@@ -1,16 +1,24 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import NavBar from './components/NavBar.vue';
+import NavbarComponent from './components/NavBar.vue';
 export default defineComponent({
-    name: "App"
+    name: "App",
+    components: {
+        NavbarComponent
+    }
 });
 </script>
 
 <template>
-    <NavBar></NavBar>
     <main>
+        <NavbarComponent></NavbarComponent>
         <RouterView />
     </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+    display: flex;
+    gap: 10px;
+}
+</style>
