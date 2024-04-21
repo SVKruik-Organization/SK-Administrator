@@ -1,39 +1,51 @@
 :root {
+    /* General */
     --color-background: #FFFFFF;
     --color-fill: #F7F9F6;
     --color-fill-dark: #E7EEE7;
-    --color-border: #CCCCCC;
+    --color-border: #e1e1e1;
 
-    --color-accent: #599862;
+    /* Informational */
+    --color-info: #A1CCD1;
+    --color-success: #599862;
+    --color-warning: #FAAB78;
+    --color-danger: #D04848;
 
-    --color-text: #393939;
-    --color-text-header: #000000;
+    /* Typography */
+    --color-text: #484848;
+    --color-text-light: #636363;
+    --color-text-header: #111111;
+
+    /* Border Radii */
+    --border-radius-low: 10px;
+    --border-radius-mid: 15px;
+    --border-radius-high: 25px;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --color-background: #FFFFFF;
-    }
+    :root {}
 }
 
+/* HTML */
 body {
-    min-height: 100vh;
-    color: var(--color-text);
     background: var(--color-background);
-    transition:
-        color 0.5s,
-        background-color 0.5s;
-    /* Font family: TODO */
+
+    /* Typography */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    list-style: none;
+    font-optical-sizing: auto;
 }
 
 * {
     color: var(--color-text);
     padding: 0;
     margin: 0;
+    list-style: none;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: "Work Sans", sans-serif;
 }
 
 h1,
@@ -41,6 +53,53 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+strong {
     color: var(--color-text-header);
+    font-weight: 600;
+}
+
+input,
+button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-weight: 500;
+}
+
+input,
+p,
+a {
+    font-size: 16px;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+a {
+    user-select: none;
+}
+
+/* Custom Classes */
+.bold {
+    font-weight: 500;
+}
+
+.align-right {
+    margin-left: auto;
+}
+
+.shadow {
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.splitter {
+    margin: 2px 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-border);
 }

@@ -1,9 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import DashboardPage from '../pages/DashboardPage.vue';
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory(),
+    linkActiveClass: "active-router-link",
     routes: [
         {
             path: '/',
@@ -11,10 +12,12 @@ const router = createRouter({
             component: HomeView
         },
         {
-            path: '/about',
-            name: 'about',
-            component: AboutView
-        }
+            path: '/app/dashboard',
+            name: 'dashboard',
+            component: DashboardPage
+        },
+        // TODO: #7
+        { path: "/:pathMatch(.*)", component: HomeView }
     ]
 });
 

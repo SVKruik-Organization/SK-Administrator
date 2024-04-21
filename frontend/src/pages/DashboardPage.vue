@@ -1,12 +1,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 export default defineComponent({
-    name: "HomeView"
+    name: "DashboardPage"
 });
 </script>
 
 <template>
     <main>
-        <p>Home View</p>
+        <p>Dashboard Page</p>
     </main>
 </template>
