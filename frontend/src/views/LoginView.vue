@@ -14,6 +14,9 @@ export default defineComponent({
         // if (this.firstName) this.$router.push("/panel");
     },
     methods: {
+        /**
+         * Fetches data and passes the data if correct upwards.
+         */
         login() {
             const payload: UserData = {
                 "firstName": "Stefan",
