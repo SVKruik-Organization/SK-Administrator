@@ -1,7 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { RouterView } from 'vue-router';
 import NavBarComponent from './components/NavBar.vue';
 import SideBarComponent from './components/SideBar.vue';
+import type { UserData } from './assets/customTypes';
 export default defineComponent({
     name: "App",
     components: {
@@ -10,41 +12,32 @@ export default defineComponent({
     },
     data() {
         return {
-            "firstName": "Stefan",
-            "lastName": "Kruik",
-            "role": "Administrator",
-            "imageUrl": "http://localhost:5173/pfp.png"
+            "userData": {
+                "firstName": null as unknown,
+                "lastName": null as unknown,
+                "role": null as unknown,
+                "imageUrl": null as unknown
+            } as UserData
+        }
+    },
+    methods: {
+        signOn(userData: UserData) {
+            console.log(userData);
+            this.userData = userData;
+            this.$router.push("/panel");
+        },
+        signOut() {
+            // TODO: #8
+            this.$router.push("/");
         }
     }
 });
 </script>
 
 <template>
-    <main>
-        <SideBarComponent :first-name="firstName" :role="role" :image-url="imageUrl"></SideBarComponent>
-        <section class="content-container">
-            <NavBarComponent :first-name="firstName" :last-name="lastName" :role="role" :image-url="imageUrl">
-            </NavBarComponent>
-            <RouterView class="content-view"></RouterView>
-        </section>
-    </main>
+    <RouterView :first-name="userData.firstName" :last-name="userData.lastName" :role="userData.role"
+        :image-url="userData.imageUrl" @sign-out="signOut()" @login="signOn">
+    </RouterView>
 </template>
 
-<style scoped>
-main {
-    display: flex;
-}
-
-.content-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    flex: 1;
-}
-
-.content-view {
-    box-sizing: border-box;
-    padding: 30px;
-}
-</style>
+<style scoped></style>

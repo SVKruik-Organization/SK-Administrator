@@ -22,7 +22,7 @@ export default defineComponent({
                     <p>{{ role }}</p>
                 </div>
             </section>
-            <RouterLink to="/app/dashboard" class="sidebar-link">
+            <RouterLink to="/panel/dashboard" class="sidebar-link">
                 <i class="fa-regular fa-table-layout"></i>
                 <p>Dashboard</p>
             </RouterLink>
@@ -30,19 +30,19 @@ export default defineComponent({
                 <div class="sidebar-content-item">
                     <h4>Operations</h4>
                     <menu>
-                        <RouterLink to="/app/operations/users" class="sidebar-link">
+                        <RouterLink to="/panel/operations/users" class="sidebar-link">
                             <i class="fa-regular fa-user"></i>
                             <p>Users</p>
                         </RouterLink>
-                        <RouterLink to="/app/operations/teams" class="sidebar-link">
+                        <RouterLink to="/panel/operations/teams" class="sidebar-link">
                             <i class="fa-regular fa-user-group"></i>
                             <p>Teams</p>
                         </RouterLink>
-                        <RouterLink to="/app/operations/tickets" class="sidebar-link">
+                        <RouterLink to="/panel/operations/tickets" class="sidebar-link">
                             <i class="fa-regular fa-bell"></i>
                             <p>Tickets</p>
                         </RouterLink>
-                        <RouterLink to="/app/operations/tasks" class="sidebar-link">
+                        <RouterLink to="/panel/operations/tasks" class="sidebar-link">
                             <i class="fa-regular fa-bars-progress"></i>
                             <p>Tasks</p>
                         </RouterLink>
@@ -51,15 +51,15 @@ export default defineComponent({
                 <div class="sidebar-content-item">
                     <h4>Documents</h4>
                     <menu>
-                        <RouterLink to="/app/documents/finance" class="sidebar-link">
+                        <RouterLink to="/panel/documents/finance" class="sidebar-link">
                             <i class="fa-regular fa-credit-card"></i>
                             <p>Finance</p>
                         </RouterLink>
-                        <RouterLink to="/app/documents/reports" class="sidebar-link">
+                        <RouterLink to="/panel/documents/reports" class="sidebar-link">
                             <i class="fa-regular fa-newspaper"></i>
                             <p>Reports</p>
                         </RouterLink>
-                        <RouterLink to="/app/documents/staff" class="sidebar-link">
+                        <RouterLink to="/panel/documents/staff" class="sidebar-link">
                             <i class="fa-regular fa-shield-check"></i>
                             <p>Staff</p>
                         </RouterLink>
@@ -68,21 +68,21 @@ export default defineComponent({
                 <div class="sidebar-content-item">
                     <h4>Status</h4>
                     <menu>
-                        <RouterLink to="/app/status/systems" class="sidebar-link">
+                        <RouterLink to="/panel/status/systems" class="sidebar-link">
                             <i class="fa-regular fa-cloud"></i>
                             <p>Systems</p>
                         </RouterLink>
-                        <RouterLink to="/app/status/automation" class="sidebar-link">
+                        <RouterLink to="/panel/status/automation" class="sidebar-link">
                             <i class="fa-regular fa-timeline"></i>
                             <p>Automation</p>
                         </RouterLink>
-                        <RouterLink to="/app/status/logs" class="sidebar-link">
+                        <RouterLink to="/panel/status/logs" class="sidebar-link">
                             <i class="fa-regular fa-list"></i>
                             <p>Logs</p>
                         </RouterLink>
                     </menu>
                 </div>
-                <RouterLink to="/app/preferences" class="sidebar-link">
+                <RouterLink to="/panel/preferences" class="sidebar-link">
                     <i class="fa-regular fa-gear"></i>
                     <p>Preferences</p>
                 </RouterLink>

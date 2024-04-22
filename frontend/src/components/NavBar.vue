@@ -2,40 +2,45 @@
 import { defineComponent } from 'vue';
 export default defineComponent({
     name: "NavbarComponent",
+    emits: [
+        "signOut"
+    ],
     props: {
         "firstName": String,
         "lastName": String,
         "imageUrl": String
+    },
+    data() {
+        return {
+            "dropdownIcon": null as unknown as HTMLElement,
+            "dropdownMenu": null as unknown as HTMLDivElement,
+        }
     },
     methods: {
         /**
          * Open or close the dropdown.
          */
         toggleDropdown(): void {
-            const caret: HTMLElement = document.getElementsByClassName("dropdown-icon")[0] as HTMLElement;
-            const menu: HTMLMenuElement = document.getElementsByClassName("dropdown-menu")[0] as HTMLMenuElement;
-            if (caret.classList.contains("rotated")) {
+            if (this.dropdownIcon && this.dropdownIcon.classList.contains("rotated")) {
                 this.closeDropdown();
             } else {
-                if (caret) caret.classList.add("rotated");
-                if (menu) menu.classList.add("visible");
+                if (this.dropdownIcon) this.dropdownIcon.classList.add("rotated");
+                if (this.dropdownMenu) this.dropdownMenu.classList.add("visible");
             }
         },
         /**
-         * Close the dropdown, regardless of current state.
+         * Closes the dropdown, regardless of current state.
          */
         closeDropdown(): void {
-            const caret: HTMLElement = document.getElementsByClassName("dropdown-icon")[0] as HTMLElement;
-            const menu: HTMLMenuElement = document.getElementsByClassName("dropdown-menu")[0] as HTMLMenuElement;
-            if (caret) caret.classList.remove("rotated");
-            if (menu) menu.classList.remove("visible");
-        },
-        signOut(): void {
-            // TODO: #8
-            this.$router.push("/");
+            if (this.dropdownIcon) this.dropdownIcon.classList.remove("rotated");
+            if (this.dropdownMenu) this.dropdownMenu.classList.remove("visible");
         }
     },
     mounted() {
+        // Set Dropdown Components
+        this.dropdownIcon = this.$refs["dropdownIcon"] as HTMLElement;
+        this.dropdownMenu = this.$refs["dropdownMenu"] as HTMLDivElement;
+
         // Global Close Dropdown
         document.body.addEventListener("click", (event: MouseEvent): void => {
             const eventTarget: HTMLElement = event.target as HTMLElement;
@@ -63,15 +68,15 @@ export default defineComponent({
                 <div class="navbar-pill user-pill">
                     <img :src="imageUrl" alt="Profile Picture">
                     <p>{{ firstName }} {{ lastName }}</p>
-                    <i class="fa-regular fa-square-caret-down dropdown-icon"></i>
+                    <i class="fa-regular fa-square-caret-down dropdown-icon" ref="dropdownIcon"></i>
                     <!-- TODO: #5 <i class="fa-regular fa-angle-down"></i> -->
                     <span class="click-item" @click="toggleDropdown()"></span>
                 </div>
-                <div class="dropdown-menu shadow">
+                <div class="dropdown-menu shadow" ref="dropdownMenu">
                     <RouterLink to="/" class="dropdown-item">Home</RouterLink>
                     <RouterLink to="/preferences/support" class="dropdown-item">Support</RouterLink>
                     <span class="splitter"></span>
-                    <button type="button" class="sign-out-button dropdown-item" @click="signOut()">
+                    <button type="button" class="sign-out-button dropdown-item" @click="$emit('signOut');">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket"></i>
                     </button>
