@@ -1,19 +1,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useUserStore } from '@/stores/UserStore';
+import type { UserData } from '@/assets/customTypes';
+
 export default defineComponent({
     name: "NavbarComponent",
-    emits: [
-        "signOut"
-    ],
-    props: {
-        "firstName": String,
-        "lastName": String,
-        "imageUrl": String
-    },
     data() {
         return {
             "dropdownIcon": null as unknown as HTMLElement,
             "dropdownMenu": null as unknown as HTMLDivElement,
+        }
+    },
+    setup() {
+        return {
+            userStore: useUserStore()
         }
     },
     methods: {
@@ -34,6 +34,13 @@ export default defineComponent({
         closeDropdown(): void {
             if (this.dropdownIcon) this.dropdownIcon.classList.remove("rotated");
             if (this.dropdownMenu) this.dropdownMenu.classList.remove("visible");
+        },
+        /**
+         * Clear store and redirect to homepage.
+         */
+        signOut() {
+            this.userStore.setUser({} as UserData);
+            this.$router.push("/");
         }
     },
     mounted() {
@@ -56,8 +63,8 @@ export default defineComponent({
         <div class="searchbar-container navbar-pill">
             <!-- TODO: #9 -->
             <i class="fa-regular fa-eye"></i>
-            <!-- TODO: #5 <i class="fa-regular fa-magnifying-glass"></i> -->
-            <input type="text" placeholder="Search">
+            <!-- TODO: #6 <i class="fa-regular fa-magnifying-glass"></i> -->
+            <input placeholder="Search" type="text">
         </div>
         <section class="nav-right">
             <div class="notification-icon navbar-pill">
@@ -66,17 +73,17 @@ export default defineComponent({
             </div>
             <div class="user-pill-container">
                 <div class="navbar-pill user-pill">
-                    <img :src="imageUrl" alt="Profile Picture">
-                    <p>{{ firstName }} {{ lastName }}</p>
-                    <i class="fa-regular fa-square-caret-down dropdown-icon" ref="dropdownIcon"></i>
-                    <!-- TODO: #5 <i class="fa-regular fa-angle-down"></i> -->
+                    <img :src="userStore.user.imageUrl" alt="Profile Picture">
+                    <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
+                    <i ref="dropdownIcon" class="fa-regular fa-square-caret-down dropdown-icon"></i>
+                    <!-- TODO: #6 <i class="fa-regular fa-angle-down"></i> -->
                     <span class="click-item" @click="toggleDropdown()"></span>
                 </div>
-                <div class="dropdown-menu shadow" ref="dropdownMenu">
-                    <RouterLink to="/" class="dropdown-item">Home</RouterLink>
-                    <RouterLink to="/preferences/support" class="dropdown-item">Support</RouterLink>
+                <div ref="dropdownMenu" class="dropdown-menu shadow">
+                    <RouterLink class="dropdown-item" to="/">Home</RouterLink>
+                    <RouterLink class="dropdown-item" to="/preferences/support">Support</RouterLink>
                     <span class="splitter"></span>
-                    <button type="button" class="sign-out-button dropdown-item" @click="$emit('signOut');">
+                    <button class="sign-out-button dropdown-item" type="button" @click="signOut()">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket"></i>
                     </button>
@@ -133,6 +140,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 20px;
+    padding-left: 20px;
 }
 
 .notification-icon {
@@ -216,4 +224,26 @@ img {
 .sign-out-button i {
     color: var(--color-danger);
 }
+
+/* Responsiveness */
+@media (width <=1020px) {
+    nav {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .searchbar-container {
+        width: 100%;
+    }
+
+    .nav-right {
+        padding: 0;
+        gap: 10px;
+        width: 100%;
+        justify-content: right;
+    }
+}
+
+/* TODO #5 */
+@media (width <=590px) {}
 </style>

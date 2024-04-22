@@ -22,9 +22,9 @@
     --border-radius-high: 25px;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
     :root {}
-}
+} */
 
 /* HTML */
 body {

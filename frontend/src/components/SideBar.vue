@@ -1,13 +1,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { RouterLink } from 'vue-router';
+import { useUserStore } from '@/stores/UserStore';
+
 export default defineComponent({
     name: "SideBarComponent",
-    props: {
-        "firstName": String,
-        "role": String,
-        "imageUrl": String
-    }
+    setup() {
+        return {
+            userStore: useUserStore()
+        }
+    },
 });
 </script>
 
@@ -16,13 +17,13 @@ export default defineComponent({
         <nav>
             <h2 class="logo">Flock</h2>
             <section class="user-information">
-                <img :src="imageUrl" alt="Profile Picture">
+                <img :src="userStore.user.imageUrl" alt="Profile Picture">
                 <div class="user-information-text">
-                    <h3>{{ firstName }}</h3>
-                    <p>{{ role }}</p>
+                    <h3>{{ userStore.user.firstName }}</h3>
+                    <p>{{ userStore.user.role }}</p>
                 </div>
             </section>
-            <RouterLink to="/panel/dashboard" class="sidebar-link">
+            <RouterLink class="sidebar-link" to="/panel/dashboard">
                 <i class="fa-regular fa-table-layout"></i>
                 <p>Dashboard</p>
             </RouterLink>
@@ -30,19 +31,19 @@ export default defineComponent({
                 <div class="sidebar-content-item">
                     <h4>Operations</h4>
                     <menu>
-                        <RouterLink to="/panel/operations/users" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/operations/users">
                             <i class="fa-regular fa-user"></i>
                             <p>Users</p>
                         </RouterLink>
-                        <RouterLink to="/panel/operations/teams" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/operations/teams">
                             <i class="fa-regular fa-user-group"></i>
                             <p>Teams</p>
                         </RouterLink>
-                        <RouterLink to="/panel/operations/tickets" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/operations/tickets">
                             <i class="fa-regular fa-bell"></i>
                             <p>Tickets</p>
                         </RouterLink>
-                        <RouterLink to="/panel/operations/tasks" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/operations/tasks">
                             <i class="fa-regular fa-bars-progress"></i>
                             <p>Tasks</p>
                         </RouterLink>
@@ -51,15 +52,15 @@ export default defineComponent({
                 <div class="sidebar-content-item">
                     <h4>Documents</h4>
                     <menu>
-                        <RouterLink to="/panel/documents/finance" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/documents/finance">
                             <i class="fa-regular fa-credit-card"></i>
                             <p>Finance</p>
                         </RouterLink>
-                        <RouterLink to="/panel/documents/reports" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/documents/reports">
                             <i class="fa-regular fa-newspaper"></i>
                             <p>Reports</p>
                         </RouterLink>
-                        <RouterLink to="/panel/documents/staff" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/documents/staff">
                             <i class="fa-regular fa-shield-check"></i>
                             <p>Staff</p>
                         </RouterLink>
@@ -68,21 +69,21 @@ export default defineComponent({
                 <div class="sidebar-content-item">
                     <h4>Status</h4>
                     <menu>
-                        <RouterLink to="/panel/status/systems" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/status/systems">
                             <i class="fa-regular fa-cloud"></i>
                             <p>Systems</p>
                         </RouterLink>
-                        <RouterLink to="/panel/status/automation" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/status/automation">
                             <i class="fa-regular fa-timeline"></i>
                             <p>Automation</p>
                         </RouterLink>
-                        <RouterLink to="/panel/status/logs" class="sidebar-link">
+                        <RouterLink class="sidebar-link" to="/panel/status/logs">
                             <i class="fa-regular fa-list"></i>
                             <p>Logs</p>
                         </RouterLink>
                     </menu>
                 </div>
-                <RouterLink to="/panel/preferences" class="sidebar-link">
+                <RouterLink class="sidebar-link" to="/panel/preferences">
                     <i class="fa-regular fa-gear"></i>
                     <p>Preferences</p>
                 </RouterLink>

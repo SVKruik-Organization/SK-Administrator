@@ -20,6 +20,7 @@ export type PopupPayload = {
     "time": number
 }
 
+// Pop-up Colors
 export enum PopupTypes {
     info = "info",
     success = "success",

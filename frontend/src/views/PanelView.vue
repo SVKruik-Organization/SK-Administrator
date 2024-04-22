@@ -5,31 +5,18 @@ import NavBarComponent from '../components/NavBar.vue';
 import SideBarComponent from '../components/SideBar.vue';
 import { createTicket } from '@/utils/ticket';
 import type { PopupItem, PopupPayload } from '@/assets/customTypes';
+import { useUserStore } from '@/stores/UserStore';
+
 export default defineComponent({
     name: "PanelView",
-    emits: [
-        "signOut"
-    ],
-    components: {
-        NotificationContainer,
-        NavBarComponent,
-        SideBarComponent
-    },
-    data() {
+    setup() {
         return {
-            popUpForbidden: [""] as Array<string>,
-            pendingPopups: [] as Array<PopupItem>
+            userStore: useUserStore()
         }
     },
-    props: {
-        "firstName": String,
-        "lastName": String,
-        "role": String,
-        "imageUrl": String
-    },
-    mounted() {
-        // TODO: # 8
-        //if (!this.firstName) return this.$router.push("/login");
+    created() {
+        // Not Logged-In
+        if (!this.userStore.user.firstName) return this.$router.push("/login");
     },
     methods: {
         /**
@@ -53,19 +40,28 @@ export default defineComponent({
                 if (childComponent) childComponent.closePopup(id);
             }, popupPayload.time);
         }
-    }
+    },
+    components: {
+        NotificationContainer,
+        NavBarComponent,
+        SideBarComponent
+    },
+    data() {
+        return {
+            popUpForbidden: [""] as Array<string>,
+            pendingPopups: [] as Array<PopupItem>
+        }
+    },
 });
 </script>
 
 <template>
     <main>
-        <NotificationContainer ref="notificationPopup" :pendingPopups="pendingPopups"
-            v-if="!popUpForbidden.includes($route.path)"></NotificationContainer>
-        <SideBarComponent :first-name="firstName" :role="role" :image-url="imageUrl"></SideBarComponent>
+        <NotificationContainer v-if="!popUpForbidden.includes($route.path)" ref="notificationPopup"
+                               :pendingPopups="pendingPopups"></NotificationContainer>
+        <SideBarComponent></SideBarComponent>
         <section class="content-container">
-            <NavBarComponent :first-name="firstName" :last-name="lastName" :role="role" :image-url="imageUrl"
-                @sign-out="$emit('signOut')">
-            </NavBarComponent>
+            <NavBarComponent></NavBarComponent>
             <RouterView class="content-view" @popup="popup"></RouterView>
         </section>
     </main>
@@ -86,8 +82,7 @@ main {
 
 .content-view {
     box-sizing: border-box;
-    padding: 30px;
-    padding-top: 20px;
+    padding: 20px 30px 30px;
     height: 100%;
 }
 </style>

@@ -1,7 +1,8 @@
 <script lang="ts">
 import type { PopupPayload } from '@/assets/customTypes';
-import { defineComponent } from 'vue';
 import { PopupTypes } from '@/assets/customTypes';
+import { defineComponent } from 'vue';
+
 export default defineComponent({
     name: "DashboardPage",
     emits: ["popup"],

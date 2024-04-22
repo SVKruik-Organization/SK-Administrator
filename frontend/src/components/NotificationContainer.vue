@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PopupItem } from '@/assets/customTypes';
+
 export default defineComponent({
     name: "NotificationContainer",
     props: {
@@ -8,7 +9,7 @@ export default defineComponent({
     },
     methods: {
         /**
-         * Close a active popup.
+         * Close an active popup.
          * @param {MouseEvent | string} input The ID of the popup element to delete.
          */
         closePopup(input: MouseEvent | string) {
@@ -21,10 +22,10 @@ export default defineComponent({
             }, 250);
         },
         /**
-         * Softly show the notification, instead of instant display.
+         * Gradually show the notification, instead of instant display.
          * @param {string} id The ID of the popup element to fade-in.
          */
-        fadeIn(id: number) {
+        fadeIn(id: string) {
             const elements: HTMLCollectionOf<Element> = document.getElementsByClassName(`parent-${id}`);
             if (elements.length === 0) return;
             elements[0].classList.add("visible");
@@ -35,15 +36,15 @@ export default defineComponent({
 
 <template>
     <section class="popup-container">
-        <div @click="closePopup($event)" class="popup shadow" v-for="popup in pendingPopups"
-            :class="`parent-${popup.id}`" :id="popup.id">
-            <div class="left pointer" :id="popup.id">
-                <span class="color-indicator pointer" :id="popup.id" :style="`background-color: ${popup.color}`"></span>
-                <p class="message pointer" :id="popup.id">{{ popup.message }}</p>
+        <div v-for="popup in pendingPopups" :id="popup.id" :class="`parent-${popup.id}`"
+             class="popup shadow" @click="closePopup($event)">
+            <div :id="popup.id" class="left pointer">
+                <span :id="popup.id" :style="`background-color: ${popup.color}`" class="color-indicator pointer"></span>
+                <p :id="popup.id" class="message pointer">{{ popup.message }}</p>
             </div>
-            <div class="right pointer" :id="popup.id">
-                <button class="close-popup-button" :id="popup.id">
-                    <i class="fa-solid fa-xmark close-icon" :id="popup.id"></i>
+            <div :id="popup.id" class="right pointer">
+                <button :id="popup.id" class="close-popup-button">
+                    <i :id="popup.id" class="fa-solid fa-xmark close-icon"></i>
                 </button>
             </div>
         </div>
