@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import NotificationContainer from '@/components/NotificationContainer.vue';
-import NavBarComponent from '../components/NavBar.vue';
+import NavbarComponent from '../components/Navbar.vue';
 import SideBarComponent from '../components/SideBar.vue';
 import { createTicket } from '@/utils/ticket';
 import type { PopupItem, PopupPayload } from '@/assets/customTypes';
@@ -43,7 +43,7 @@ export default defineComponent({
     },
     components: {
         NotificationContainer,
-        NavBarComponent,
+        NavbarComponent,
         SideBarComponent
     },
     data() {
@@ -58,10 +58,10 @@ export default defineComponent({
 <template>
     <main>
         <NotificationContainer v-if="!popUpForbidden.includes($route.path)" ref="notificationPopup"
-                               :pendingPopups="pendingPopups"></NotificationContainer>
+            :pendingPopups="pendingPopups"></NotificationContainer>
         <SideBarComponent></SideBarComponent>
         <section class="content-container">
-            <NavBarComponent></NavBarComponent>
+            <NavbarComponent></NavbarComponent>
             <RouterView class="content-view" @popup="popup"></RouterView>
         </section>
     </main>

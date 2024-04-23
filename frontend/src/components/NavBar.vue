@@ -1,39 +1,61 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
+import { useNotificationStore } from '@/stores/NotificationStore';
 import type { UserData } from '@/assets/customTypes';
+import NavbarNotificationItem from './NavbarNotificationItem.vue';
 
 export default defineComponent({
     name: "NavbarComponent",
     data() {
         return {
-            "dropdownIcon": null as unknown as HTMLElement,
-            "dropdownMenu": null as unknown as HTMLDivElement,
+            "userDropdownIcon": null as unknown as HTMLElement,
+            "userDropdownMenu": null as unknown as HTMLDivElement,
+            "notificationDropdownIcon": null as unknown as HTMLElement,
+            "notificationDropdownMenu": null as unknown as HTMLDivElement
         }
+    },
+    components: {
+        NavbarNotificationItem
     },
     setup() {
         return {
-            userStore: useUserStore()
+            userStore: useUserStore(),
+            notificationStore: useNotificationStore()
         }
     },
     methods: {
         /**
-         * Open or close the dropdown.
+         * Open or close the user dropdown.
          */
-        toggleDropdown(): void {
-            if (this.dropdownIcon && this.dropdownIcon.classList.contains("rotated")) {
-                this.closeDropdown();
+        toggleUserDropdown(): void {
+            if (this.userDropdownIcon && this.userDropdownIcon.classList.contains("rotated")) {
+                this.closeUserDropdown();
             } else {
-                if (this.dropdownIcon) this.dropdownIcon.classList.add("rotated");
-                if (this.dropdownMenu) this.dropdownMenu.classList.add("visible");
+                if (this.userDropdownIcon) this.userDropdownIcon.classList.add("rotated");
+                if (this.userDropdownMenu) this.userDropdownMenu.classList.add("visible");
             }
         },
         /**
-         * Closes the dropdown, regardless of current state.
+         * Open or close the notification dropdown.
          */
-        closeDropdown(): void {
-            if (this.dropdownIcon) this.dropdownIcon.classList.remove("rotated");
-            if (this.dropdownMenu) this.dropdownMenu.classList.remove("visible");
+        toggleNotificationDropdown(): void {
+            if (this.notificationDropdownMenu && this.notificationDropdownMenu.classList.contains("visible")) {
+                this.closeNotificationDropdown();
+            } else if (this.notificationDropdownMenu) this.notificationDropdownMenu.classList.add("visible");
+        },
+        /**
+         * Closes the user dropdown, regardless of current state.
+         */
+        closeUserDropdown(): void {
+            if (this.userDropdownIcon) this.userDropdownIcon.classList.remove("rotated");
+            if (this.userDropdownMenu) this.userDropdownMenu.classList.remove("visible");
+        },
+        /**
+         * Closes the notification dropdown, regardless of current state.
+         */
+        closeNotificationDropdown(): void {
+            if (this.notificationDropdownMenu) this.notificationDropdownMenu.classList.remove("visible");
         },
         /**
          * Clear store and redirect to homepage.
@@ -41,18 +63,29 @@ export default defineComponent({
         signOut() {
             this.userStore.setUser({} as UserData);
             this.$router.push("/");
+        },
+        /**
+         * Focus searchbar
+         */
+        focusSearchbar() {
+            (this.$refs["searchBar"] as HTMLInputElement).focus();
         }
     },
     mounted() {
         // Set Dropdown Components
-        this.dropdownIcon = this.$refs["dropdownIcon"] as HTMLElement;
-        this.dropdownMenu = this.$refs["dropdownMenu"] as HTMLDivElement;
+        this.userDropdownIcon = this.$refs["userDropdownIcon"] as HTMLElement;
+        this.userDropdownMenu = this.$refs["userDropdownMenu"] as HTMLDivElement;
+        this.notificationDropdownIcon = this.$refs["notificationDropdownIcon"] as HTMLElement;
+        this.notificationDropdownMenu = this.$refs["notificationDropdownMenu"] as HTMLDivElement;
 
         // Global Close Dropdown
         document.body.addEventListener("click", (event: MouseEvent): void => {
             const eventTarget: HTMLElement = event.target as HTMLElement;
             if (!eventTarget) return;
-            if (!eventTarget.classList.contains("click-item")) this.closeDropdown();
+            if (!eventTarget.classList.contains("click-item")) {
+                this.closeUserDropdown();
+                this.closeNotificationDropdown();
+            };
         });
     },
 });
@@ -61,29 +94,38 @@ export default defineComponent({
 <template>
     <nav>
         <div class="searchbar-container navbar-pill">
-            <!-- TODO: #9 -->
-            <i class="fa-regular fa-eye"></i>
+            <i class="fa-regular fa-eye" @click="focusSearchbar"></i>
             <!-- TODO: #6 <i class="fa-regular fa-magnifying-glass"></i> -->
-            <input placeholder="Search" type="text">
+            <input placeholder="Search" type="text" ref="searchBar">
         </div>
         <section class="nav-right">
-            <div class="notification-icon navbar-pill">
-                <i class="fa-regular fa-bell"></i>
-                <!-- TODO: #2 <i class="fa-regular fa-bell-ring"></i> -->
+            <div class="notification-pill-container">
+                <div class="navbar-pill notification-pill">
+                    <i ref="notificationDropdownIcon" class="fa-regular fa-bell"></i>
+                    <span class="click-item notification-user-item" @click="toggleNotificationDropdown()"></span>
+                    <!-- TODO: #2 <i class="fa-regular fa-bell-ring"></i> -->
+                </div>
+                <div ref="notificationDropdownMenu" class="notification-dropdown-menu shadow dropdown-menu">
+                    <NavbarNotificationItem v-for="notification in notificationStore.notifications"
+                        :id="notification.ticket" :ticket="notification.ticket" :type="notification.type"
+                        :message="notification.message" :read="notification.read" :source="notification.source"
+                        :date="notification.date">
+                    </NavbarNotificationItem>
+                </div>
             </div>
             <div class="user-pill-container">
                 <div class="navbar-pill user-pill">
                     <img :src="userStore.user.imageUrl" alt="Profile Picture">
                     <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
-                    <i ref="dropdownIcon" class="fa-regular fa-square-caret-down dropdown-icon"></i>
+                    <i ref="userDropdownIcon" class="fa-regular fa-square-caret-down user-dropdown-icon"></i>
                     <!-- TODO: #6 <i class="fa-regular fa-angle-down"></i> -->
-                    <span class="click-item" @click="toggleDropdown()"></span>
+                    <span class="click-item" @click="toggleUserDropdown()"></span>
                 </div>
-                <div ref="dropdownMenu" class="dropdown-menu shadow">
-                    <RouterLink class="dropdown-item" to="/">Home</RouterLink>
-                    <RouterLink class="dropdown-item" to="/preferences/support">Support</RouterLink>
+                <div ref="userDropdownMenu" class="user-dropdown-menu shadow dropdown-menu">
+                    <RouterLink class="user-dropdown-item" to="/">Home</RouterLink>
+                    <RouterLink class="user-dropdown-item" to="/preferences/support">Support</RouterLink>
                     <span class="splitter"></span>
-                    <button class="sign-out-button dropdown-item" type="button" @click="signOut()">
+                    <button class="sign-out-button user-dropdown-item" type="button" @click="signOut()">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket"></i>
                     </button>
@@ -128,6 +170,10 @@ nav {
     background-color: var(--color-fill-dark);
 }
 
+input {
+    width: 100%;
+}
+
 /* Left */
 .searchbar-container {
     gap: 15px;
@@ -147,6 +193,17 @@ nav {
     justify-content: center;
     border-radius: 50%;
     aspect-ratio: 1 / 1;
+}
+
+.notification-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: relative;
+    height: 40px;
+    width: 40px;
+    padding: 0;
 }
 
 .user-pill {
@@ -180,13 +237,15 @@ img {
     z-index: 1;
 }
 
+.notification-user-item {
+    margin: 0;
+}
+
 .dropdown-menu {
     display: none;
     flex-direction: column;
     gap: 5px;
     position: absolute;
-    width: 150px;
-    right: 25px;
     height: fit-content;
     top: 80px;
     background-color: var(--color-fill);
@@ -197,6 +256,16 @@ img {
     padding: 5px;
 }
 
+.notification-dropdown-menu {
+    width: fit-content;
+    right: 280px;
+}
+
+.user-dropdown-menu {
+    width: 150px;
+    right: 25px;
+}
+
 .rotated {
     rotate: 180deg;
 }
@@ -205,13 +274,13 @@ img {
     display: flex;
 }
 
-.dropdown-item {
+.user-dropdown-item {
     box-sizing: border-box;
     padding: 5px;
     border-radius: var(--border-radius-low);
 }
 
-.dropdown-item:hover {
+.user-dropdown-item:hover {
     background-color: var(--color-fill-dark);
 }
 

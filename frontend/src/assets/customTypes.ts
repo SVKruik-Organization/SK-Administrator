@@ -15,15 +15,25 @@ export type PopupItem = {
 
 // Constructable Pop-up Item
 export type PopupPayload = {
-    "type": PopupTypes,
+    "type": PromptTypes,
     "message": string,
     "time": number
 }
 
-// Pop-up Colors
-export enum PopupTypes {
+// Prompt/Informational Message Types
+export enum PromptTypes {
     info = "info",
     success = "success",
     warning = "warning",
     danger = "danger"
+}
+
+// Navbar Notifications
+export type NotificationItem = {
+    "ticket": string,
+    "type": PromptTypes,
+    "message": string,
+    "read": boolean,
+    "source": string,
+    "date": Date
 }
