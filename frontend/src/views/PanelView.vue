@@ -1,10 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import NotificationContainer from '@/components/NotificationContainer.vue';
+import PopupContainer from '@/components/PopupContainer.vue';
 import NavbarComponent from '../components/Navbar.vue';
 import SideBarComponent from '../components/SideBar.vue';
-import { createTicket } from '@/utils/ticket';
-import type { PopupItem, PopupPayload } from '@/assets/customTypes';
+import type { PopupItem } from '@/assets/customTypes';
 import { useUserStore } from '@/stores/UserStore';
 
 export default defineComponent({
@@ -21,34 +20,19 @@ export default defineComponent({
     methods: {
         /**
          * Show a popup to the user.
-         * @param {PopupPayload} popupPayload The popup data to display.
+         * @param {PopupItem} popupPayload The popup data to display.
          */
-        popup(popupPayload: PopupPayload) {
-            const id: string = `popup${createTicket()}`;
-            const childComponent: any = this.$refs["notificationPopup"];
-            this.pendingPopups.push({
-                "id": id,
-                "color": `var(--color-${popupPayload.type})`,
-                "message": popupPayload.message
-            });
-
-            setTimeout(() => {
-                if (childComponent) childComponent.fadeIn(id);
-            }, 10);
-
-            setTimeout(() => {
-                if (childComponent) childComponent.closePopup(id);
-            }, popupPayload.time);
+        popup(popupPayload: PopupItem) {
+            this.pendingPopups.push(popupPayload);
         }
     },
     components: {
-        NotificationContainer,
+        PopupContainer,
         NavbarComponent,
         SideBarComponent
     },
     data() {
         return {
-            popUpForbidden: [""] as Array<string>,
             pendingPopups: [] as Array<PopupItem>
         }
     },
@@ -57,8 +41,7 @@ export default defineComponent({
 
 <template>
     <main>
-        <NotificationContainer v-if="!popUpForbidden.includes($route.path)" ref="notificationPopup"
-            :pendingPopups="pendingPopups"></NotificationContainer>
+        <PopupContainer ref="notificationPopup" :pendingPopups="pendingPopups"></PopupContainer>
         <SideBarComponent></SideBarComponent>
         <section class="content-container">
             <NavbarComponent></NavbarComponent>

@@ -16,7 +16,7 @@ export default defineComponent({
     <header>
         <nav>
             <h2 class="logo">Flock</h2>
-            <section class="user-information">
+            <section class="user-information flex">
                 <img :src="userStore.user.imageUrl" alt="Profile Picture">
                 <div class="user-information-text">
                     <h3>{{ userStore.user.firstName }}</h3>
@@ -94,13 +94,13 @@ export default defineComponent({
 
 <style scoped>
 header {
+    display: flex;
+    flex-direction: column;
     width: 250px;
     background-color: var(--color-fill);
     height: 100vh;
-    padding: 30px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    padding: 30px;
 }
 
 nav {
@@ -112,8 +112,6 @@ nav {
 
 /* Header */
 .user-information {
-    display: flex;
-    align-items: center;
     gap: 15px;
 }
 

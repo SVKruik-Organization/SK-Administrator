@@ -6,18 +6,12 @@ export type UserData = {
     "imageUrl": string
 }
 
-// Usable Pop-up Item
+// Pop-up Item
 export type PopupItem = {
     "id": string,
-    "color": string,
-    "message": string
-}
-
-// Constructable Pop-up Item
-export type PopupPayload = {
     "type": PromptTypes,
     "message": string,
-    "time": number
+    "expiryMilliseconds": number
 }
 
 // Prompt/Informational Message Types
@@ -33,7 +27,7 @@ export type NotificationItem = {
     "ticket": string,
     "type": PromptTypes,
     "message": string,
-    "read": boolean,
+    "unread": boolean,
     "source": string,
     "date": Date
 }

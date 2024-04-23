@@ -1,0 +1,79 @@
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useNotificationStore } from '@/stores/NotificationStore';
+
+export default defineComponent({
+    name: "NotificationItem",
+    props: {
+        "ticket": String,
+        "type": String,
+        "message": String,
+        "unread": Boolean,
+        "source": String,
+        "date": Date
+    },
+    setup() {
+        return {
+            notificationStore: useNotificationStore()
+        }
+    },
+    methods: {
+        markAsRead(): void {
+            if (!this.unread) return;
+            this.notificationStore.markAsRead(this.ticket);
+        }
+    }
+});
+</script>
+
+<template>
+    <div class="notification-item" :style="`background-color: var(--color-${unread ? 'fill-dark' : 'fill'});`">
+        <section class="notification-item-left">
+            <span :style="`background-color: var(--color-${type});`" class="type-indicator"></span>
+            <p>{{ message }}</p>
+            <button type="button" class="click-item" @click="markAsRead()"></button>
+        </section>
+        <section class="notification-item-right">
+
+        </section>
+    </div>
+</template>
+
+<style scoped>
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    min-width: 400px;
+    height: 30px;
+    border-top-right-radius: var(--border-radius-low);
+    border-bottom-right-radius: var(--border-radius-low);
+    background-color: var(--color-background);
+    cursor: pointer;
+}
+
+.notification-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    width: fit-content;
+    position: relative;
+}
+
+.type-indicator {
+    display: block;
+    height: 100%;
+    width: 5px;
+    border-top-left-radius: var(--border-radius-low);
+    border-bottom-left-radius: var(--border-radius-low);
+}
+
+.click-item {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+}
+</style>

@@ -10,7 +10,14 @@ export const useNotificationStore = defineStore("NotificationStore", {
     },
     actions: {
         newNotification(notification: NotificationItem): void {
-            this.notifications.push(notification);
+            this.notifications.unshift(notification);
+        },
+        markAsRead(ticket: string | undefined): void {
+            if (!ticket) return;
+            this.notifications.filter((notification: NotificationItem) => notification.ticket === ticket)[0].unread = false;
         }
+    },
+    getters: {
+        unreadNotifications: (state) => state.notifications.filter((notification: NotificationItem) => notification.unread)
     }
 });

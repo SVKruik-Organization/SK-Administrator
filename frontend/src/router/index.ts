@@ -10,21 +10,22 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            name: "home",
             component: HomeView,
             props: true
         },
         {
             path: "/login",
-            name: "login",
             component: LoginView,
             props: true
         },
         {
             path: "/panel", component: PanelView, props: true, children: [
                 { path: "", redirect: "/panel/dashboard" },
-                { path: "dashboard", component: DashboardPage, props: true },
-                { path: "preferences", component: DashboardPage, props: true },
+                {
+                    path: "dashboard", component: DashboardPage, props: true, children: [
+                        { path: "notifications", component: DashboardPage, props: true }
+                    ]
+                },
 
                 { path: "operations/users", component: DashboardPage, props: true },
                 { path: "operations/teams", component: DashboardPage, props: true },
@@ -37,7 +38,13 @@ const router = createRouter({
 
                 { path: "status/systems", component: DashboardPage, props: true },
                 { path: "status/automation", component: DashboardPage, props: true },
-                { path: "status/logs", component: DashboardPage, props: true }
+                { path: "status/logs", component: DashboardPage, props: true },
+
+                {
+                    path: "preferences", component: DashboardPage, props: true, children: [
+                        { path: "support", component: DashboardPage, props: true }
+                    ]
+                },
             ]
         },
         // TODO: #7

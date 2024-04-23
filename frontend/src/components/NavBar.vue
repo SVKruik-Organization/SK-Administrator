@@ -1,9 +1,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/stores/UserStore';
 import { useNotificationStore } from '@/stores/NotificationStore';
 import type { UserData } from '@/assets/customTypes';
-import NavbarNotificationItem from './NavbarNotificationItem.vue';
+import NotificationItem from './NotificationItem.vue';
 
 export default defineComponent({
     name: "NavbarComponent",
@@ -11,12 +12,12 @@ export default defineComponent({
         return {
             "userDropdownIcon": null as unknown as HTMLElement,
             "userDropdownMenu": null as unknown as HTMLDivElement,
-            "notificationDropdownIcon": null as unknown as HTMLElement,
-            "notificationDropdownMenu": null as unknown as HTMLDivElement
+            "notificationDropdownMenu": null as unknown as HTMLDivElement,
+            "notificationLimit": 5
         }
     },
     components: {
-        NavbarNotificationItem
+        NotificationItem
     },
     setup() {
         return {
@@ -63,29 +64,32 @@ export default defineComponent({
         signOut() {
             this.userStore.setUser({} as UserData);
             this.$router.push("/");
-        },
-        /**
-         * Focus searchbar
-         */
-        focusSearchbar() {
-            (this.$refs["searchBar"] as HTMLInputElement).focus();
         }
     },
     mounted() {
         // Set Dropdown Components
         this.userDropdownIcon = this.$refs["userDropdownIcon"] as HTMLElement;
         this.userDropdownMenu = this.$refs["userDropdownMenu"] as HTMLDivElement;
-        this.notificationDropdownIcon = this.$refs["notificationDropdownIcon"] as HTMLElement;
         this.notificationDropdownMenu = this.$refs["notificationDropdownMenu"] as HTMLDivElement;
 
         // Global Close Dropdown
         document.body.addEventListener("click", (event: MouseEvent): void => {
             const eventTarget: HTMLElement = event.target as HTMLElement;
             if (!eventTarget) return;
-            if (!eventTarget.classList.contains("click-item")) {
+
+            const validClasses: Array<string> = ["notification-click-item", "click-item", "notification-dropdown-wrapper", "notification-dropdown-menu-header", "notification-dropdown-menu-footer", "notification-item"];
+            let validClass = true;
+            for (let i = 0; i < eventTarget.classList.length; i++) {
+                if (!validClasses.includes(eventTarget.classList[i])) {
+                    validClass = false;
+                    break;
+                }
+            }
+
+            if (!validClass) {
                 this.closeUserDropdown();
                 this.closeNotificationDropdown();
-            };
+            }
         });
     },
 });
@@ -94,40 +98,72 @@ export default defineComponent({
 <template>
     <nav>
         <div class="searchbar-container navbar-pill">
-            <i class="fa-regular fa-eye" @click="focusSearchbar"></i>
-            <!-- TODO: #6 <i class="fa-regular fa-magnifying-glass"></i> -->
+            <i class="fa-regular fa-magnifying-glass" @click="($refs['searchBar'] as HTMLInputElement).focus()"></i>
             <input placeholder="Search" type="text" ref="searchBar">
         </div>
-        <section class="nav-right">
+        <section class="nav-right flex">
             <div class="notification-pill-container">
                 <div class="navbar-pill notification-pill">
-                    <i ref="notificationDropdownIcon" class="fa-regular fa-bell"></i>
-                    <span class="click-item notification-user-item" @click="toggleNotificationDropdown()"></span>
-                    <!-- TODO: #2 <i class="fa-regular fa-bell-ring"></i> -->
+                    <!-- TODO: #13 -->
+                    <i v-if="notificationStore.unreadNotifications.length === 0"
+                        class="fa-regular fa-hexagon-check"></i>
+                    <i v-else class="fa-regular fa-hexagon-exclamation"></i>
+                    <button type="button" class="click-item notification-click-item"
+                        @click="toggleNotificationDropdown()"></button>
                 </div>
                 <div ref="notificationDropdownMenu" class="notification-dropdown-menu shadow dropdown-menu">
-                    <NavbarNotificationItem v-for="notification in notificationStore.notifications"
-                        :id="notification.ticket" :ticket="notification.ticket" :type="notification.type"
-                        :message="notification.message" :read="notification.read" :source="notification.source"
-                        :date="notification.date">
-                    </NavbarNotificationItem>
+                    <section v-if="notificationStore.notifications.length === 0"
+                        class="notification-dropdown-menu-empty">
+                        <strong>Notification Center</strong>
+                        <span class="splitter"></span>
+                        <p>Nothing new to display at the moment.</p>
+                    </section>
+                    <div v-else class="notification-dropdown-wrapper">
+                        <section class="notification-dropdown-menu-header">
+                            <strong>Notification Center</strong>
+                            <small>Last {{ notificationStore.notifications.length >= 6 ? 5 :
+                                notificationStore.notifications.length }}
+                                {{ notificationStore.notifications.length > 1 ? "notifications" : "notification"
+                                }}.</small>
+                            <span class="splitter"></span>
+                        </section>
+                        <NotificationItem
+                            v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
+                            :id="notification.ticket" :ticket="notification.ticket" :type="notification.type"
+                            :message="notification.message" :unread="notification.unread" :source="notification.source"
+                            :date="new Date(notification.date)">
+                        </NotificationItem>
+                        <section class="notification-dropdown-menu-footer">
+                            <span class="splitter"></span>
+                            <RouterLink to="/panel/dashboard/notifications"
+                                class="notification-dropdown-menu-footer-link flex">
+                                <p>See all ({{ notificationStore.notifications.length }})</p>
+                                <i class="fa-regular fa-arrow-right"></i>
+                            </RouterLink>
+                        </section>
+                    </div>
                 </div>
             </div>
             <div class="user-pill-container">
                 <div class="navbar-pill user-pill">
                     <img :src="userStore.user.imageUrl" alt="Profile Picture">
                     <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
-                    <i ref="userDropdownIcon" class="fa-regular fa-square-caret-down user-dropdown-icon"></i>
-                    <!-- TODO: #6 <i class="fa-regular fa-angle-down"></i> -->
-                    <span class="click-item" @click="toggleUserDropdown()"></span>
+                    <i ref="userDropdownIcon" class="fa-regular fa-angle-down user-dropdown-icon"></i>
+                    <button type="button" class="click-item" @click="toggleUserDropdown()"></button>
                 </div>
                 <div ref="userDropdownMenu" class="user-dropdown-menu shadow dropdown-menu">
+                    <section class="user-dropdown-menu-header">
+                        <strong>Quick Access</strong>
+                        <small>Handy resources & links.</small>
+                        <span class="splitter"></span>
+                    </section>
                     <RouterLink class="user-dropdown-item" to="/">Home</RouterLink>
-                    <RouterLink class="user-dropdown-item" to="/preferences/support">Support</RouterLink>
+                    <RouterLink class="user-dropdown-item" to="/panel/preferences">Preferences</RouterLink>
+                    <RouterLink class="user-dropdown-item" to="/panel/preferences/support">Support</RouterLink>
                     <span class="splitter"></span>
-                    <button class="sign-out-button user-dropdown-item" type="button" @click="signOut()">
+                    <button type="button" class="sign-out-button user-dropdown-item" @click="signOut()">
                         <p>Sign Out</p>
-                        <i class="fa-regular fa-arrow-right-from-bracket"></i>
+                        <i class="fa-regular fa-arrow-right-from-bracket color-danger"></i>
                     </button>
                 </div>
             </div>
@@ -183,8 +219,6 @@ input {
 
 /* Right */
 .nav-right {
-    display: flex;
-    align-items: center;
     gap: 20px;
     padding-left: 20px;
 }
@@ -227,7 +261,7 @@ img {
     object-fit: cover;
 }
 
-/* Dropdown */
+/* Gerneral Dropdown */
 .click-item {
     width: 100%;
     height: 100%;
@@ -235,10 +269,6 @@ img {
     margin-left: -15px;
     position: absolute;
     z-index: 1;
-}
-
-.notification-user-item {
-    margin: 0;
 }
 
 .dropdown-menu {
@@ -249,11 +279,16 @@ img {
     height: fit-content;
     top: 80px;
     background-color: var(--color-fill);
-    border-radius: calc(var(--border-radius-low) + 5px);
+    border-radius: var(--border-radius-low);
     user-select: none;
     z-index: 1;
     box-sizing: border-box;
     padding: 5px;
+}
+
+/* Notification Dropdown  */
+.notification-click-item {
+    margin: 0;
 }
 
 .notification-dropdown-menu {
@@ -261,8 +296,28 @@ img {
     right: 280px;
 }
 
+.notification-dropdown-wrapper,
+.notification-dropdown-menu-empty,
+.notification-dropdown-menu-header,
+.notification-dropdown-menu-footer,
+.user-dropdown-menu-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.notification-dropdown-wrapper,
+.notification-dropdown-menu-footer-link {
+    gap: 10px;
+}
+
+.notification-dropdown-menu-footer-link {
+    width: fit-content;
+}
+
+/* User Dropdown */
 .user-dropdown-menu {
-    width: 150px;
+    width: 200px;
     right: 25px;
 }
 
@@ -288,10 +343,6 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.sign-out-button i {
-    color: var(--color-danger);
 }
 
 /* Responsiveness */

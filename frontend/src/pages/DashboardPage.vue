@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { NotificationItem, PopupPayload } from '@/assets/customTypes';
+import type { NotificationItem, PopupItem } from '@/assets/customTypes';
 import { PromptTypes } from '@/assets/customTypes';
 import { defineComponent } from 'vue';
 import { useNotificationStore } from '@/stores/NotificationStore';
@@ -18,10 +18,11 @@ export default defineComponent({
          * Temporary test function.
          */
         showPopupItem(): void {
-            const payload: PopupPayload = {
+            const payload: PopupItem = {
+                "id": createTicket(),
                 "type": PromptTypes.success,
                 "message": "This is a test message.",
-                "time": 60000
+                "expiryMilliseconds": 3000
             }
             this.$emit("popup", payload);
         },
@@ -30,7 +31,7 @@ export default defineComponent({
                 "ticket": createTicket(),
                 "type": PromptTypes.success,
                 "message": "This is a test notification.",
-                "read": false,
+                "unread": true,
                 "source": "System",
                 "date": new Date()
             }
@@ -43,16 +44,31 @@ export default defineComponent({
 <template>
     <section>
         <p>Dashboard Page</p>
-        <button type="button" @click="showPopupItem()">Popup</button>
-        <button type="button" @click="showNotificationItem()">Notification</button>
+        <div class="temp">
+            <strong>Functionality Testing:</strong>
+            <button type="button" @click="showPopupItem()">New Popup (success, 3 seconds)</button>
+            <button type="button" @click="showNotificationItem()">New Notification (unread, success)</button>
+        </div>
     </section>
 </template>
 
 <style scoped>
-section {
+section,
+.temp {
     display: flex;
     flex-direction: column;
     align-items: baseline;
-    gap: 10px;
+    gap: 20px;
+}
+
+.temp {
+    gap: 5px;
+}
+
+.temp button {
+    background-color: var(--color-fill-dark);
+    border-radius: var(--border-radius-low);
+    box-sizing: border-box;
+    padding: 5px;
 }
 </style>
