@@ -82,20 +82,22 @@ export default defineComponent({
         this.notificationTooltip = this.$refs["notificationTooltip"] as HTMLDivElement;
         this.userTooltip = this.$refs["userTooltip"] as HTMLDivElement;
 
-        console.log(this.notificationTooltip, this.userTooltip);
-
         // Global Close Dropdown
         document.body.addEventListener("click", (event: MouseEvent): void => {
             const eventTarget: HTMLElement = event.target as HTMLElement;
             if (!eventTarget) return;
 
-            const validClasses: Array<string> = ["notification-click-item", "click-item", "notification-dropdown-wrapper", "notification-dropdown-menu-header", "notification-dropdown-menu-footer", "notification-item"];
+            const validClasses: Array<string> = ["notification-click-item", "user-click-item", "notification-dropdown-wrapper", "notification-dropdown-menu-header", "notification-dropdown-menu-footer", "notification-item"];
+            const validClickItems: Array<String> = ["notification-click-item", "user-click-item"];
             let validClass = true;
             for (let i = 0; i < eventTarget.classList.length; i++) {
                 if (!validClasses.includes(eventTarget.classList[i])) {
                     validClass = false;
-                    break;
-                }
+                } else validClass = true;
+
+                if (eventTarget.classList[i] === validClickItems[0]) {
+                    this.closeUserDropdown();
+                } else if (eventTarget.classList[i] === validClickItems[1]) this.closeNotificationDropdown();
             }
 
             if (!validClass) {
@@ -165,7 +167,7 @@ export default defineComponent({
                     <img :src="userStore.user.imageUrl" alt="Profile Picture">
                     <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
                     <i ref="userDropdownIcon" class="fa-regular fa-angle-down user-dropdown-icon"></i>
-                    <button title="Quick Access" type="button" class="click-item"
+                    <button title="Quick Access" type="button" class="click-item user-click-item"
                         @click="toggleUserDropdown()"></button>
                 </div>
                 <div ref="userDropdownMenu" class="user-dropdown-menu shadow dropdown-menu">
@@ -296,7 +298,8 @@ img {
 }
 
 /* Gerneral Dropdown */
-.click-item {
+.user-click-item,
+.notification-click-item {
     width: 100%;
     height: 100%;
     background-color: transparent;

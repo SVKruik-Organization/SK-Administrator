@@ -1,4 +1,4 @@
-import type { NotificationItem } from "@/assets/customTypes";
+import { PromptTypes, type NotificationItem } from "@/assets/customTypes";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 
@@ -18,6 +18,17 @@ export const useNotificationStore = defineStore("NotificationStore", {
         }
     },
     getters: {
-        unreadNotifications: (state) => state.notifications.filter((notification: NotificationItem) => notification.unread)
+        unreadNotifications(state) {
+            return state.notifications.filter((notification: NotificationItem) => notification.unread);
+        },
+        highestPriority(state): string {
+            if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptTypes.danger).length) {
+                return "danger";
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptTypes.warning).length) {
+                return "warning";
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptTypes.success).length) {
+                return "success";
+            } else return "info";
+        }
     }
 });

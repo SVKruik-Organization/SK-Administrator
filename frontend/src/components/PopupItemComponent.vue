@@ -46,7 +46,7 @@ export default defineComponent({
     <button title="Close Popup" type="button" ref="popupItem" class="popup shadow">
         <div class="left">
             <span :style="`background-color: var(--color-${popupData.type});`" class="color-indicator"></span>
-            <p class="message">{{ popupData.message }}</p>
+            <p class="message ellipsis">{{ popupData.message }}</p>
         </div>
         <div class="right">
             <div class="close-popup-button">

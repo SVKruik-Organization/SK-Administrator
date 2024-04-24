@@ -121,6 +121,12 @@ a {
     margin-right: auto;
 }
 
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Color Classes */
 .color-info {
     color: var(--color-info);
