@@ -114,6 +114,13 @@ a {
     background-color: var(--color-border);
 }
 
+.relative-center {
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Color Classes */
 .color-info {
     color: var(--color-info);
@@ -129,4 +136,33 @@ a {
 
 .color-danger {
     color: var(--color-danger);
+}
+
+/* Tooltips */
+.tooltip-item {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    z-index: 1;
+    top: 50px;
+    width: fit-content;
+    width: -moz-fit-content;
+    height: fit-content;
+}
+
+.tooltip-item p {
+    background-color: var(--color-fill-dark);
+    z-index: 2;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    border-radius: var(--border-radius-high);
+}
+
+.tooltip-arrow {
+    height: 10px;
+    width: 10px;
+    margin-bottom: -5px;
+    transform: rotate(45deg);
+    background-color: var(--color-fill-dark);
 }

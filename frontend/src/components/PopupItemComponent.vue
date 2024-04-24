@@ -43,15 +43,15 @@ export default defineComponent({
 </script>
 
 <template>
-    <button type="button" ref="popupItem" class="popup shadow">
+    <button title="Close Popup" type="button" ref="popupItem" class="popup shadow">
         <div class="left">
             <span :style="`background-color: var(--color-${popupData.type});`" class="color-indicator"></span>
             <p class="message">{{ popupData.message }}</p>
         </div>
         <div class="right">
-            <button class="close-popup-button">
+            <div class="close-popup-button">
                 <i class="fa-solid fa-xmark close-icon"></i>
-            </button>
+            </div>
         </div>
         <span class="click-item" @click="closePopup()"></span>
     </button>

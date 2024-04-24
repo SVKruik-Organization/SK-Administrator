@@ -36,7 +36,7 @@ export default defineComponent({
 <template>
     <main>
         <p>Login View</p>
-        <button type="button" @click="login()">Login Button</button>
+        <button title="Login" type="button" @click="login()">Login Button</button>
     </main>
 </template>
 

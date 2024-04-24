@@ -31,7 +31,7 @@ export default defineComponent({
         <section class="notification-item-left">
             <span :style="`background-color: var(--color-${type});`" class="type-indicator"></span>
             <p>{{ message }}</p>
-            <button type="button" class="click-item" @click="markAsRead()"></button>
+            <button title="Mark as Read" type="button" class="click-item" @click="markAsRead()"></button>
         </section>
         <section class="notification-item-right">
 

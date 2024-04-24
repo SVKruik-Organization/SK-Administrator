@@ -46,8 +46,9 @@ export default defineComponent({
         <p>Dashboard Page</p>
         <div class="temp">
             <strong>Functionality Testing:</strong>
-            <button type="button" @click="showPopupItem()">New Popup (success, 3 seconds)</button>
-            <button type="button" @click="showNotificationItem()">New Notification (unread, success)</button>
+            <button title="New Popup" type="button" @click="showPopupItem()">New Popup (success, 3 seconds)</button>
+            <button title="New Notification" type="button" @click="showNotificationItem()">New Notification (unread,
+                success)</button>
         </div>
     </section>
 </template>

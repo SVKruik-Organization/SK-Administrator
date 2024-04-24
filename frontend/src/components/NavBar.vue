@@ -13,7 +13,9 @@ export default defineComponent({
             "userDropdownIcon": null as unknown as HTMLElement,
             "userDropdownMenu": null as unknown as HTMLDivElement,
             "notificationDropdownMenu": null as unknown as HTMLDivElement,
-            "notificationLimit": 5
+            "notificationLimit": 5,
+            "notificationTooltip": null as unknown as HTMLDivElement,
+            "userTooltip": null as unknown as HTMLDivElement
         }
     },
     components: {
@@ -35,6 +37,7 @@ export default defineComponent({
             } else {
                 if (this.userDropdownIcon) this.userDropdownIcon.classList.add("rotated");
                 if (this.userDropdownMenu) this.userDropdownMenu.classList.add("visible");
+                if (this.userTooltip) this.userTooltip.classList.add("hidden");
             }
         },
         /**
@@ -43,7 +46,10 @@ export default defineComponent({
         toggleNotificationDropdown(): void {
             if (this.notificationDropdownMenu && this.notificationDropdownMenu.classList.contains("visible")) {
                 this.closeNotificationDropdown();
-            } else if (this.notificationDropdownMenu) this.notificationDropdownMenu.classList.add("visible");
+            } else if (this.notificationDropdownMenu && this.notificationTooltip) {
+                this.notificationDropdownMenu.classList.add("visible");
+                this.notificationTooltip.classList.add("hidden");
+            }
         },
         /**
          * Closes the user dropdown, regardless of current state.
@@ -51,12 +57,14 @@ export default defineComponent({
         closeUserDropdown(): void {
             if (this.userDropdownIcon) this.userDropdownIcon.classList.remove("rotated");
             if (this.userDropdownMenu) this.userDropdownMenu.classList.remove("visible");
+            if (this.userTooltip) this.userTooltip.classList.remove("hidden");
         },
         /**
          * Closes the notification dropdown, regardless of current state.
          */
         closeNotificationDropdown(): void {
             if (this.notificationDropdownMenu) this.notificationDropdownMenu.classList.remove("visible");
+            if (this.notificationTooltip) this.notificationTooltip.classList.remove("hidden");
         },
         /**
          * Clear store and redirect to homepage.
@@ -71,6 +79,10 @@ export default defineComponent({
         this.userDropdownIcon = this.$refs["userDropdownIcon"] as HTMLElement;
         this.userDropdownMenu = this.$refs["userDropdownMenu"] as HTMLDivElement;
         this.notificationDropdownMenu = this.$refs["notificationDropdownMenu"] as HTMLDivElement;
+        this.notificationTooltip = this.$refs["notificationTooltip"] as HTMLDivElement;
+        this.userTooltip = this.$refs["userTooltip"] as HTMLDivElement;
+
+        console.log(this.notificationTooltip, this.userTooltip);
 
         // Global Close Dropdown
         document.body.addEventListener("click", (event: MouseEvent): void => {
@@ -108,8 +120,12 @@ export default defineComponent({
                     <i v-if="notificationStore.unreadNotifications.length === 0"
                         class="fa-regular fa-hexagon-check"></i>
                     <i v-else class="fa-regular fa-hexagon-exclamation"></i>
-                    <button type="button" class="click-item notification-click-item"
+                    <button title="Notifications" type="button" class="click-item notification-click-item"
                         @click="toggleNotificationDropdown()"></button>
+                    <div class="tooltip-item notification-pill-tooltip" ref="notificationTooltip">
+                        <span class="tooltip-arrow"></span>
+                        <p>Notifications</p>
+                    </div>
                 </div>
                 <div ref="notificationDropdownMenu" class="notification-dropdown-menu shadow dropdown-menu">
                     <section v-if="notificationStore.notifications.length === 0"
@@ -149,7 +165,8 @@ export default defineComponent({
                     <img :src="userStore.user.imageUrl" alt="Profile Picture">
                     <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
                     <i ref="userDropdownIcon" class="fa-regular fa-angle-down user-dropdown-icon"></i>
-                    <button type="button" class="click-item" @click="toggleUserDropdown()"></button>
+                    <button title="Quick Access" type="button" class="click-item"
+                        @click="toggleUserDropdown()"></button>
                 </div>
                 <div ref="userDropdownMenu" class="user-dropdown-menu shadow dropdown-menu">
                     <section class="user-dropdown-menu-header">
@@ -161,10 +178,15 @@ export default defineComponent({
                     <RouterLink class="user-dropdown-item" to="/panel/preferences">Preferences</RouterLink>
                     <RouterLink class="user-dropdown-item" to="/panel/preferences/support">Support</RouterLink>
                     <span class="splitter"></span>
-                    <button type="button" class="sign-out-button user-dropdown-item" @click="signOut()">
+                    <button title="Sign Out" type="button" class="sign-out-button user-dropdown-item"
+                        @click="signOut()">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket color-danger"></i>
                     </button>
+                </div>
+                <div class="tooltip-item user-pill-tooltip relative-center" ref="userTooltip">
+                    <span class="tooltip-arrow"></span>
+                    <p>Quick Access</p>
                 </div>
             </div>
         </section>
@@ -240,6 +262,18 @@ input {
     padding: 0;
 }
 
+.notification-pill:hover .notification-pill-tooltip {
+    display: flex;
+}
+
+.user-pill-container {
+    position: relative;
+}
+
+.user-pill-container:hover .user-pill-tooltip {
+    display: flex;
+}
+
 .user-pill {
     display: flex;
     align-items: center;
@@ -277,7 +311,7 @@ img {
     gap: 5px;
     position: absolute;
     height: fit-content;
-    top: 80px;
+    top: 50px;
     background-color: var(--color-fill);
     border-radius: var(--border-radius-low);
     user-select: none;
@@ -294,6 +328,7 @@ img {
 .notification-dropdown-menu {
     width: fit-content;
     right: 280px;
+    top: 75px;
 }
 
 .notification-dropdown-wrapper,
@@ -318,11 +353,12 @@ img {
 /* User Dropdown */
 .user-dropdown-menu {
     width: 200px;
-    right: 25px;
+    right: 0px;
+    margin-right: 0;
 }
 
 .rotated {
-    rotate: 180deg;
+    transform: rotate(180deg);
 }
 
 .visible {
@@ -343,6 +379,10 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.hidden {
+    display: none !important;
 }
 
 /* Responsiveness */
