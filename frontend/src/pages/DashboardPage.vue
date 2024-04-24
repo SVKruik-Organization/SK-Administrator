@@ -48,8 +48,10 @@ export default defineComponent({
             <strong>Functionality Testing:</strong>
             <button title="New Popup" type="button" @click="showPopupItem()">New Popup (success, 3 seconds)</button>
             <button title="New Notification" type="button" @click="showNotificationItem()">New Notification (unread,
-                danger)</button>
+                danger)
+            </button>
         </div>
+        <RouterView></RouterView>
     </section>
 </template>
 

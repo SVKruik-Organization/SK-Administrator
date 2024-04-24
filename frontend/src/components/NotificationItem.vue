@@ -27,7 +27,8 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="notification-item" :style="`background-color: var(--color-${unread ? 'fill-dark' : 'fill'});`">
+    <!-- TODO: #15 -->
+    <div :style="`background-color: var(--color-${unread ? 'fill-dark' : 'fill'});`" class="notification-item">
         <section class="notification-item-left">
             <span :style="`background-color: var(--color-${type});`" class="type-indicator"></span>
             <p>{{ message }}</p>
@@ -35,8 +36,8 @@ export default defineComponent({
         <section class="notification-item-right">
 
         </section>
-        <button title="Mark as Read" type="button" class="click-item notification-click-item"
-            @click="markAsRead()"></button>
+        <button class="click-item notification-click-item" title="Mark as Read" type="button"
+                @click="markAsRead()"></button>
     </div>
 </template>
 

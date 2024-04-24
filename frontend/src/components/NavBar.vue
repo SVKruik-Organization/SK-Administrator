@@ -111,6 +111,7 @@ export default defineComponent({
 
 <template>
     <nav>
+        <!-- TODO: #4 -->
         <div class="searchbar-container navbar-pill">
             <i class="fa-regular fa-magnifying-glass" @click="($refs['searchBar'] as HTMLInputElement).focus()"></i>
             <input placeholder="Search" type="text" ref="searchBar">

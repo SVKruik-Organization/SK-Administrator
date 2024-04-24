@@ -1,4 +1,4 @@
-import { PromptTypes, type NotificationItem } from "@/assets/customTypes";
+import { type NotificationItem, PromptTypes } from "@/assets/customTypes";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 

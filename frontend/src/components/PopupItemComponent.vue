@@ -1,6 +1,6 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 import type { PopupItem } from '@/assets/customTypes';
 
 export default defineComponent({
@@ -43,7 +43,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <button title="Close Popup" type="button" ref="popupItem" class="popup shadow">
+    <button ref="popupItem" class="popup shadow" title="Close Popup" type="button">
         <div class="left">
             <span :style="`background-color: var(--color-${popupData.type});`" class="color-indicator"></span>
             <p class="message ellipsis">{{ popupData.message }}</p>
