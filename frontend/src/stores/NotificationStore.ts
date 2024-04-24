@@ -15,6 +15,10 @@ export const useNotificationStore = defineStore("NotificationStore", {
         markAsRead(ticket: string | undefined): void {
             if (!ticket) return;
             this.notifications.filter((notification: NotificationItem) => notification.ticket === ticket)[0].unread = false;
+        },
+        delete(ticket: string | undefined): void {
+            if (!ticket) return;
+            this.notifications.splice(this.notifications.indexOf(this.notifications.filter((notification: NotificationItem) => notification.ticket === ticket)[0]), 1);
         }
     },
     getters: {

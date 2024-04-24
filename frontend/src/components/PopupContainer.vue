@@ -9,7 +9,7 @@ export default defineComponent({
         PopupItemComponent
     },
     props: {
-        pendingPopups: Array<PopupItem>
+        "pendingPopups": { type: Array<PopupItem>, required: true },
     }
 });
 </script>

@@ -5,12 +5,12 @@ import { useNotificationStore } from '@/stores/NotificationStore';
 export default defineComponent({
     name: "NotificationItem",
     props: {
-        "ticket": String,
-        "type": String,
-        "message": String,
-        "unread": Boolean,
-        "source": String,
-        "date": Date
+        "ticket": { type: String, required: true },
+        "type": { type: String, required: true },
+        "message": { type: String, required: true },
+        "unread": { type: Boolean, required: true },
+        "source": { type: String, required: true },
+        "date": { type: Date, required: true },
     },
     setup() {
         return {
@@ -21,23 +21,34 @@ export default defineComponent({
         markAsRead(): void {
             if (!this.unread) return;
             this.notificationStore.markAsRead(this.ticket);
+        },
+        deleteNotification(): void {
+            this.notificationStore.delete(this.ticket);
         }
     }
 });
 </script>
 
 <template>
-    <!-- TODO: #15 -->
     <div :style="`background-color: var(--color-${unread ? 'fill-dark' : 'fill'});`" class="notification-item">
         <section class="notification-item-left">
             <span :style="`background-color: var(--color-${type});`" class="type-indicator"></span>
-            <p>{{ message }}</p>
+            <p class="ellipsis">{{ message }}</p>
+            <span class="click-item"></span>
         </section>
         <section class="notification-item-right">
-
+            <button v-if="unread" :style="`background-color: var(--color-${unread ? 'fill' : 'fill-dark'});`" class="notification-action-button" title="Mark as Read"
+                    type="button" @click="markAsRead()">
+                <i class="fa-regular fa-envelope-circle-check"></i>
+                <span class="click-item"></span>
+            </button>
+            <button :style="`background-color: var(--color-${unread ? 'fill' : 'fill-dark'});`" class="notification-action-button" title="Delete Notification"
+                    type="button"
+                    @click="deleteNotification()">
+                <i class="fa-regular fa-envelope-open"></i>
+                <span class="click-item"></span>
+            </button>
         </section>
-        <button class="click-item notification-click-item" title="Mark as Read" type="button"
-                @click="markAsRead()"></button>
     </div>
 </template>
 
@@ -45,6 +56,7 @@ export default defineComponent({
 .notification-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     width: fit-content;
     min-width: 400px;
@@ -52,7 +64,6 @@ export default defineComponent({
     border-top-right-radius: var(--border-radius-low);
     border-bottom-right-radius: var(--border-radius-low);
     background-color: var(--color-background);
-    cursor: pointer;
     position: relative;
 }
 
@@ -62,6 +73,7 @@ export default defineComponent({
     gap: 10px;
     height: 100%;
     width: fit-content;
+    position: relative;
 }
 
 .type-indicator {
@@ -72,10 +84,32 @@ export default defineComponent({
     border-bottom-left-radius: var(--border-radius-low);
 }
 
-.click-item {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 1;
+.notification-item-right {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    gap: 5px;
+    margin-right: 5px;
+}
+
+.notification-item:hover .notification-item-right {
+    opacity: 1;
+}
+
+.notification-action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-fill-dark);
+    height: 20px;
+    width: 20px;
+    border-radius: var(--border-radius-low);
+    position: relative;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.notification-action-button i {
+    font-size: small;
 }
 </style>

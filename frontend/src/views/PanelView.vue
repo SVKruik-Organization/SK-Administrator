@@ -33,7 +33,7 @@ export default defineComponent({
     },
     data() {
         return {
-            pendingPopups: [] as Array<PopupItem>
+            "pendingPopups": [] as Array<PopupItem>
         }
     },
 });

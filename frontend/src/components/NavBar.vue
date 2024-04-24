@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/stores/UserStore';
 import { useNotificationStore } from '@/stores/NotificationStore';
 import type { UserData } from '@/assets/customTypes';
@@ -87,7 +86,7 @@ export default defineComponent({
             const eventTarget: HTMLElement = event.target as HTMLElement;
             if (!eventTarget) return;
 
-            const validClasses: Array<string> = ["notification-item", "visible", "shadow", "splitter", "notification-click-item", "user-dropdown-menu-header", "user-click-item", "notification-dropdown-wrapper", "notification-dropdown-menu-header", "notification-dropdown-menu-footer"];
+            const validClasses: Array<string> = ["notification-item", "visible", "shadow", "splitter", "user-dropdown-menu-header", "notification-click-item", "notification-action-button", "user-click-item", "click-item", "notification-dropdown-wrapper", "notification-dropdown-menu-header", "notification-dropdown-menu-footer"];
             const validClickItems: Array<String> = ["notification-click-item", "user-click-item"];
             let validClass = true;
             for (let i = 0; i < eventTarget.classList.length; i++) {
@@ -114,48 +113,52 @@ export default defineComponent({
         <!-- TODO: #4 -->
         <div class="searchbar-container navbar-pill">
             <i class="fa-regular fa-magnifying-glass" @click="($refs['searchBar'] as HTMLInputElement).focus()"></i>
-            <input placeholder="Search" type="text" ref="searchBar">
+            <input ref="searchBar" placeholder="Search" type="text">
         </div>
         <section class="nav-right flex">
             <div class="notification-pill-container">
                 <div class="navbar-pill notification-pill">
-                    <i v-if="notificationStore.unreadNotifications.length === 0" class="fa-regular fa-circle-check"
-                        :style="`color: var(--color-${notificationStore.highestPriority})`"></i>
-                    <i v-else class="fa-regular fa-circle-exclamation"
-                        :style="`color: var(--color-${notificationStore.highestPriority})`"></i>
-                    <button title="Notifications" type="button" class="click-item notification-click-item"
-                        @click="toggleNotificationDropdown()"></button>
-                    <div class="tooltip-item notification-pill-tooltip" ref="notificationTooltip">
+                    <i v-if="notificationStore.unreadNotifications.length === 0" :style="`color: var(--color-${notificationStore.highestPriority})`"
+                       class="fa-regular fa-envelope"></i>
+                    <i v-else :style="`color: var(--color-${notificationStore.highestPriority})`"
+                       class="fa-regular fa-envelope-dot"></i>
+                    <button class="click-item notification-click-item" title="Notifications" type="button"
+                            @click="toggleNotificationDropdown()"></button>
+                    <div ref="notificationTooltip" class="tooltip-item notification-pill-tooltip">
                         <span class="tooltip-arrow"></span>
                         <p>Notifications</p>
                     </div>
                 </div>
                 <div ref="notificationDropdownMenu" class="notification-dropdown-menu shadow dropdown-menu">
                     <section v-if="notificationStore.notifications.length === 0"
-                        class="notification-dropdown-menu-empty">
+                             class="notification-dropdown-menu-empty">
                         <strong>Notification Center</strong>
+                        <small>You are all caught up!</small>
                         <span class="splitter"></span>
                         <p>Nothing new to display at the moment.</p>
                     </section>
                     <div v-else class="notification-dropdown-wrapper">
                         <section class="notification-dropdown-menu-header">
                             <strong>Notification Center</strong>
-                            <small>Last {{ notificationStore.notifications.length >= 6 ? 5 :
-                                notificationStore.notifications.length }}
-                                {{ notificationStore.notifications.length > 1 ? "notifications" : "notification"
+                            <small>Last {{
+                                    notificationStore.notifications.length >= 6 ? 5 :
+                                        notificationStore.notifications.length
+                                }}
+                                {{
+                                    notificationStore.notifications.length > 1 ? "notifications" : "notification"
                                 }}.</small>
                             <span class="splitter"></span>
                         </section>
                         <NotificationItem
                             v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
-                            :id="notification.ticket" :ticket="notification.ticket" :type="notification.type"
-                            :message="notification.message" :unread="notification.unread" :source="notification.source"
-                            :date="new Date(notification.date)">
+                            :id="notification.ticket" :date="new Date(notification.date)" :message="notification.message"
+                            :source="notification.source" :ticket="notification.ticket" :type="notification.type"
+                            :unread="notification.unread">
                         </NotificationItem>
                         <section class="notification-dropdown-menu-footer">
                             <span class="splitter"></span>
-                            <RouterLink to="/panel/dashboard/notifications"
-                                class="notification-dropdown-menu-footer-link flex">
+                            <RouterLink class="notification-dropdown-menu-footer-link flex"
+                                        to="/panel/dashboard/notifications">
                                 <p>See all ({{ notificationStore.notifications.length }})</p>
                                 <i class="fa-regular fa-arrow-right"></i>
                             </RouterLink>
@@ -168,8 +171,8 @@ export default defineComponent({
                     <img :src="userStore.user.imageUrl" alt="Profile Picture">
                     <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
                     <i ref="userDropdownIcon" class="fa-regular fa-angle-down user-dropdown-icon"></i>
-                    <button title="Quick Access" type="button" class="click-item user-click-item"
-                        @click="toggleUserDropdown()"></button>
+                    <button class="click-item user-click-item" title="Quick Access" type="button"
+                            @click="toggleUserDropdown()"></button>
                 </div>
                 <div ref="userDropdownMenu" class="user-dropdown-menu shadow dropdown-menu">
                     <section class="user-dropdown-menu-header">
@@ -181,13 +184,13 @@ export default defineComponent({
                     <RouterLink class="user-dropdown-item" to="/panel/preferences">Preferences</RouterLink>
                     <RouterLink class="user-dropdown-item" to="/panel/preferences/support">Support</RouterLink>
                     <span class="splitter"></span>
-                    <button title="Sign Out" type="button" class="sign-out-button user-dropdown-item"
-                        @click="signOut()">
+                    <button class="sign-out-button user-dropdown-item" title="Sign Out" type="button"
+                            @click="signOut()">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket color-danger"></i>
                     </button>
                 </div>
-                <div class="tooltip-item user-pill-tooltip relative-center" ref="userTooltip">
+                <div ref="userTooltip" class="tooltip-item user-pill-tooltip relative-center">
                     <span class="tooltip-arrow"></span>
                     <p>Quick Access</p>
                 </div>
@@ -330,7 +333,7 @@ img {
 }
 
 .notification-dropdown-menu {
-    width: fit-content;
+    width: 410px;
     right: 280px;
     top: 75px;
 }
@@ -390,7 +393,7 @@ img {
 }
 
 /* Responsiveness */
-@media (width <=1020px) {
+@media (width <= 1020px) {
     nav {
         flex-direction: column-reverse;
         gap: 10px;
@@ -409,5 +412,6 @@ img {
 }
 
 /* TODO #5 */
-@media (width <=590px) {}
+@media (width <= 590px) {
+}
 </style>
