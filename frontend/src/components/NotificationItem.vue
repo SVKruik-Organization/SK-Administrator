@@ -31,11 +31,12 @@ export default defineComponent({
         <section class="notification-item-left">
             <span :style="`background-color: var(--color-${type});`" class="type-indicator"></span>
             <p>{{ message }}</p>
-            <button title="Mark as Read" type="button" class="click-item" @click="markAsRead()"></button>
         </section>
         <section class="notification-item-right">
 
         </section>
+        <button title="Mark as Read" type="button" class="click-item notification-click-item"
+            @click="markAsRead()"></button>
     </div>
 </template>
 
@@ -51,6 +52,7 @@ export default defineComponent({
     border-bottom-right-radius: var(--border-radius-low);
     background-color: var(--color-background);
     cursor: pointer;
+    position: relative;
 }
 
 .notification-item-left {
@@ -59,7 +61,6 @@ export default defineComponent({
     gap: 10px;
     height: 100%;
     width: fit-content;
-    position: relative;
 }
 
 .type-indicator {

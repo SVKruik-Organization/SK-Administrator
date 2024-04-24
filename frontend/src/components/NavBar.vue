@@ -87,7 +87,7 @@ export default defineComponent({
             const eventTarget: HTMLElement = event.target as HTMLElement;
             if (!eventTarget) return;
 
-            const validClasses: Array<string> = ["notification-click-item", "user-click-item", "notification-dropdown-wrapper", "notification-dropdown-menu-header", "notification-dropdown-menu-footer", "notification-item"];
+            const validClasses: Array<string> = ["notification-item", "visible", "shadow", "splitter", "notification-click-item", "user-dropdown-menu-header", "user-click-item", "notification-dropdown-wrapper", "notification-dropdown-menu-header", "notification-dropdown-menu-footer"];
             const validClickItems: Array<String> = ["notification-click-item", "user-click-item"];
             let validClass = true;
             for (let i = 0; i < eventTarget.classList.length; i++) {
@@ -118,10 +118,10 @@ export default defineComponent({
         <section class="nav-right flex">
             <div class="notification-pill-container">
                 <div class="navbar-pill notification-pill">
-                    <!-- TODO: #13 -->
-                    <i v-if="notificationStore.unreadNotifications.length === 0"
-                        class="fa-regular fa-hexagon-check"></i>
-                    <i v-else class="fa-regular fa-hexagon-exclamation"></i>
+                    <i v-if="notificationStore.unreadNotifications.length === 0" class="fa-regular fa-circle-check"
+                        :style="`color: var(--color-${notificationStore.highestPriority})`"></i>
+                    <i v-else class="fa-regular fa-circle-exclamation"
+                        :style="`color: var(--color-${notificationStore.highestPriority})`"></i>
                     <button title="Notifications" type="button" class="click-item notification-click-item"
                         @click="toggleNotificationDropdown()"></button>
                     <div class="tooltip-item notification-pill-tooltip" ref="notificationTooltip">

@@ -28,7 +28,9 @@ export const useNotificationStore = defineStore("NotificationStore", {
                 return "warning";
             } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptTypes.success).length) {
                 return "success";
-            } else return "info";
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptTypes.info).length) {
+                return "info";
+            } else return "text-light";
         }
     }
 });
