@@ -118,7 +118,8 @@ export default defineComponent({
         <section class="nav-right flex">
             <div class="notification-pill-container">
                 <div class="navbar-pill notification-pill">
-                    <i v-if="notificationStore.unreadNotifications.length === 0" :style="`color: var(--color-${notificationStore.highestPriority})`"
+                    <i v-if="notificationStore.unreadNotifications.length === 0"
+                       :style="`color: var(--color-${notificationStore.highestPriority})`"
                        class="fa-regular fa-envelope"></i>
                     <i v-else :style="`color: var(--color-${notificationStore.highestPriority})`"
                        class="fa-regular fa-envelope-dot"></i>
@@ -141,17 +142,18 @@ export default defineComponent({
                         <section class="notification-dropdown-menu-header">
                             <strong>Notification Center</strong>
                             <small>Last {{
-                                    notificationStore.notifications.length >= 6 ? 5 :
-                                        notificationStore.notifications.length
+                                notificationStore.notifications.length >= 6 ? 5 :
+                                notificationStore.notifications.length
                                 }}
                                 {{
-                                    notificationStore.notifications.length > 1 ? "notifications" : "notification"
+                                notificationStore.notifications.length > 1 ? "notifications" : "notification"
                                 }}.</small>
                             <span class="splitter"></span>
                         </section>
                         <NotificationItem
                             v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
-                            :id="notification.ticket" :date="new Date(notification.date)" :message="notification.message"
+                            :id="notification.ticket" :date="new Date(notification.date)"
+                            :message="notification.message"
                             :source="notification.source" :ticket="notification.ticket" :type="notification.type"
                             :unread="notification.unread">
                         </NotificationItem>

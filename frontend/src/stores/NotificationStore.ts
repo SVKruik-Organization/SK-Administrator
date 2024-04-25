@@ -22,7 +22,7 @@ export const useNotificationStore = defineStore("NotificationStore", {
         }
     },
     getters: {
-        unreadNotifications(state) {
+        unreadNotifications(state): NotificationItem[] {
             return state.notifications.filter((notification: NotificationItem) => notification.unread);
         },
         highestPriority(state): string {
@@ -35,6 +35,9 @@ export const useNotificationStore = defineStore("NotificationStore", {
             } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptTypes.info).length) {
                 return "info";
             } else return "text-light";
-        }
+        },
+        getByTicket(state) {
+            return (ticket: string | undefined) => state.notifications.find((notification) => notification.ticket === ticket);
+        },
     }
 });

@@ -24,6 +24,9 @@ export default defineComponent({
         },
         deleteNotification(): void {
             this.notificationStore.delete(this.ticket);
+        },
+        openDetails(): void {
+            this.$router.push(`/panel/dashboard/notifications?ticket=${this.ticket}`);
         }
     }
 });
@@ -34,16 +37,16 @@ export default defineComponent({
         <section class="notification-item-left">
             <span :style="`background-color: var(--color-${type});`" class="type-indicator"></span>
             <p class="ellipsis">{{ message }}</p>
-            <span class="click-item"></span>
+            <button class="click-item" title="Open Details" type="button" @click="openDetails()"></button>
         </section>
         <section class="notification-item-right">
-            <button v-if="unread" :style="`background-color: var(--color-${unread ? 'fill' : 'fill-dark'});`" class="notification-action-button" title="Mark as Read"
-                    type="button" @click="markAsRead()">
+            <button v-if="unread" :style="`background-color: var(--color-${unread ? 'fill' : 'fill-dark'});`"
+                    class="notification-action-button" title="Mark as Read" type="button" @click="markAsRead()">
                 <i class="fa-regular fa-envelope-circle-check"></i>
                 <span class="click-item"></span>
             </button>
-            <button :style="`background-color: var(--color-${unread ? 'fill' : 'fill-dark'});`" class="notification-action-button" title="Delete Notification"
-                    type="button"
+            <button :style="`background-color: var(--color-${unread ? 'fill' : 'fill-dark'});`"
+                    class="notification-action-button" title="Delete Notification" type="button"
                     @click="deleteNotification()">
                 <i class="fa-regular fa-envelope-open"></i>
                 <span class="click-item"></span>
