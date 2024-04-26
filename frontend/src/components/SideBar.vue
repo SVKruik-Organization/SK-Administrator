@@ -13,12 +13,12 @@ export default defineComponent({
 </script>
 
 <template>
-    <header>
-        <nav>
+    <header class="flex-col">
+        <nav class="flex-col">
             <h2 class="logo">Flock</h2>
             <section class="user-information flex">
                 <img :src="userStore.user.imageUrl" alt="Profile Picture">
-                <div class="user-information-text">
+                <div class="user-information-text flex-col">
                     <h3>{{ userStore.user.firstName }}</h3>
                     <p>{{ userStore.user.role }}</p>
                 </div>
@@ -27,8 +27,8 @@ export default defineComponent({
                 <i class="fa-regular fa-table-layout"></i>
                 <p>Dashboard</p>
             </RouterLink>
-            <section class="sidebar-content first-sidebar-content">
-                <div class="sidebar-content-item">
+            <section class="sidebar-content first-sidebar-content flex-col">
+                <div class="sidebar-content-item flex-col">
                     <h4>Operations</h4>
                     <menu>
                         <RouterLink class="sidebar-link" to="/panel/operations/users">
@@ -49,7 +49,7 @@ export default defineComponent({
                         </RouterLink>
                     </menu>
                 </div>
-                <div class="sidebar-content-item">
+                <div class="sidebar-content-item flex-col">
                     <h4>Documents</h4>
                     <menu>
                         <RouterLink class="sidebar-link" to="/panel/documents/finance">
@@ -66,7 +66,7 @@ export default defineComponent({
                         </RouterLink>
                     </menu>
                 </div>
-                <div class="sidebar-content-item">
+                <div class="sidebar-content-item flex-col">
                     <h4>Status</h4>
                     <menu>
                         <RouterLink class="sidebar-link" to="/panel/status/systems">
@@ -94,8 +94,7 @@ export default defineComponent({
 
 <style scoped>
 header {
-    display: flex;
-    flex-direction: column;
+    gap: 0;
     width: 250px;
     background-color: var(--color-fill);
     height: 100vh;
@@ -104,8 +103,6 @@ header {
 }
 
 nav {
-    display: flex;
-    flex-direction: column;
     gap: 40px;
     flex-grow: 1;
 }
@@ -116,8 +113,7 @@ nav {
 }
 
 .user-information-text {
-    display: flex;
-    flex-direction: column;
+    gap: 0;
     align-items: baseline;
 }
 
@@ -131,8 +127,7 @@ img {
 /* Content */
 .sidebar-content,
 .sidebar-content-item {
-    display: flex;
-    flex-direction: column;
+    gap: 0;
 }
 
 .sidebar-content {

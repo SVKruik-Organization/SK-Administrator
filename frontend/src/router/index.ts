@@ -5,18 +5,29 @@ const HomeView = () => import('../views/HomeView.vue');
 const LoginView = () => import('../views/LoginView.vue');
 const PanelView = () => import('../views/PanelView.vue');
 
+// Temporary Items
+const TemporaryPage = () => import('../pages/TemporaryPage.vue');
+const TemporaryTab = () => import('../tabs/TemporaryTab.vue');
+
 // Pages
 const DashboardPage = () => import('../pages/DashboardPage.vue');
-const SettingsPage = () => import('../pages/SettingsPage.vue');
-const TemporaryPage = () => import('../pages/TemporaryPage.vue');
+const PreferencesPage = () => import('../pages/PreferencesPage.vue');
+const TeamsPage = () => import('../pages/TeamsPage.vue');
+const TicketsPage = () => import('../pages/TicketsPage.vue');
+const UsersPage = () => import('../pages/UsersPage.vue');
 
 // Tabs (sub-pages)
 const DashboardNotificationsTab = () => import('../tabs/DashboardNotificationsTab.vue');
 const PreferencesSupportTab = () => import('../tabs/PreferencesSupportTab.vue');
+const TeamsFeaturesTab = () => import('../tabs/TeamsFeaturesTab.vue');
+const TeamsOverviewTab = () => import('../tabs/TeamsOverviewTab.vue');
+const UsersMembersTab = () => import('../tabs/UsersMembersTab.vue');
+const UsersOwnersTab = () => import('../tabs/UsersOwnersTab.vue');
 
 const router = createRouter({
     history: createWebHistory(),
     linkActiveClass: "active-router-link",
+    linkExactActiveClass: "active-exact-router-link",
     routes: [
         {
             path: "/",
@@ -28,20 +39,41 @@ const router = createRouter({
             component: LoginView,
             props: true
         },
-        // TODO: #14
         {
             path: "/panel", component: PanelView, props: true, children: [
                 { path: "", redirect: "/panel/dashboard" },
                 {
                     path: "dashboard", component: DashboardPage, props: true, children: [
+                        { path: "", redirect: "/panel/dashboard/notifications" },
                         { path: "notifications", component: DashboardNotificationsTab, props: true },
-                        { path: ":pathMatch(.*)", redirect: "/panel/dashboard" }
+                        { path: ":pathMatch(.*)", redirect: "/panel/dashboard/notifications" }
                     ]
                 },
-
-                { path: "operations/users", component: TemporaryPage, props: true },
-                { path: "operations/teams", component: TemporaryPage, props: true },
-                { path: "operations/tickets", component: TemporaryPage, props: true },
+                {
+                    path: "operations/users", component: UsersPage, props: true, children: [
+                        { path: "", redirect: "/panel/operations/users/members" },
+                        { path: "members", component: UsersMembersTab, props: true },
+                        { path: "owners", component: UsersOwnersTab, props: true },
+                        { path: ":pathMatch(.*)", redirect: "/panel/operations/users/members" }
+                    ]
+                },
+                {
+                    path: "operations/teams", component: TeamsPage, props: true, children: [
+                        { path: "", redirect: "/panel/operations/teams/overview" },
+                        { path: "overview", component: TeamsOverviewTab, props: true },
+                        { path: "features", component: TeamsFeaturesTab, props: true },
+                        { path: ":pathMatch(.*)", redirect: "/panel/operations/teams/overview" }
+                    ]
+                },
+                {
+                    path: "operations/tickets", component: TicketsPage, props: true, children: [
+                        { path: "", redirect: "/panel/operations/tickets/pending" },
+                        { path: "pending", component: TemporaryTab, props: true },
+                        { path: "active", component: TemporaryTab, props: true },
+                        { path: "closed", component: TemporaryTab, props: true },
+                        { path: ":pathMatch(.*)", redirect: "/panel/operations/tickets/pending" }
+                    ]
+                },
                 { path: "operations/tasks", component: TemporaryPage, props: true },
 
                 { path: "documents/finance", component: TemporaryPage, props: true },
@@ -53,9 +85,10 @@ const router = createRouter({
                 { path: "status/logs", component: TemporaryPage, props: true },
 
                 {
-                    path: "preferences", component: SettingsPage, props: true, children: [
+                    path: "preferences", component: PreferencesPage, props: true, children: [
+                        { path: "", redirect: "/panel/preferences/support" },
                         { path: "support", component: PreferencesSupportTab, props: true },
-                        { path: ":pathMatch(.*)", redirect: "/panel/preferences" }
+                        { path: ":pathMatch(.*)", redirect: "/panel/preferences/support" }
                     ]
                 },
                 { path: ":pathMatch(.*)", redirect: "/panel/dashboard" },

@@ -132,32 +132,31 @@ export default defineComponent({
                 </div>
                 <div ref="notificationDropdownMenu" class="notification-dropdown-menu shadow dropdown-menu">
                     <section v-if="notificationStore.notifications.length === 0"
-                             class="notification-dropdown-menu-empty">
+                             class="notification-dropdown-menu-empty flex-col">
                         <strong>Notification Center</strong>
                         <small>You are all caught up!</small>
                         <span class="splitter"></span>
                         <p>Nothing new to display at the moment.</p>
                     </section>
-                    <div v-else class="notification-dropdown-wrapper">
-                        <section class="notification-dropdown-menu-header">
+                    <div v-else class="notification-dropdown-wrapper flex-col">
+                        <section class="notification-dropdown-menu-header flex-col">
                             <strong>Notification Center</strong>
                             <small>Last {{
-                                notificationStore.notifications.length >= 6 ? 5 :
-                                notificationStore.notifications.length
+                                    notificationStore.notifications.length >= 6 ? 5 :
+                                        notificationStore.notifications.length
                                 }}
                                 {{
-                                notificationStore.notifications.length > 1 ? "notifications" : "notification"
+                                    notificationStore.notifications.length > 1 ? "notifications" : "notification"
                                 }}.</small>
                             <span class="splitter"></span>
                         </section>
                         <NotificationItem
                             v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
                             :id="notification.ticket" :date="new Date(notification.date)"
-                            :message="notification.message"
-                            :source="notification.source" :ticket="notification.ticket" :type="notification.type"
-                            :unread="notification.unread">
+                            :message="notification.message" :source="notification.source" :ticket="notification.ticket"
+                            :type="notification.type" :unread="notification.unread">
                         </NotificationItem>
-                        <section class="notification-dropdown-menu-footer">
+                        <section class="notification-dropdown-menu-footer flex-col">
                             <span class="splitter"></span>
                             <RouterLink class="notification-dropdown-menu-footer-link flex"
                                         to="/panel/dashboard/notifications">
@@ -177,7 +176,7 @@ export default defineComponent({
                             @click="toggleUserDropdown()"></button>
                 </div>
                 <div ref="userDropdownMenu" class="user-dropdown-menu shadow dropdown-menu">
-                    <section class="user-dropdown-menu-header">
+                    <section class="user-dropdown-menu-header flex-col">
                         <strong>Quick Access</strong>
                         <small>Handy resources & links.</small>
                         <span class="splitter"></span>
@@ -338,16 +337,6 @@ img {
     width: 410px;
     right: 280px;
     top: 75px;
-}
-
-.notification-dropdown-wrapper,
-.notification-dropdown-menu-empty,
-.notification-dropdown-menu-header,
-.notification-dropdown-menu-footer,
-.user-dropdown-menu-header {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
 }
 
 .notification-dropdown-wrapper,

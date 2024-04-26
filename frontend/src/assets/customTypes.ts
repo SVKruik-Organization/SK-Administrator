@@ -31,3 +31,24 @@ export type NotificationItem = {
     "source": string,
     "date": Date
 }
+
+// Global UI Themes
+// TODO: #19
+export enum UIThemes {
+    tempA = "tempA",
+    tempB = "tempB",
+    tempC = "tempC"
+}
+
+// Team Subscription Tiers
+export enum SubscriptionTiers {
+    basic = "Basic",
+    professional = "Professional",
+    enterprise = "Enterprise"
+}
+
+// Tab Component Item
+export type TabComponentItem = {
+    "title": string,
+    "route": string,
+}

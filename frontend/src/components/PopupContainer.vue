@@ -15,15 +15,13 @@ export default defineComponent({
 </script>
 
 <template>
-    <section class="popup-container">
+    <section class="popup-container flex-col">
         <PopupItemComponent v-for="popup in pendingPopups" :id="popup.id" :popupData="popup"></PopupItemComponent>
     </section>
 </template>
 
 <style scoped>
 .popup-container {
-    display: flex;
-    flex-direction: column;
     gap: 10px;
     width: 700px;
     position: absolute;

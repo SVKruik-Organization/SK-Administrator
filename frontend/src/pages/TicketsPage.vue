@@ -4,16 +4,24 @@ import TabComponent from '@/components/TabComponent.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "TemporaryPage",
+    name: "PreferencesPage",
     components: {
         TabComponent
     },
     data() {
         return {
             "navigationTabs": [{
-                "title": "Temporary",
-                "route": "/temporary"
-            }] as Array<TabComponentItem>
+                "title": "Pending",
+                "route": "/pending"
+            },
+                {
+                    "title": "Active",
+                    "route": "/active"
+                },
+                {
+                    "title": "Closed",
+                    "route": "/closed"
+                }] as Array<TabComponentItem>
         }
     }
 });
@@ -22,7 +30,7 @@ export default defineComponent({
 <template>
     <section class="flex-col">
         <div class="page-header">
-            <TabComponent :base-route="'/panel/dashboard'" :tabs="navigationTabs" :title="'Temporary'">
+            <TabComponent :base-route="'/panel/operations/tickets'" :tabs="navigationTabs" :title="'Tickets'">
             </TabComponent>
             <span class="page-splitter"></span>
         </div>

@@ -1,9 +1,10 @@
+/* Default Theme */
 :root {
     /* General */
     --color-background: #FFFFFF;
     --color-fill: #F7F9F6;
     --color-fill-dark: #E7EEE7;
-    --color-border: #e1e1e1;
+    --color-border: #f2f2f2;
 
     /* Informational */
     --color-info: #A1CCD1;
@@ -22,9 +23,18 @@
     --border-radius-high: 20px;
 }
 
-/* @media (prefers-color-scheme: dark) {
-    :root {}
-} */
+/* TODO: #19 */
+:root.tempA {
+    --color-background: #bababa;
+}
+
+:root.tempB {
+    --color-background: #7e7e7e;
+}
+
+:root.tempC {
+    --color-background: #2e2e2e;
+}
 
 /* HTML */
 body {
@@ -87,6 +97,10 @@ a {
     user-select: none;
 }
 
+h1 {
+    font-size: x-large;
+}
+
 /* Custom Classes */
 .bold {
     font-weight: 500;
@@ -105,6 +119,12 @@ a {
 .flex {
     display: flex;
     align-items: center;
+    gap: 5px;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
     gap: 5px;
 }
 
@@ -132,6 +152,16 @@ a {
     height: 100%;
     position: absolute;
     z-index: 1;
+}
+
+.page-splitter {
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-border);
+}
+
+.page-header {
+    margin-bottom: 20px;
 }
 
 /* Color Classes */

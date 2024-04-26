@@ -43,7 +43,7 @@ export default defineComponent({
     <main>
         <PopupContainer ref="notificationPopup" :pendingPopups="pendingPopups"></PopupContainer>
         <SideBarComponent></SideBarComponent>
-        <section class="content-container">
+        <section class="content-container flex-col">
             <NavbarComponent></NavbarComponent>
             <RouterView class="content-view" @popup="popup"></RouterView>
         </section>
@@ -56,8 +56,6 @@ main {
 }
 
 .content-container {
-    display: flex;
-    flex-direction: column;
     gap: 20px;
     width: 100%;
     flex: 1;

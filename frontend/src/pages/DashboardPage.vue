@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { NotificationItem, PopupItem } from '@/assets/customTypes';
-import { PromptTypes } from '@/assets/customTypes';
+import { PromptTypes, UIThemes } from '@/assets/customTypes';
 import { defineComponent } from 'vue';
 import { useNotificationStore } from '@/stores/NotificationStore';
 import { createTicket } from '@/utils/ticket';
@@ -36,36 +36,43 @@ export default defineComponent({
                 "date": new Date()
             }
             this.notificationStore.newNotification(payload);
+        },
+        themeSwitch(theme: string): void {
+            document.documentElement.className = "";
+            if (theme === "reset") return;
+            document.documentElement.classList.add(UIThemes[theme as keyof typeof UIThemes]);
         }
     }
 });
 </script>
 
 <template>
-    <section>
+    <section class="flex-col">
         <p>Dashboard Page</p>
-        <div class="temp">
+        <div class="temp flex-col">
             <strong>Functionality Testing:</strong>
             <button title="New Popup" type="button" @click="showPopupItem()">New Popup (success, 3 seconds)</button>
             <button title="New Notification" type="button" @click="showNotificationItem()">New Notification (unread,
                 danger)
             </button>
+            <div class="flex">
+                <button title="Theme Switch" type="button" @click="themeSwitch('tempA')">Theme A</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch('tempB')">Theme B</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch('tempC')">Theme C</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch('reset')">Reset</button>
+            </div>
         </div>
         <RouterView></RouterView>
     </section>
 </template>
 
 <style scoped>
-section,
-.temp {
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
+section {
     gap: 20px;
 }
 
 .temp {
-    gap: 5px;
+    align-items: baseline;
 }
 
 .temp button {

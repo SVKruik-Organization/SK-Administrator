@@ -2,14 +2,13 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "SettingsPage"
+    name: "TemporaryTab"
 });
 </script>
 
 <template>
     <section>
-        <p>Settings Page</p>
-        <RouterView></RouterView>
+        <p>Temporary Tab</p>
     </section>
 </template>
 

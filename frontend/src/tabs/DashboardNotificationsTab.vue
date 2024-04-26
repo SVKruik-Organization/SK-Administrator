@@ -15,7 +15,10 @@ export default defineComponent({
 <template>
     <section>
         <p>Notifications Tab</p>
-        <p>Active notification: {{ notificationStore.getByTicket($route.query.ticket?.toString()) || "None Active" }}
+        <p>Active notification: {{
+                notificationStore.getByTicket($route.query.ticket?.toString())
+                || "Select a notification for details."
+            }}
         </p>
     </section>
 </template>
