@@ -16,7 +16,8 @@ export default defineComponent({
 
 <template>
     <section class="popup-container flex-col">
-        <PopupItemComponent v-for="popup in pendingPopups" :id="popup.id" :popupData="popup"></PopupItemComponent>
+        <PopupItemComponent v-for="popup in pendingPopups" :id="popup.id" :key="popup.id" :popupData="popup">
+        </PopupItemComponent>
     </section>
 </template>
 

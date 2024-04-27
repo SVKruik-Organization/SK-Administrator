@@ -52,3 +52,36 @@ export type TabComponentItem = {
     "title": string,
     "route": string,
 }
+
+// Operator Member
+export type OperatorUser = {
+    "memberId": number,
+    "snowflake": string,
+    "username": string,
+    "email": string,
+    "service_tag": string,
+    "date_creation": Date,
+    "date_update": Date,
+    "status": boolean,
+    [key: string]: string | number | boolean | Date;
+}
+
+// Lower/Upperbounds for Pagination
+export type PaginationValues = {
+    "lowerBound": number,
+    "upperBound": number
+}
+
+// Table Header Element
+export type tableColumn = {
+    "title": string,
+    "comparator": string,
+    "id": number
+}
+
+// Date Formatter
+export type DateFormat = {
+    "date": string,
+    "time": string,
+    "today": Date
+}

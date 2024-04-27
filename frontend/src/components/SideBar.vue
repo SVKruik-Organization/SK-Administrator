@@ -31,9 +31,9 @@ export default defineComponent({
                 <div class="sidebar-content-item flex-col">
                     <h4>Operations</h4>
                     <menu>
-                        <RouterLink class="sidebar-link" to="/panel/operations/users">
+                        <RouterLink class="sidebar-link" to="/panel/operations/accounts">
                             <i class="fa-regular fa-user"></i>
-                            <p>Users</p>
+                            <p>Accounts</p>
                         </RouterLink>
                         <RouterLink class="sidebar-link" to="/panel/operations/teams">
                             <i class="fa-regular fa-user-group"></i>
@@ -100,6 +100,7 @@ header {
     height: 100vh;
     box-sizing: border-box;
     padding: 30px;
+    position: fixed;
 }
 
 nav {

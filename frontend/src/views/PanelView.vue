@@ -58,7 +58,7 @@ main {
 .content-container {
     gap: 20px;
     width: 100%;
-    flex: 1;
+    margin-left: 250px;
 }
 
 .content-view {

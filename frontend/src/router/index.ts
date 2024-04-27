@@ -14,15 +14,16 @@ const DashboardPage = () => import('../pages/DashboardPage.vue');
 const PreferencesPage = () => import('../pages/PreferencesPage.vue');
 const TeamsPage = () => import('../pages/TeamsPage.vue');
 const TicketsPage = () => import('../pages/TicketsPage.vue');
-const UsersPage = () => import('../pages/UsersPage.vue');
+const AccountsPage = () => import('../pages/AccountsPage.vue');
 
 // Tabs (sub-pages)
 const DashboardNotificationsTab = () => import('../tabs/DashboardNotificationsTab.vue');
 const PreferencesSupportTab = () => import('../tabs/PreferencesSupportTab.vue');
 const TeamsFeaturesTab = () => import('../tabs/TeamsFeaturesTab.vue');
 const TeamsOverviewTab = () => import('../tabs/TeamsOverviewTab.vue');
-const UsersMembersTab = () => import('../tabs/UsersMembersTab.vue');
-const UsersOwnersTab = () => import('../tabs/UsersOwnersTab.vue');
+const AccountsMembersTab = () => import('../tabs/AccountsMembersTab.vue');
+const AccountsOwnersTab = () => import('../tabs/AccountsOwnersTab.vue');
+const AccountsUsersTab = () => import('../tabs/AccountsUsersTab.vue');
 
 const router = createRouter({
     history: createWebHistory(),
@@ -50,11 +51,12 @@ const router = createRouter({
                     ]
                 },
                 {
-                    path: "operations/users", component: UsersPage, props: true, children: [
-                        { path: "", redirect: "/panel/operations/users/members" },
-                        { path: "members", component: UsersMembersTab, props: true },
-                        { path: "owners", component: UsersOwnersTab, props: true },
-                        { path: ":pathMatch(.*)", redirect: "/panel/operations/users/members" }
+                    path: "operations/accounts", component: AccountsPage, props: true, children: [
+                        { path: "", redirect: "/panel/operations/accounts/members" },
+                        { path: "members", component: AccountsMembersTab, props: true },
+                        { path: "owners", component: AccountsOwnersTab, props: true },
+                        { path: "users", component: AccountsUsersTab, props: true },
+                        { path: ":pathMatch(.*)", redirect: "/panel/operations/accounts/members" }
                     ]
                 },
                 {

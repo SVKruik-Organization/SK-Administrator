@@ -2,13 +2,13 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "UsersMembersTab"
+    name: "AccountsUsersTab"
 });
 </script>
 
 <template>
     <section>
-        <p>Members Tab</p>
+        <p>Users Tab</p>
     </section>
 </template>
 

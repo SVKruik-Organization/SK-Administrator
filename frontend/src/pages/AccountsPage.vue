@@ -4,7 +4,7 @@ import TabComponent from '@/components/TabComponent.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: "UsersPage",
+    name: "AccountsPage",
     components: {
         TabComponent
     },
@@ -17,6 +17,10 @@ export default defineComponent({
                 {
                     "title": "Team Owners",
                     "route": "/owners"
+                },
+                {
+                    "title": "Users",
+                    "route": "/users"
                 }] as Array<TabComponentItem>
         }
     }
@@ -26,7 +30,7 @@ export default defineComponent({
 <template>
     <section class="flex-col">
         <div class="page-header">
-            <TabComponent :base-route="'/panel/operations/users'" :tabs="navigationTabs" :title="'Users'">
+            <TabComponent :base-route="'/panel/operations/accounts'" :tabs="navigationTabs" :title="'Accounts'">
             </TabComponent>
             <span class="page-splitter"></span>
         </div>

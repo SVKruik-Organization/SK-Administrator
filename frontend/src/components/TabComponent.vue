@@ -16,7 +16,7 @@ export default defineComponent({
     <div class="tab-container-wrapper flex-col">
         <h1>{{ title }}</h1>
         <section class="tab-container flex">
-            <RouterLink v-for="tab in tabs" :to="`${baseRoute}${tab.route}`" class="tab-item flex-col">
+            <RouterLink v-for="tab in tabs" :key="tab.title" :to="`${baseRoute}${tab.route}`" class="tab-item flex-col">
                 <p class="tab-title">{{ tab.title }}</p>
                 <span class="active-exact-router-link active-indicator"></span>
             </RouterLink>

@@ -152,9 +152,9 @@ export default defineComponent({
                         </section>
                         <NotificationItem
                             v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
-                            :id="notification.ticket" :date="new Date(notification.date)"
-                            :message="notification.message" :source="notification.source" :ticket="notification.ticket"
-                            :type="notification.type" :unread="notification.unread">
+                            :id="notification.ticket" :key="notification.ticket"
+                            :date="new Date(notification.date)" :message="notification.message" :source="notification.source"
+                            :ticket="notification.ticket" :type="notification.type" :unread="notification.unread">
                         </NotificationItem>
                         <section class="notification-dropdown-menu-footer flex-col">
                             <span class="splitter"></span>
@@ -207,7 +207,7 @@ nav {
     justify-content: space-between;
     box-sizing: border-box;
     padding: 25px;
-    height: fit-content;
+    height: 100px;
     border-bottom: 2px solid var(--color-border);
 }
 
