@@ -33,11 +33,10 @@ export type NotificationItem = {
 }
 
 // Global UI Themes
-// TODO: #19
 export enum UIThemes {
-    tempA = "tempA",
-    tempB = "tempB",
-    tempC = "tempC"
+    Default = "default",
+    Carbon = "carbon",
+    Monokai = "monokai"
 }
 
 // Team Subscription Tiers

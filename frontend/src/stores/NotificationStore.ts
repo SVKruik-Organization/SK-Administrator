@@ -5,7 +5,7 @@ import { useStorage } from "@vueuse/core";
 export const useNotificationStore = defineStore("NotificationStore", {
     state: () => {
         return {
-            notifications: useStorage('notification', [] as Array<NotificationItem>)
+            notifications: useStorage("notification", [] as Array<NotificationItem>)
         }
     },
     actions: {

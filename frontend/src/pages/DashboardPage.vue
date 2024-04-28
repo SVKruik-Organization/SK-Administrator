@@ -1,16 +1,17 @@
 <script lang="ts">
-import type { NotificationItem, PopupItem } from '@/assets/customTypes';
-import { PromptTypes, UIThemes } from '@/assets/customTypes';
+import { type NotificationItem, type PopupItem, PromptTypes, UIThemes } from '@/assets/customTypes';
 import { defineComponent } from 'vue';
 import { useNotificationStore } from '@/stores/NotificationStore';
 import { createTicket } from '@/utils/ticket';
+import { useThemeStore } from '@/stores/ThemeStore';
 
 export default defineComponent({
     name: "DashboardPage",
     emits: ["popup"],
     setup() {
         return {
-            notificationStore: useNotificationStore()
+            notificationStore: useNotificationStore(),
+            themeStore: useThemeStore()
         }
     },
     methods: {
@@ -18,29 +19,31 @@ export default defineComponent({
          * Temporary test function.
          */
         showPopupItem(): void {
-            const payload: PopupItem = {
+            this.$emit("popup", {
                 "id": createTicket(),
                 "type": PromptTypes.success,
                 "message": "This is a test message.",
                 "expiryMilliseconds": 3000
-            }
-            this.$emit("popup", payload);
+            } as PopupItem);
         },
         showNotificationItem(): void {
-            const payload: NotificationItem = {
+            this.notificationStore.newNotification({
                 "ticket": createTicket(),
                 "type": PromptTypes.danger,
                 "message": "This is a test notification.",
                 "unread": true,
                 "source": "System",
                 "date": new Date()
-            }
-            this.notificationStore.newNotification(payload);
+            } as NotificationItem);
         },
-        themeSwitch(theme: string): void {
-            document.documentElement.className = "";
-            if (theme === "reset") return;
-            document.documentElement.classList.add(UIThemes[theme as keyof typeof UIThemes]);
+        themeSwitch(theme: keyof typeof UIThemes): void {
+            this.themeStore.setTheme(theme);
+            this.$emit("popup", {
+                "id": createTicket(),
+                "type": PromptTypes.info,
+                "message": `New theme active: ${theme}`,
+                "expiryMilliseconds": 3000
+            } as PopupItem);
         }
     }
 });
@@ -56,10 +59,9 @@ export default defineComponent({
                 danger)
             </button>
             <div class="flex">
-                <button title="Theme Switch" type="button" @click="themeSwitch('tempA')">Theme A</button>
-                <button title="Theme Switch" type="button" @click="themeSwitch('tempB')">Theme B</button>
-                <button title="Theme Switch" type="button" @click="themeSwitch('tempC')">Theme C</button>
-                <button title="Theme Switch" type="button" @click="themeSwitch('reset')">Reset</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch('Default')">Default</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch('Carbon')">Carbon</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch('Monokai')">Monokai</button>
             </div>
         </div>
         <RouterView></RouterView>

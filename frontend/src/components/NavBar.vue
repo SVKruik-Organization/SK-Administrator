@@ -2,7 +2,6 @@
 import { defineComponent } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
 import { useNotificationStore } from '@/stores/NotificationStore';
-import type { UserData } from '@/assets/customTypes';
 import NotificationItem from './NotificationItem.vue';
 
 export default defineComponent({
@@ -69,7 +68,7 @@ export default defineComponent({
          * Clear store and redirect to homepage.
          */
         signOut() {
-            this.userStore.setUser({} as UserData);
+            this.userStore.signOut();
             this.$router.push("/");
         }
     },
@@ -115,16 +114,17 @@ export default defineComponent({
             <i class="fa-regular fa-magnifying-glass" @click="($refs['searchBar'] as HTMLInputElement).focus()"></i>
             <input ref="searchBar" placeholder="Search" type="text">
         </div>
+        <!-- TODO: #5 -->
         <section class="nav-right flex">
             <div class="notification-pill-container">
                 <div class="navbar-pill notification-pill">
                     <i v-if="notificationStore.unreadNotifications.length === 0"
-                       :style="`color: var(--color-${notificationStore.highestPriority})`"
-                       class="fa-regular fa-envelope"></i>
+                        :style="`color: var(--color-${notificationStore.highestPriority})`"
+                        class="fa-regular fa-envelope"></i>
                     <i v-else :style="`color: var(--color-${notificationStore.highestPriority})`"
-                       class="fa-regular fa-envelope-dot"></i>
+                        class="fa-regular fa-envelope-dot"></i>
                     <button class="click-item notification-click-item" title="Notifications" type="button"
-                            @click="toggleNotificationDropdown()"></button>
+                        @click="toggleNotificationDropdown()"></button>
                     <div ref="notificationTooltip" class="tooltip-item notification-pill-tooltip">
                         <span class="tooltip-arrow"></span>
                         <p>Notifications</p>
@@ -132,7 +132,7 @@ export default defineComponent({
                 </div>
                 <div ref="notificationDropdownMenu" class="notification-dropdown-menu shadow dropdown-menu">
                     <section v-if="notificationStore.notifications.length === 0"
-                             class="notification-dropdown-menu-empty flex-col">
+                        class="notification-dropdown-menu-empty flex-col">
                         <strong>Notification Center</strong>
                         <small>You are all caught up!</small>
                         <span class="splitter"></span>
@@ -142,9 +142,9 @@ export default defineComponent({
                         <section class="notification-dropdown-menu-header flex-col">
                             <strong>Notification Center</strong>
                             <small>Last {{
-                                    notificationStore.notifications.length >= 6 ? 5 :
-                                        notificationStore.notifications.length
-                                }}
+                                notificationStore.notifications.length >= 6 ? 5 :
+                                    notificationStore.notifications.length
+                            }}
                                 {{
                                     notificationStore.notifications.length > 1 ? "notifications" : "notification"
                                 }}.</small>
@@ -152,14 +152,14 @@ export default defineComponent({
                         </section>
                         <NotificationItem
                             v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
-                            :id="notification.ticket" :key="notification.ticket"
-                            :date="new Date(notification.date)" :message="notification.message" :source="notification.source"
-                            :ticket="notification.ticket" :type="notification.type" :unread="notification.unread">
+                            :id="notification.ticket" :key="notification.ticket" :date="new Date(notification.date)"
+                            :message="notification.message" :source="notification.source" :ticket="notification.ticket"
+                            :type="notification.type" :unread="notification.unread">
                         </NotificationItem>
                         <section class="notification-dropdown-menu-footer flex-col">
                             <span class="splitter"></span>
                             <RouterLink class="notification-dropdown-menu-footer-link flex"
-                                        to="/panel/dashboard/notifications">
+                                to="/panel/dashboard/notifications">
                                 <p>See all ({{ notificationStore.notifications.length }})</p>
                                 <i class="fa-regular fa-arrow-right"></i>
                             </RouterLink>
@@ -173,7 +173,7 @@ export default defineComponent({
                     <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
                     <i ref="userDropdownIcon" class="fa-regular fa-angle-down user-dropdown-icon"></i>
                     <button class="click-item user-click-item" title="Quick Access" type="button"
-                            @click="toggleUserDropdown()"></button>
+                        @click="toggleUserDropdown()"></button>
                 </div>
                 <div ref="userDropdownMenu" class="user-dropdown-menu shadow dropdown-menu">
                     <section class="user-dropdown-menu-header flex-col">
@@ -186,7 +186,7 @@ export default defineComponent({
                     <RouterLink class="user-dropdown-item" to="/panel/preferences/support">Support</RouterLink>
                     <span class="splitter"></span>
                     <button class="sign-out-button user-dropdown-item" title="Sign Out" type="button"
-                            @click="signOut()">
+                        @click="signOut()">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket color-danger"></i>
                     </button>
@@ -351,7 +351,7 @@ img {
 /* User Dropdown */
 .user-dropdown-menu {
     width: 200px;
-    right: 0px;
+    right: 0;
     margin-right: 0;
 }
 
@@ -384,7 +384,7 @@ img {
 }
 
 /* Responsiveness */
-@media (width <= 1020px) {
+@media (width <=1020px) {
     nav {
         flex-direction: column-reverse;
         gap: 10px;
@@ -403,6 +403,5 @@ img {
 }
 
 /* TODO #5 */
-@media (width <= 590px) {
-}
+@media (width <=590px) {}
 </style>

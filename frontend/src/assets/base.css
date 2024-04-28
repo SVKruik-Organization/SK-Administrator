@@ -1,22 +1,9 @@
-/* Default Theme */
 :root {
-    /* General */
-    --color-background: #FFFFFF;
-    --color-fill: #F7F9F6;
-    --color-fill-dark: #E7EEE7;
-    --color-border: #F2F2F2;
-    --color-border-dark: #DEDEDE;
-
     /* Informational */
     --color-info: #A1CCD1;
     --color-success: #599862;
     --color-warning: #FAAB78;
     --color-danger: #D04848;
-
-    /* Typography */
-    --color-text: #484848;
-    --color-text-light: #636363;
-    --color-text-header: #111111;
 
     /* Border Radii */
     --border-radius-low: 5px;
@@ -24,24 +11,43 @@
     --border-radius-high: 20px;
 }
 
-/* TODO: #19 */
-:root.tempA {
-    --color-background: #bababa;
+/* Themes */
+:root.default {
+    --color-background: #FFFFFF;
+    --color-fill: #F7F9F6;
+    --color-fill-dark: #E7EEE7;
+    --color-border: #F2F2F2;
+    --color-border-dark: #DEDEDE;
+    --color-text: #484848;
+    --color-text-light: #636363;
+    --color-text-header: #111111;
 }
 
-:root.tempB {
-    --color-background: #7e7e7e;
+:root.carbon {
+    --color-background: #020202;
+    --color-fill: #0e0e0e;
+    --color-fill-dark: #181818;
+    --color-border: #141414;
+    --color-border-dark: #323232;
+    --color-text: #ececec;
+    --color-text-light: #c5c5c5;
+    --color-text-header: #efefef;
 }
 
-:root.tempC {
-    --color-background: #2e2e2e;
+:root.monokai {
+    --color-background: #222222;
+    --color-fill: #191919;
+    --color-fill-dark: #363537;
+    --color-border: #141414;
+    --color-border-dark: #323232;
+    --color-text: #e8e8e8;
+    --color-text-light: #cdcdcd;
+    --color-text-header: #e2e2e2;
 }
 
 /* HTML */
 body {
     background: var(--color-background);
-
-    /* Typography */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -91,7 +97,8 @@ button {
 
 a,
 button,
-input[type=checkbox] {
+input[type=checkbox],
+.pointer {
     cursor: pointer;
 }
 
@@ -135,6 +142,20 @@ h1 {
     gap: 5px;
 }
 
+.no-select {
+    user-select: none;
+}
+
+.pill {
+    height: 40px;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: var(--border-radius-high);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+}
+
 .splitter {
     width: 100%;
     height: 2px;
@@ -165,10 +186,6 @@ h1 {
     width: 100%;
     height: 2px;
     background-color: var(--color-border);
-}
-
-.page-header {
-    margin-bottom: 20px;
 }
 
 /* Color Classes */

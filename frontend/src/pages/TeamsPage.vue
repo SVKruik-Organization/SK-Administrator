@@ -14,10 +14,10 @@ export default defineComponent({
                 "title": "Overview",
                 "route": "/overview"
             },
-                {
-                    "title": "Features",
-                    "route": "/features"
-                }] as Array<TabComponentItem>
+            {
+                "title": "Features",
+                "route": "/features"
+            }] as Array<TabComponentItem>
         }
     }
 });

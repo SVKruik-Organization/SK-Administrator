@@ -65,5 +65,6 @@ main {
     box-sizing: border-box;
     padding: 20px 30px 30px;
     height: 100%;
+    gap: 20px;
 }
 </style>

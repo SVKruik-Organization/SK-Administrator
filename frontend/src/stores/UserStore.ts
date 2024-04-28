@@ -5,12 +5,15 @@ import { useStorage } from "@vueuse/core";
 export const useUserStore = defineStore("UserStore", {
     state: () => {
         return {
-            user: useStorage('user', {} as UserData)
+            user: useStorage("user", {} as UserData)
         }
     },
     actions: {
         setUser(userData: UserData): void {
             this.user = userData;
+        },
+        signOut(): void {
+            this.setUser({} as UserData);
         }
     }
 });

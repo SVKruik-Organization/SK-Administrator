@@ -17,9 +17,12 @@ export default defineComponent({
     methods: {
         /**
          * Fetches data and passes the data if correct upwards.
+         * Also logs this event for administration.
          */
         login() {
             // TODO #11
+            // TODO: #17
+            // TODO: #24
             const payload: UserData = {
                 "firstName": "Stefan",
                 "lastName": "Kruik",
@@ -35,6 +38,7 @@ export default defineComponent({
 
 <template>
     <main>
+        <!-- TODO: #11 -->
         <p>Login View</p>
         <button title="Login" type="button" @click="login()">Login Button</button>
     </main>

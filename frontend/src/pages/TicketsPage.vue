@@ -14,14 +14,14 @@ export default defineComponent({
                 "title": "Pending",
                 "route": "/pending"
             },
-                {
-                    "title": "Active",
-                    "route": "/active"
-                },
-                {
-                    "title": "Closed",
-                    "route": "/closed"
-                }] as Array<TabComponentItem>
+            {
+                "title": "Active",
+                "route": "/active"
+            },
+            {
+                "title": "Closed",
+                "route": "/closed"
+            }] as Array<TabComponentItem>
         }
     }
 });

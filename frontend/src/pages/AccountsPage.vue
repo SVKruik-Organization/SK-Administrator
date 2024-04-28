@@ -14,14 +14,14 @@ export default defineComponent({
                 "title": "Members",
                 "route": "/members"
             },
-                {
-                    "title": "Team Owners",
-                    "route": "/owners"
-                },
-                {
-                    "title": "Users",
-                    "route": "/users"
-                }] as Array<TabComponentItem>
+            {
+                "title": "Team Owners",
+                "route": "/owners"
+            },
+            {
+                "title": "Users",
+                "route": "/users"
+            }] as Array<TabComponentItem>
         }
     }
 });
