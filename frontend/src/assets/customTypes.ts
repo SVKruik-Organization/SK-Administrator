@@ -54,7 +54,7 @@ export type TabComponentItem = {
 
 // Operator Member
 export type OperatorUser = {
-    "memberId": number,
+    "id": number,
     "snowflake": string,
     "username": string,
     "email": string,
@@ -72,7 +72,7 @@ export type PaginationValues = {
 }
 
 // Table Header Element
-export type tableColumn = {
+export type TableColumn = {
     "title": string,
     "comparator": string,
     "id": number
@@ -83,4 +83,12 @@ export type DateFormat = {
     "date": string,
     "time": string,
     "today": Date
+}
+
+// Boolean Table Data (status etc.)
+export type BooleanTableData = {
+    "trueColor": PromptTypes,
+    "falseColor": PromptTypes,
+    "trueMessage": string,
+    "falseMessage": string
 }
