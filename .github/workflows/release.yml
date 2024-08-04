@@ -1,0 +1,15 @@
+name: Release Administrator
+on:
+  release:
+    types: [created]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -X POST \
+               -H "Content-Type: application/json" \
+               -H "Authorization: Bearer ${{ secrets.DEPLOYMENT_PASSWORD }}" \
+               -d '{"type":"release","repository":"Bot-Administrator", "payload":${{ toJson(github.event.release) }}}' \
+               ${{ secrets.DEPLOYMENT_ENDPOINT }}
