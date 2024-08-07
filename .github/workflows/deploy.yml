@@ -1,4 +1,4 @@
-name: Deploy Administrator
+name: Deploy SK Administrator
 on:
   push
 
@@ -10,5 +10,5 @@ jobs:
           curl -X POST \
                -H "Content-Type: application/json" \
                -H "Authorization: Bearer ${{ secrets.DEPLOYMENT_PASSWORD }}" \
-               -d '{"type":"push","repository":"Bot-Administrator", "payload":${{ toJson(github.event) }}}' \
+               -d '{"type":"push","repository":"SK-Administrator", "payload":${{ toJson(github.event) }}}' \
                ${{ secrets.DEPLOYMENT_ENDPOINT }}

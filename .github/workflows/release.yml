@@ -1,4 +1,4 @@
-name: Release Administrator
+name: Release SK Administrator
 on:
   release:
     types: [created]
@@ -11,5 +11,5 @@ jobs:
           curl -X POST \
                -H "Content-Type: application/json" \
                -H "Authorization: Bearer ${{ secrets.DEPLOYMENT_PASSWORD }}" \
-               -d '{"type":"release","repository":"Bot-Administrator", "payload":${{ toJson(github.event.release) }}}' \
+               -d '{"type":"release","repository":"SK-Administrator", "payload":${{ toJson(github.event.release) }}}' \
                ${{ secrets.DEPLOYMENT_ENDPOINT }}

@@ -1,8 +1,16 @@
 {
-    "name": "bot-administrator-frontend",
+    "name": "sk-administrator-frontend",
+    "description": "SK Administrator Frontend",
     "version": "1.0.0",
-    "description": "Frontend part of the Bot Administrator application.",
-    "private": true,
+    "author": "Stefan Kruik",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SVKruik-Organization/SK-Administrator.git"
+    },
+    "bugs": {
+        "url": "https://github.com/SVKruik-Organization/SK-Administrator/issues"
+    },
+    "homepage": "https://github.com/SVKruik-Organization/SK-Administrator#readme",
     "type": "module",
     "scripts": {
         "dev": "vite",
