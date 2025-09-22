@@ -1,1 +1,17 @@
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+node_modules
+logs
 .DS_Store
+.idea
+.env.local
+package-lock.json
+.env
+.obsidian
+.vscode
+
+server

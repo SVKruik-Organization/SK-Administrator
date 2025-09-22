@@ -6,7 +6,7 @@ import {
     PromptTypes,
     type TableColumn
 } from '@/assets/customTypes';
-import { testMembers } from '@/assets/dev-data/dev-members';
+import { devMembers } from '@/assets/dev-data/dev-members';
 import TableComponent from '@/components/TableComponent.vue';
 import { getDate } from '@/utils/date';
 import { defineComponent } from 'vue';
@@ -15,7 +15,7 @@ export default defineComponent({
     name: "AccountsMembersTab",
     data() {
         return {
-            "members": testMembers as Array<OperatorUser>,
+            "members": devMembers as Array<OperatorUser>,
             "rowLimit": 15 as number,
             "pageCount": 1 as number,
             "selectedMember": null as unknown as OperatorUser,
