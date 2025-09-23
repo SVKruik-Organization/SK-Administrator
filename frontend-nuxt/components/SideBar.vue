@@ -1,27 +1,39 @@
 <script lang="ts" setup>
 import { useUserStore } from "@/stores/UserStore";
 const userStore = useUserStore();
+
+// Methods
+
+/**
+ * Opens the profile switcher dropdown.
+ */
+function toggleProfileSwitcher(): void {
+    console.log("Profile Switcher clicked.");
+}
 </script>
 
 <template>
     <nav class="flex-col">
-        <section class="user-information flex">
-            <ClientOnly>
-                <img :src="userStore.user.imageUrl" alt="Profile Picture">
-                <div class="user-information-text flex-col">
-                    <h3>{{ userStore.user.firstName }}</h3>
-                    <p>{{ userStore.user.role }}</p>
-                </div>
-            </ClientOnly>
+        <img class="sidebar-logo-image no-select" src="/mesh_1.png" alt="Logo">
+        <section class="sidebar-logo flex no-select">
+            <h3>SK Administrator</h3>
+        </section>
+        <section class="user-information flex no-select" @click="toggleProfileSwitcher()">
+            <img :src="userStore.user.imageUrl" alt="Profile Picture">
+            <div class="user-information-text flex-col">
+                <h3>{{ userStore.user.firstName }}</h3>
+                <small>Work account</small>
+            </div>
+            <i class="fa-regular fa-angle-down profile-switcher"></i>
         </section>
         <section class="sidebar-content flex-col">
             <div class="sidebar-content-item flex-col">
                 <menu>
-                    <NuxtLink to="/panel/dashboard" v-slot="{ isActive }" class="sidebar-link">
+                    <NuxtLink to="/panel/dashboard" v-slot="{ isActive }" class="sidebar-link sidebar-link-top">
                         <i :class="isActive ? 'fa-solid fa-chart-pie' : 'fa-regular fa-chart-pie'"></i>
                         <p>Dashboard</p>
                     </NuxtLink>
-                    <NuxtLink to="/panel/users" v-slot="{ isActive }" class="sidebar-link">
+                    <NuxtLink to="/panel/users" v-slot="{ isActive }" class="sidebar-link sidebar-link-top">
                         <i :class="isActive ? 'fa-solid fa-user-group' : 'fa-regular fa-user-group'"></i>
                         <p>Users</p>
                     </NuxtLink>
@@ -129,16 +141,54 @@ const userStore = useUserStore();
 <style scoped>
 nav {
     height: 100vh;
-    gap: 40px;
+    gap: 20px;
     width: 250px;
     box-sizing: border-box;
     padding: 25px 0 0 25px;
     background-color: var(--color-fill);
+    position: relative;
+    overflow-x: hidden;
+}
+
+nav section {
+    z-index: 2;
 }
 
 /* Header */
+.sidebar-logo-image {
+    height: 400px;
+    width: 1000px;
+    position: absolute;
+    opacity: 0.4;
+    filter: blur(50px);
+    pointer-events: none;
+    left: -400px;
+    top: -140px;
+    z-index: 2;
+    rotate: 30deg;
+}
+
+.carbon .sidebar-logo-image,
+.monokai .sidebar-logo-image {
+    opacity: 0.2;
+}
+
+.sidebar-logo {
+    margin-left: 5px;
+}
+
 .user-information {
     gap: 15px;
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 8px;
+    box-sizing: border-box;
+    width: 95%;
+    margin-left: -8px;
+}
+
+.user-information:hover {
+    background-color: var(--color-background);
 }
 
 .user-information-text {
@@ -146,11 +196,19 @@ nav {
     align-items: baseline;
 }
 
-img {
+.user-information img {
     height: 50px;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.profile-switcher {
+    opacity: 0;
+}
+
+.user-information:hover .profile-switcher {
+    opacity: 1;
 }
 
 /* Content */
@@ -188,5 +246,9 @@ img {
 /* Active Link */
 .sidebar-link.router-link-active {
     background-color: var(--color-fill-dark);
+}
+
+.sidebar-link-top.router-link-active {
+    background-color: var(--color-background);
 }
 </style>

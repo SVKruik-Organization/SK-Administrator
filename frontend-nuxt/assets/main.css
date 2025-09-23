@@ -150,6 +150,8 @@ h1 {
 }
 
 .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
 }
 

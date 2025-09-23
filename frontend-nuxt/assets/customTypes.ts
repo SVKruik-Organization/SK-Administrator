@@ -100,8 +100,6 @@ export enum LogTypes {
 }
 
 export enum CronJobTypes {
-    userTimeout = "userTimeout",
-    userBlock = "userBlock",
 }
 
 // MeiliSearch Response
