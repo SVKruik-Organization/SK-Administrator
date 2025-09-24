@@ -18,7 +18,7 @@ export type PopupItem = {
     "id": string,
     "type": PromptTypes,
     "message": string,
-    "expiryMilliseconds": number
+    "duration": number
 }
 
 // Prompt/Informational Message Types

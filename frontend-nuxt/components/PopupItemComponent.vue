@@ -35,7 +35,7 @@ onMounted(() => {
     // Self-Destruct
     setTimeout(() => {
         closePopup();
-    }, props.popupData.expiryMilliseconds);
+    }, props.popupData.duration * 1000);
 });
 </script>
 

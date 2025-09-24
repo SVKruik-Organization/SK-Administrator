@@ -31,7 +31,8 @@ export function formatNumber(num: number): string {
 }
 
 /**
- * Formats an H3 error for the toast notification.
+ * Formats an H3 error for the popup notification.
+ * Use this function only in the backend.
  * Specifically for backend errors.
  * @param error The error to handle.
  */
@@ -41,15 +42,12 @@ export function formatApiError(error: any): H3Error {
     const formattedErrorMessage = statusCode === 500 ? internalErrorMessage : error?.message || internalErrorMessage;
     return createError({
         statusCode: statusCode > 1000 ? statusCode - 1000 : statusCode,
-        statusMessage: formattedErrorMessage,
-        data: {
-            message: formattedErrorMessage,
-        },
+        message: formattedErrorMessage,
     });
 }
 
 /**
- * Formats an error for the toast notification.
+ * Formats an error for the popup notification.
  * @param error The error to handle.
  */
 export function formatError(error: any): Error {

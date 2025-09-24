@@ -18,7 +18,7 @@ function showPopupItem(): void {
         "id": createTicket(),
         "type": PromptTypes.success,
         "message": "This is a test message.",
-        "expiryMilliseconds": 3000
+        "duration": 3
     } as PopupItem);
 }
 
@@ -53,7 +53,7 @@ function themeSwitch(theme: keyof typeof UIThemes): void {
         "id": createTicket(),
         "type": PromptTypes.info,
         "message": `New theme active: ${theme}`,
-        "expiryMilliseconds": 3000
+        "duration": 3
     } as PopupItem);
 }
 </script>

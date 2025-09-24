@@ -1,18 +1,16 @@
 import type { UserData } from "~/assets/customTypes";
 /**
- * Create a new session for a user via email.
- * @param email The email address of the user.
- * @param password The password of the email account.
+ * Create a new session for a guest user with a code.
+ * @param code The guest code.
  * @returns The response from the API.
  * @throws An error if the request fails.
  */
-export const useFetchLoginEmail = async (email: string, password: string): Promise<UserData | true> => {
+export const useFetchLoginGuest = async (code: string): Promise<UserData | false> => {
     try {
-        const data = await $fetch("/api/auth/login/email", {
+        const data = await $fetch("/api/auth/login/guest", {
             method: "POST",
             body: {
-                email,
-                password,
+                code
             },
             headers: {
                 "Content-Type": "application/json",

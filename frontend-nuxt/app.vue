@@ -11,5 +11,6 @@ onMounted(() => {
 <template>
     <!-- TODO: #20 -->
     <!-- TODO: #25 -->
+    <PopupContainer></PopupContainer>
     <NuxtPage></NuxtPage>
 </template>

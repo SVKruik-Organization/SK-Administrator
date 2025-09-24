@@ -1,0 +1,21 @@
+<mjml>
+  <mj-head>
+    <mj-title>Login OTP</mj-title>
+    <mj-attributes>
+      <mj-all font-family="Open Sans" />
+      <mj-text font-size="16px" line-height="24px" color="#000000" />
+      <mj-class name="head" font-size="24px" line-height="32px" />
+      <mj-class name="bold" font-weight="600" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text>Dear {{ firstName }},</mj-text>
+        <mj-text>Use the following code to login to SK Administrator:</mj-text>
+        <mj-text mj-class="bold">{{ verificationPin }}</mj-text>
+        <mj-text>Do not share this code with anyone. Welcome back!</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

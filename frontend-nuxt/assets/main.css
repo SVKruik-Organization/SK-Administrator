@@ -4,6 +4,7 @@
     --color-success: #599862;
     --color-warning: #FAAB78;
     --color-danger: #D04848;
+    --color-accent: #827FF0;
 
     /* Border Radii */
     --border-radius-low: 5px;
@@ -14,8 +15,8 @@
 /* Themes */
 :root.default {
     --color-background: #FFFFFF;
-    --color-fill: #F7F9F6;
-    --color-fill-dark: #E7EEE7;
+    --color-fill: #F4F7FB;
+    --color-fill-dark: #E3EAF5;
     --color-border: #F2F2F2;
     --color-border-dark: #DEDEDE;
     --color-text: #484848;

@@ -1,6 +1,6 @@
 import { useWebSocket } from "@vueuse/core";
 import { useRuntimeConfig } from "#app";
-import { NotificationTypes, type NotificationItem } from "~/assets/customTypes";
+import { NotificationTypes, PromptTypes, type NotificationItem } from "~/assets/customTypes";
 
 let socketInstance: ReturnType<typeof useWebSocket> | null = null;
 
@@ -15,6 +15,7 @@ export const useAppWebSocket = () => {
                 socketInstance?.send(JSON.stringify({
                     user_id: userStore.user.id,
                     type: NotificationTypes.initialize,
+                    level: PromptTypes.info,
                     data: null,
                     source: "RTD - Client",
                     url: "/",

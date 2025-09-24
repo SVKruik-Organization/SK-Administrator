@@ -6,9 +6,9 @@ declare module "#auth-utils" {
         id: number;
         firstName: string;
         lastName: string;
-        email: string;
+        email: string | undefined;
         role: UserTypes;
-        imageUrl: string;
+        imageUrl: string | undefined;
     }
 
     // Session

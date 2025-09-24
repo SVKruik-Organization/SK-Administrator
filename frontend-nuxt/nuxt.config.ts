@@ -6,6 +6,11 @@ export default defineNuxtConfig({
             websocket: true
         }
     },
+    vite: {
+        server: {
+            allowedHosts: ['.test']
+        }
+    },
     components: {
         dirs: [
             {

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import PopupContainer from "@/components/PopupContainer.vue";
 import NavBar from "~/components/NavBar.vue";
 import SideBar from "@/components/SideBar.vue";
 import { UserTypes } from "~/assets/customTypes";
@@ -22,7 +21,6 @@ onMounted(() => {
 </script>
 
 <template>
-    <PopupContainer></PopupContainer>
     <main>
         <SideBar></SideBar>
         <section class="content-container flex-col">
