@@ -15,9 +15,9 @@ export async function createUserSession(event: H3Event, user: {
     id: number;
     firstName: string,
     lastName: string | undefined,
-    email: string | undefined,
-    role: UserTypes,
-    imageUrl: string | undefined
+    email: string | null,
+    type: UserTypes,
+    imageName: string | null
 }, connection: Pool): Promise<UserData> {
     await setUserSession(event, {
         user: {
@@ -25,14 +25,15 @@ export async function createUserSession(event: H3Event, user: {
             "firstName": user.firstName,
             "lastName": user.lastName,
             "email": user.email,
-            "role": user.role,
-            "imageUrl": user.imageUrl
+            "type": user.type,
+            "imageName": user.imageName
         },
         loggedInAt: new Date(),
     });
 
     // Update the last login date in the database
-    await connection.query("UPDATE user SET date_last_login = CURRENT_TIMESTAMP WHERE id = ?;", [user.id]);
+    const tableName: string = user.type === UserTypes.USER ? "user" : "guest";
+    await connection.query(`UPDATE ${tableName} SET date_last_login = CURRENT_TIMESTAMP WHERE id = ?;`, [user.id]);
 
     // Return the user data
     return (await getUserSession(event)).user as UserData;

@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
             // Check if the user is logged in
             const session = await getUserSession(event);
             if (session && session.user) {
-                data.objectType = session.user.role;
+                data.objectType = session.user.type;
                 data.objectId = session.user.id;
                 data.description = session.user.firstName + " " + session.user.lastName;
             }

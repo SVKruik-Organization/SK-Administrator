@@ -3,7 +3,7 @@
  * @param email The email address of the user.
  * @param password The password of the email account.
  */
-export const useFetchLoginEmail = async (email: string, password: string): Promise<boolean> => {
+export const useFetchLoginEmail = async (email: string, password: string): Promise<string> => {
     try {
         return await $fetch("/api/auth/login/email", {
             method: "POST",

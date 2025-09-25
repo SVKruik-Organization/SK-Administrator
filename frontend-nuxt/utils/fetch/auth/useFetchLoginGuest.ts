@@ -5,7 +5,7 @@ import type { UserData } from "~/assets/customTypes";
  * @returns The response from the API.
  * @throws An error if the request fails.
  */
-export const useFetchLoginGuest = async (code: string): Promise<UserData | false> => {
+export const useFetchLoginGuest = async (code: string): Promise<UserData> => {
     try {
         const data = await $fetch("/api/auth/login/guest", {
             method: "POST",

@@ -2,6 +2,7 @@
 import { useUserStore } from "@/stores/UserStore";
 import { useNotificationStore } from "@/stores/NotificationStore";
 import NotificationItem from "./NotificationItem.vue";
+import { getImageUrl } from "~/utils/image";
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 const router = useRouter();
@@ -143,8 +144,8 @@ function signOut() {
             </div>
             <div class="user-pill-container">
                 <div class="navbar-pill user-pill">
-                    <img :src="userStore.user.imageUrl" alt="Profile Picture">
-                    <p>{{ userStore.user.firstName }} {{ userStore.user.lastName }}</p>
+                    <img :src="getImageUrl(userStore.user)" alt="Profile Picture">
+                    <p>{{ userStore.user?.firstName }} {{ userStore.user?.lastName }}</p>
                     <i ref="userDropdownIcon" class="fa-regular fa-angle-down user-dropdown-icon"></i>
                     <button class="click-item user-click-item" title="Quick Access" type="button"
                         @click="toggleUserDropdown()"></button>

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useUserStore } from "@/stores/UserStore";
+import { getImageUrl } from "~/utils/image";
 const userStore = useUserStore();
 
 // Methods
@@ -19,9 +20,9 @@ function toggleProfileSwitcher(): void {
             <h3>SK Administrator</h3>
         </section>
         <section class="user-information flex no-select" @click="toggleProfileSwitcher()">
-            <img :src="userStore.user.imageUrl" alt="Profile Picture">
+            <img :src="getImageUrl(userStore.user)" alt="Profile Picture">
             <div class="user-information-text flex-col">
-                <h3>{{ userStore.user.firstName }}</h3>
+                <h3>{{ userStore.user?.firstName }}</h3>
                 <small>Work account</small>
             </div>
             <i class="fa-regular fa-angle-down profile-switcher"></i>

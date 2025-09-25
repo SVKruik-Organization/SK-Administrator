@@ -14,7 +14,7 @@ const bodySchema = z.object({
  * Login using email and password
  * See /auth.d.ts for the session type
  */
-export default defineEventHandler(async (event): Promise<boolean> => {
+export default defineEventHandler(async (event): Promise<string> => {
     try {
         const parseResult = bodySchema.safeParse(await readBody(event));
         if (!parseResult.success) throw new Error("The form is not completed correctly. Please try again.", { cause: { statusCode: 1400 } });
@@ -24,8 +24,9 @@ export default defineEventHandler(async (event): Promise<boolean> => {
         const connection: Pool = await database("ska");
         const response: Array<{
             "first_name": string,
+            "last_name": string,
             "password": string,
-        }> = await connection.query("SELECT first_name, password FROM user WHERE email = ?;", [email]);
+        }> = await connection.query("SELECT first_name, last_name, password FROM user WHERE email = ?;", [email]);
 
         // Validate the response
         const user = response[0];
@@ -45,9 +46,8 @@ export default defineEventHandler(async (event): Promise<boolean> => {
             "DELETE FROM user_verification WHERE user_email = ? AND reason = '2fa'; INSERT INTO user_verification (user_email, pin, reason) VALUES (?, ?, ?);",
             [email, email, verificationPin, "2fa"]);
 
-
         await connection.end();
-        return true;
+        return `${user.first_name} ${user.last_name}`;
     } catch (error: any) {
         throw formatApiError(error);
     }

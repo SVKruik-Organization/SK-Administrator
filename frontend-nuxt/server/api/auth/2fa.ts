@@ -32,8 +32,8 @@ export default defineEventHandler(async (event): Promise<UserData> => {
             "first_name": string,
             "last_name": string,
             "password": string,
-            "image_url": string,
-        }> = await connection.query("SELECT id, first_name, last_name, password, image_url FROM user WHERE email = ?;", [email]);
+            "image_name": string,
+        }> = await connection.query("SELECT id, first_name, last_name, password, image_name FROM user WHERE email = ?;", [email]);
 
         // Validate the response
         const user = response[0];
@@ -45,8 +45,8 @@ export default defineEventHandler(async (event): Promise<UserData> => {
             "firstName": user.first_name,
             "lastName": user.last_name,
             "email": email,
-            "role": UserTypes.ADMIN,
-            "imageUrl": user.image_url,
+            "type": UserTypes.USER,
+            "imageName": user.image_name,
         }, connection);
         await connection.end();
         return session;

@@ -4,12 +4,12 @@ export type UserData = {
     "firstName": string,
     "lastName": string,
     "email": string,
-    "role": string,
-    "imageUrl": string
+    "type": UserTypes,
+    "imageName": string
 }
 
 export enum UserTypes {
-    ADMIN = "Administrator",
+    USER = "User",
     GUEST = "Guest",
 }
 

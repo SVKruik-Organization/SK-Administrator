@@ -27,7 +27,7 @@ function showPopupItem(): void {
  */
 function showNotificationItem(): void {
     notificationStore.newNotification({
-        "user_id": userStore.user.id,
+        "user_id": userStore.user?.id,
         "type": NotificationTypes.acknowledge,
         "level": "danger",
         "data": {

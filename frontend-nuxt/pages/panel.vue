@@ -1,22 +1,8 @@
 <script lang="ts" setup>
 import NavBar from "~/components/NavBar.vue";
 import SideBar from "@/components/SideBar.vue";
-import { UserTypes } from "~/assets/customTypes";
-const userStore = useUserStore();
-
 definePageMeta({
     middleware: ["auth"],
-});
-
-onMounted(() => {
-    userStore.setUser({
-        "id": 1,
-        "firstName": "Stefan",
-        "lastName": "Kruik",
-        "email": "me@stefankruik.nl",
-        "role": UserTypes.ADMIN,
-        "imageUrl": "http://localhost:9099/pfp-temp.png"
-    });
 });
 </script>
 

@@ -4,21 +4,21 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore("userStore", {
     state: () => {
         return {
-            user: {} as UserData,
+            user: null as UserData | null,
         };
     },
     persist: {
         storage: piniaPluginPersistedstate.localStorage(),
     },
     actions: {
-        setUser(userData: UserData): void {
+        setUser(userData: UserData | null): void {
             this.user = userData;
         },
         async signOut(): Promise<void> {
             if (!this.isLoggedIn) return;
             const { clear: clearSession } = useUserSession();
 
-            this.setUser({} as UserData);
+            this.setUser(null);
             clearSession();
             navigateTo("/");
         },
@@ -26,9 +26,6 @@ export const useUserStore = defineStore("userStore", {
     getters: {
         isLoggedIn(): boolean {
             return !!this.user?.id;
-        },
-        isAdmin(): boolean {
-            return true;
         },
     },
 });
