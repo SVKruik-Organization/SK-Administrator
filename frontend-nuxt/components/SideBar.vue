@@ -2,6 +2,7 @@
 import { useUserStore } from "@/stores/UserStore";
 import { getImageUrl } from "~/utils/image";
 const userStore = useUserStore();
+const sideBarStore = useSideBarStore();
 
 // Methods
 
@@ -10,6 +11,15 @@ const userStore = useUserStore();
  */
 function toggleProfileSwitcher(): void {
     console.log("Profile Switcher clicked.");
+}
+
+/**
+ * Normalizes a URL by replacing spaces with hyphens and converting to lowercase.
+ * @param url - The URL to normalize.
+ * @returns The normalized URL.
+ */
+function normalizeUrl(url: string): string {
+    return url.replaceAll(" ", "-").toLowerCase();
 }
 </script>
 
@@ -23,111 +33,30 @@ function toggleProfileSwitcher(): void {
             <img :src="getImageUrl(userStore.user)" alt="Profile Picture">
             <div class="user-information-text flex-col">
                 <h3>{{ userStore.user?.firstName }}</h3>
-                <small>Work account</small>
+                <small>{{ sideBarStore.getActiveProfile?.name }}</small>
             </div>
             <i class="fa-regular fa-angle-down profile-switcher"></i>
         </section>
         <section class="sidebar-content flex-col">
             <div class="sidebar-content-item flex-col">
                 <menu>
-                    <NuxtLink to="/panel/dashboard" v-slot="{ isActive }" class="sidebar-link sidebar-link-top">
-                        <i :class="isActive ? 'fa-solid fa-chart-pie' : 'fa-regular fa-chart-pie'"></i>
-                        <p>Dashboard</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/users" v-slot="{ isActive }" class="sidebar-link sidebar-link-top">
-                        <i :class="isActive ? 'fa-solid fa-user-group' : 'fa-regular fa-user-group'"></i>
-                        <p>Users</p>
+                    <NuxtLink v-for="item, key in sideBarStore.topItems" :key="key"
+                        :to="`/panel/${normalizeUrl(item.name)}`" v-slot="{ isActive }"
+                        class="sidebar-link sidebar-link-top">
+                        <i :class="isActive ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
+                        <p>{{ item.name }}</p>
                     </NuxtLink>
                 </menu>
             </div>
-            <div class="sidebar-content-item flex-col">
-                <NuxtLink to="/panel/guilds" v-slot="{ isActive }" class="flex">
-                    <i :class="isActive ? 'fa-solid fa-users-gear' : 'fa-regular fa-users-gear'"></i>
-                    <h4>Guilds</h4>
+            <div class="sidebar-content-item flex-col" v-for="module in sideBarStore.modules" :key="module.name">
+                <NuxtLink :to="`/panel/${normalizeUrl(module.name)}`" v-slot="{ isActive }" class="flex">
+                    <i :class="isActive ? `fa-solid ${module.icon}` : `fa-regular ${module.icon}`"></i>
+                    <h4>{{ module.name }}</h4>
                 </NuxtLink>
                 <menu>
-                    <NuxtLink to="/panel/guilds/overview" class="sidebar-link">
-                        <p>Overview</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/guilds/economy" class="sidebar-link">
-                        <p>Economy</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/guilds/tier" class="sidebar-link">
-                        <p>Tier</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/guilds/admins" class="sidebar-link">
-                        <p>Admins</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/guilds/blocked" class="sidebar-link">
-                        <p>Blocked</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/guilds/events" class="sidebar-link">
-                        <p>Events</p>
-                    </NuxtLink>
-                </menu>
-            </div>
-            <div class="sidebar-content-item flex-col">
-                <NuxtLink to="/panel/operators" v-slot="{ isActive }" class="flex">
-                    <i :class="isActive ? 'fa-solid fa-user-group-crown' : 'fa-regular fa-user-group-crown'"></i>
-                    <h4>Operators</h4>
-                </NuxtLink>
-                <menu>
-                    <NuxtLink to="/panel/operators/teams" class="sidebar-link">
-                        <p>Teams</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/operators/owners" class="sidebar-link">
-                        <p>Owners</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/operators/members" class="sidebar-link">
-                        <p>Members</p>
-                    </NuxtLink>
-                </menu>
-            </div>
-            <div class="sidebar-content-item flex-col">
-                <NuxtLink to="/panel/status" v-slot="{ isActive }" class="flex">
-                    <i :class="isActive ? 'fa-solid fa-satellite-dish' : 'fa-regular fa-satellite-dish'"></i>
-                    <h4>Status</h4>
-                </NuxtLink>
-                <menu>
-                    <NuxtLink to="/panel/status/sites" class="sidebar-link">
-                        <p>Sites</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/status/hardware" class="sidebar-link">
-                        <p>Hardware</p>
-                    </NuxtLink>
-                </menu>
-            </div>
-            <div class="sidebar-content-item flex-col">
-                <NuxtLink to="/panel/activity" v-slot="{ isActive }" class="flex">
-                    <i :class="isActive ? 'fa-solid fa-wave-pulse' : 'fa-regular fa-wave-pulse'"></i>
-                    <h4>Activity</h4>
-                </NuxtLink>
-                <menu>
-                    <NuxtLink to="/panel/activity/logs" class="sidebar-link">
-                        <p>Logs</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/activity/purchases" class="sidebar-link">
-                        <p>Purchases</p>
-                    </NuxtLink>
-                </menu>
-            </div>
-            <div class="sidebar-content-item flex-col">
-                <NuxtLink to="/panel/records" v-slot="{ isActive }" class="flex">
-                    <i :class="isActive ? 'fa-solid fa-folder-open' : 'fa-regular fa-folder-open'"></i>
-                    <h4>Records</h4>
-                </NuxtLink>
-                <menu>
-                    <NuxtLink to="/panel/records/tickets" class="sidebar-link">
-                        <p>Tickets</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/records/questions" class="sidebar-link">
-                        <p>Questions</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/records/reports" class="sidebar-link">
-                        <p>Reports</p>
-                    </NuxtLink>
-                    <NuxtLink to="/panel/records/warnings" class="sidebar-link">
-                        <p>Warnings</p>
+                    <NuxtLink v-for="item, key in module.links" :key="key"
+                        :to="`/panel/${normalizeUrl(module.name + '/' + item)}`" class="sidebar-link">
+                        <p>{{ item }}</p>
                     </NuxtLink>
                 </menu>
             </div>

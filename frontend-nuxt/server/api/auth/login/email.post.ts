@@ -35,10 +35,10 @@ export default defineEventHandler(async (event): Promise<string> => {
 
         // Send the email with a 6-digit code
         const verificationPin: number = Math.floor(100000 + Math.random() * 900000);
-        await sendMail(email, "Login OTP", [
-            { "key": "firstName", "value": user.first_name || "user" },
-            { "key": "verificationPin", "value": verificationPin.toString() },
-        ], "2fa-code");
+        // await sendMail(email, "Login OTP", [
+        //     { "key": "firstName", "value": user.first_name || "user" },
+        //     { "key": "verificationPin", "value": verificationPin.toString() },
+        // ], "2fa-code");
 
         // Delete any existing verification codes for the same email and reason
         // Insert the verification code into the database

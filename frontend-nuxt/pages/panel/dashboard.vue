@@ -45,9 +45,9 @@ function showNotificationItem(): void {
 
 /**
  * Temporary test function.
- * @param {keyof typeof UIThemes} theme The theme to switch to.
+ * @param theme The theme to switch to.
  */
-function themeSwitch(theme: keyof typeof UIThemes): void {
+function themeSwitch(theme: UIThemes): void {
     themeStore.setTheme(theme);
     $event("popup", {
         "id": createTicket(),
@@ -68,9 +68,9 @@ function themeSwitch(theme: keyof typeof UIThemes): void {
                 danger)
             </button>
             <div class="flex">
-                <button title="Theme Switch" type="button" @click="themeSwitch('Default')">Default</button>
-                <button title="Theme Switch" type="button" @click="themeSwitch('Carbon')">Carbon</button>
-                <button title="Theme Switch" type="button" @click="themeSwitch('Monokai')">Monokai</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch(UIThemes.default)">Default</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch(UIThemes.carbon)">Carbon</button>
+                <button title="Theme Switch" type="button" @click="themeSwitch(UIThemes.monokai)">Monokai</button>
             </div>
         </div>
         <NuxtPage></NuxtPage>

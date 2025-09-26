@@ -1,4 +1,4 @@
-import type { UserData } from "~/assets/customTypes";
+import type { LoginResponse } from "~/assets/customTypes";
 
 /**
  * Submits the 2FA pin for verification.
@@ -6,7 +6,7 @@ import type { UserData } from "~/assets/customTypes";
  * @param pin The 2FA pin to submit.
  * @returns The status of the operation.
  */
-export const useFetchSubmit2FA = async (email: string, pin: string): Promise<UserData> => {
+export const useFetchSubmit2FA = async (email: string, pin: string): Promise<LoginResponse> => {
     try {
         const data = await $fetch("/api/auth/2fa", {
             method: "POST",

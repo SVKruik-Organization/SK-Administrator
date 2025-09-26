@@ -8,7 +8,9 @@ export default defineNuxtConfig({
     },
     vite: {
         server: {
-            allowedHosts: ['.test']
+            allowedHosts: ['.test'],
+            origin: 'http://sk-admin.test',
+            hmr: { host: 'sk-admin.test' },
         }
     },
     components: {

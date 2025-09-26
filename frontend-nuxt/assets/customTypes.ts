@@ -44,9 +44,9 @@ export type NotificationItem = {
 
 // Global UI Themes
 export enum UIThemes {
-    Default = "default",
-    Carbon = "carbon",
-    Monokai = "monokai"
+    default = "default",
+    carbon = "carbon",
+    monokai = "monokai"
 }
 
 export type TabComponentItem = {
@@ -139,4 +139,31 @@ export enum FileTypes {
 export enum NotificationTypes {
     initialize = "initialize",
     acknowledge = "ack",
+}
+
+export type LoginResponse = {
+    "user": UserData,
+    "activeProfile": number,
+    "profiles": Array<Profile>,
+    "topItems": Array<TopLink>,
+    "modules": Array<Module>,
+}
+
+export type Profile = {
+    "id": number,
+    "name": string,
+    "position": number,
+    "date_last_usage": Date | null,
+}
+
+export type TopLink = {
+    "name": string,
+    "icon": string,
+}
+
+export type Module = {
+    "id": number,
+    "name": string,
+    "icon": string,
+    "links"?: Array<string>,
 }

@@ -1,23 +1,22 @@
 import { UIThemes } from "@/assets/customTypes";
 import { defineStore } from "pinia";
-import { useStorage } from "@vueuse/core";
 
 export const useThemeStore = defineStore("ThemeStore", {
     state: () => {
         return {
-            theme: useStorage("theme", "default" as keyof typeof UIThemes)
+            theme: UIThemes.default
         }
     },
     persist: {
         storage: piniaPluginPersistedstate.localStorage(),
     },
     actions: {
-        setTheme(newTheme: keyof typeof UIThemes): void {
+        setTheme(newTheme: UIThemes): void {
             document.documentElement.className = UIThemes[newTheme];
             this.theme = newTheme;
         },
         loadTheme(): void {
-            document.documentElement.className = UIThemes[this.theme as keyof typeof UIThemes];
+            this.setTheme(this.theme);
         }
     }
 });

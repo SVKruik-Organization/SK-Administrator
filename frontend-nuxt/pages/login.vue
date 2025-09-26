@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { PromptTypes, type PopupItem, type UserData } from "~/assets/customTypes";
+import { PromptTypes, type LoginResponse, type Module, type PopupItem, type UserData } from "~/assets/customTypes";
+import { useSideBarStore } from "~/stores/SideBarStore";
 import { useFetchLoginEmail } from "~/utils/fetch/auth/useFetchLoginEmail";
 import { useFetchLoginGuest } from "~/utils/fetch/auth/useFetchLoginGuest";
 import { useFetchSubmit2FA } from "~/utils/fetch/auth/useFetchSubmit2FA";
 const { $event } = useNuxtApp();
 const userStore = useUserStore();
+const sideBarStore = useSideBarStore();
 
 // Reactive Data
 const emailInput: Ref<string> = ref("");
@@ -58,8 +60,9 @@ async function submit2fa(): Promise<boolean> {
         toggleButtonState(verificationButton.value, true);
 
         if (!emailInput.value.length || !verificationInput.value.length) throw new Error("The form is not completed correctly. Please try again.");
-        const response: UserData = await useFetchSubmit2FA(emailInput.value, verificationInput.value);
-        userStore.setUser(response);
+        const response: LoginResponse = await useFetchSubmit2FA(emailInput.value, verificationInput.value);
+        userStore.setUser(response.user);
+        sideBarStore.setSideBar(response.activeProfile, response.profiles, response.topItems, response.modules);
 
         $event("popup", {
             id: createTicket(4),
