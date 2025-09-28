@@ -2,7 +2,7 @@
  * Generate a random string.
  * Used for reference support tickets, images, etc.
  * 
- * @param length - The maximum length of the string.
+ * @param length The maximum length of the string.
  * @return The random generated ticket.
  */
 export function createTicket(length: number = 16): string {

@@ -1,4 +1,4 @@
-import type { UserTypes } from "~/assets/customTypes";
+import type { Languages, UserTypes } from "~/assets/customTypes";
 
 declare module "#auth-utils" {
     // General User
@@ -9,6 +9,7 @@ declare module "#auth-utils" {
         email: string | null;
         type: UserTypes;
         imageName: string | null;
+        language: Languages;
     }
 
     // Session

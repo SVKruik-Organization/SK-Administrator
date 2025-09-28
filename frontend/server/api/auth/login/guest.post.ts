@@ -1,7 +1,7 @@
 import type { Pool } from "mariadb";
 import { database } from "#imports";
 import { z } from "zod";
-import { type UserData, UserTypes } from "~/assets/customTypes";
+import { Languages, type UserData, UserTypes } from "~/assets/customTypes";
 import { createUserSession } from "#imports";
 import { formatApiError } from "~/utils/format";
 
@@ -27,8 +27,9 @@ export default defineEventHandler(async (event): Promise<UserData> => {
             "first_name": string,
             "last_name": string,
             "password": string,
-            "image_name": string
-        }> = await connection.query("SELECT id, first_name, last_name, password, image_name FROM guest WHERE password = ?;", [code]);
+            "image_name": string,
+            "language": Languages
+        }> = await connection.query("SELECT id, first_name, last_name, password, image_name, language FROM guest WHERE password = ?;", [code]);
 
         // Validate the response
         if (response.length === 0) throw new Error("This guest account does not exist. Please check your credentials and try again.", { cause: { statusCode: 1401 } });
@@ -42,6 +43,7 @@ export default defineEventHandler(async (event): Promise<UserData> => {
             "email": null,
             "type": UserTypes.GUEST,
             "imageName": user.image_name,
+            "language": user.language
         }, connection);
 
         await connection.end();

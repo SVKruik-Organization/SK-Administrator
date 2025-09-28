@@ -1,10 +1,16 @@
 <script lang="ts" setup>
 import { useUserStore } from "~/stores/UserStore";
-import { PromptTypes, type PopupItem } from "~/assets/customTypes";
+import { Languages, PromptTypes, type PopupItem } from "~/assets/customTypes";
 import { getImageUrl } from "~/utils/image";
 const userStore = useUserStore();
 const sideBarStore = useSideBarStore();
 const { $event } = useNuxtApp();
+
+// Lifecycle Hooks
+
+onMounted(async () => {
+    await sideBarStore.loadModules();
+});
 
 // Methods
 
@@ -17,16 +23,17 @@ function toggleProfileSwitcher(): void {
 
 /**
  * Normalizes a URL by replacing spaces with hyphens and converting to lowercase.
- * @param url - The URL to normalize.
+ * @param url The URL to normalize.
  * @returns The normalized URL.
  */
-function normalizeUrl(url: string): string {
+function normalizeUrl(url: string | { [lang in Languages]: string }): string {
+    if (typeof url === "object") return url[Languages.EN].replaceAll(" ", "-").toLowerCase();
     return url.replaceAll(" ", "-").toLowerCase();
 }
 
 async function switchProfile(profileId: number): Promise<boolean> {
     try {
-        await sideBarStore.switchProfile(profileId); return true;
+        return await sideBarStore.switchProfile(profileId);
     } catch (error: any) {
         $event("popup", {
             id: createTicket(4),
@@ -67,19 +74,19 @@ async function switchProfile(profileId: number): Promise<boolean> {
                         :to="`/panel/${normalizeUrl(item.name)}`" v-slot="{ isActive }"
                         class="sidebar-link sidebar-link-top">
                         <i :class="isActive ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
-                        <p>{{ item.name }}</p>
+                        <p>{{ item.name[userStore.getLanguage] }}</p>
                     </NuxtLink>
                 </menu>
             </div>
-            <div class="sidebar-content-item flex-col" v-for="module in sideBarStore.modules" :key="module.name">
+            <div class="sidebar-content-item flex-col" v-for="module in sideBarStore.modules" :key="module.name.en">
                 <NuxtLink :to="`/panel/${normalizeUrl(module.name)}`" v-slot="{ isActive }" class="flex">
                     <i :class="isActive ? `fa-solid ${module.icon}` : `fa-regular ${module.icon}`"></i>
-                    <h4>{{ module.name }}</h4>
+                    <h4>{{ module.name[userStore.getLanguage] }}</h4>
                 </NuxtLink>
                 <menu>
                     <NuxtLink v-for="item, key in module.links" :key="key"
-                        :to="`/panel/${normalizeUrl(module.name + '/' + item)}`" class="sidebar-link">
-                        <p>{{ item }}</p>
+                        :to="`/panel/${normalizeUrl(module.name.en + '/' + item.en)}`" class="sidebar-link">
+                        <p>{{ item[userStore.getLanguage] }}</p>
                     </NuxtLink>
                 </menu>
             </div>

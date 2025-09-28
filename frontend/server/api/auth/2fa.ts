@@ -51,6 +51,7 @@ export default defineEventHandler(async (event): Promise<LoginResponse> => {
             "email": email,
             "type": UserTypes.USER,
             "imageName": user.image_name,
+            "language": profileData.language,
         }, connection);
 
         await connection.end();

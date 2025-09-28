@@ -15,17 +15,39 @@ export const useSideBarStore = defineStore("SideBarStore", {
         storage: piniaPluginPersistedstate.localStorage(),
     },
     actions: {
+        /**
+         * Loads the sidebar modules.
+         * @param force Force reload of the modules even if they are already loaded.
+         */
+        async loadModules(force: boolean = false): Promise<void> {
+            if (!this.profiles.length || force) await this.switchProfile(0);
+        },
+        /**
+         * Sets the sidebar state.
+         * @param activeProfileId The ID of the active profile.
+         * @param profiles The list of user profiles.
+         * @param topItems The list of top-level items.
+         * @param modules The list of modules.
+         */
         setSideBar(activeProfileId: number, profiles: Array<Profile>, topItems: Array<TopLink>, modules: Array<Module>): void {
             this.active_profile_id = activeProfileId;
             this.profiles = profiles;
             this.topItems = topItems;
             this.modules = modules;
         },
+        /**
+         * Switches the active user profile.
+         * @param profileId The ID of the profile to switch to. Use 0 to switch to the most recently used profile.
+         * @returns Status of the operation.
+         */
         async switchProfile(profileId: number): Promise<boolean> {
             const response: ProfileData = await useFetchProfile(profileId);
             this.setSideBar(response.activeProfileId, response.profiles, response.topItems, response.modules);
             return true;
         },
+        /**
+         * Clears the sidebar state.
+         */
         clear(): void {
             this.active_profile_id = 1;
             this.profiles = [];

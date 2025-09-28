@@ -5,12 +5,19 @@ export type UserData = {
     "lastName": string,
     "email": string,
     "type": UserTypes,
-    "imageName": string
+    "imageName": string,
+    "language": Languages,
 }
 
 export enum UserTypes {
     USER = "User",
     GUEST = "Guest",
+}
+
+export enum Languages {
+    EN = "en",
+    NL = "nl",
+    KR = "kr",
 }
 
 // Pop-up Item
@@ -154,6 +161,7 @@ export type ProfileData = {
     "profiles": Array<Profile>,
     "topItems": Array<TopLink>,
     "modules": Array<Module>,
+    "language": Languages,
 }
 
 export type Profile = {
@@ -165,13 +173,13 @@ export type Profile = {
 }
 
 export type TopLink = {
-    "name": string,
+    "name": { [lang in Languages]: string },
     "icon": string,
 }
 
 export type Module = {
     "id": number,
-    "name": string,
+    "name": { [lang in Languages]: string },
     "icon": string,
-    "links"?: Array<string>,
+    "links"?: Array<{ [lang in Languages]: string }>,
 }
