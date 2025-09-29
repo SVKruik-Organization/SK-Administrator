@@ -25,7 +25,7 @@ const username: Ref<string> = ref("Administrator");
 /**
  * Try a user login with email and password.
  * If successful, move to step 2 (2FA).
- * @returns The status of the submission.
+ * @returns Status of the operation.
  */
 async function submitLogin(): Promise<boolean> {
     try {
@@ -52,7 +52,7 @@ async function submitLogin(): Promise<boolean> {
 /**
  * Try to submit the 2FA code for verification.
  * If successful, log the user in and redirect to the dashboard.
- * @returns The status of the submission.
+ * @returns Status of the operation.
  */
 async function submit2fa(): Promise<boolean> {
     try {
@@ -87,7 +87,7 @@ async function submit2fa(): Promise<boolean> {
 
 /**
  * Try a guest user using a code.q
- * @returns The status of the submission.
+ * @returns Status of the operation.
  */
 async function submitGuest(): Promise<boolean> {
     try {

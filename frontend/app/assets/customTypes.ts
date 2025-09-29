@@ -17,7 +17,7 @@ export enum UserTypes {
 export enum Languages {
     EN = "en",
     NL = "nl",
-    KR = "kr",
+    // KR = "kr",
 }
 
 // Pop-up Item

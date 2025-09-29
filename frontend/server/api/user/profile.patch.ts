@@ -22,17 +22,16 @@ export default defineEventHandler(async (event): Promise<ProfileData> => {
 
         // Retrieve the profile from the database
         const connection: Pool = await database("ska");
-        const userId: number | undefined = (await getUserSession(event)).user?.id;
-        if (!userId) throw new Error("You must be logged in to access this resource.", { cause: { statusCode: 1401 } });
-        const profileData: ProfileData = await getProfileData(userId, profileId, connection);
+        const session = await getUserSession(event);
+        if (!session.user) throw new Error("You must be logged in to access this resource.", { cause: { statusCode: 1401 } });
+        const profileData: ProfileData = await getProfileData(session.user.id, profileId, connection);
+
+        // Update language preference in session
+        session.user.language = profileData.language;
+        await setUserSession(event, session);
 
         await connection.end();
-        return {
-            "activeProfileId": profileId,
-            "profiles": profileData.profiles,
-            "topItems": profileData.topItems,
-            "modules": profileData.modules,
-        };
+        return profileData;
     } catch (error: any) {
         throw formatApiError(error);
     }

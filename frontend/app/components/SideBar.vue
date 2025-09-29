@@ -7,19 +7,39 @@ const sideBarStore = useSideBarStore();
 const { $event } = useNuxtApp();
 
 // Lifecycle Hooks
-
 onMounted(async () => {
     await sideBarStore.loadModules();
 });
 
-// Methods
-
-/**
- * Opens the profile switcher dropdown.
- */
-function toggleProfileSwitcher(): void {
-    console.log("Profile Switcher clicked.");
+// Localizations
+const translations: { [key: string]: { [lang in Languages]: string } } = {
+    "error": {
+        [Languages.EN]: "Something went wrong on our end. Please try again later.",
+        [Languages.NL]: "Er is iets misgegaan. Probeer het later opnieuw.",
+    },
+    "click_switch_profile": {
+        [Languages.EN]: "Click to switch user profile.",
+        [Languages.NL]: "Klik om van gebruikersprofiel te wisselen.",
+    },
+    "profile_picture": {
+        [Languages.EN]: "Profile Picture",
+        [Languages.NL]: "Profielfoto",
+    },
+    "active_profile": {
+        [Languages.EN]: "Active Profile",
+        [Languages.NL]: "Actief Profiel",
+    },
+    "preferences": {
+        [Languages.EN]: "Preferences",
+        [Languages.NL]: "Voorkeuren",
+    },
 }
+
+// Reactive Data
+const isProfileSwitcherOpen: Ref<boolean> = ref(false);
+const activeProfile: Ref<string> = ref(sideBarStore.getActiveProfile?.name || "");
+
+// Methods
 
 /**
  * Normalizes a URL by replacing spaces with hyphens and converting to lowercase.
@@ -31,14 +51,23 @@ function normalizeUrl(url: string | { [lang in Languages]: string }): string {
     return url.replaceAll(" ", "-").toLowerCase();
 }
 
+/**
+ * Switches the active user profile.
+ * @param profileId The ID of the profile to switch to.
+ * @returns Status of the operation.
+ */
 async function switchProfile(profileId: number): Promise<boolean> {
     try {
-        return await sideBarStore.switchProfile(profileId);
+        console.log("Switching profile to ID:", profileId);
+        const response: boolean = await sideBarStore.switchProfile(profileId);
+        activeProfile.value = sideBarStore.getActiveProfile?.name || "";
+        isProfileSwitcherOpen.value = false;
+        return response;
     } catch (error: any) {
         $event("popup", {
             id: createTicket(4),
             type: PromptTypes.danger,
-            message: error.message || "Something went wrong on our end. Please try again later.",
+            message: error.message || translations.error![userStore.getLanguage],
             duration: 3,
         } as PopupItem);
         return false;
@@ -47,25 +76,32 @@ async function switchProfile(profileId: number): Promise<boolean> {
 </script>
 
 <template>
+    <div class="overlay" v-if="isProfileSwitcherOpen" @click="isProfileSwitcherOpen = false"></div>
     <nav class="flex-col">
         <img class="sidebar-logo-image no-select" src="/mesh_1.png" alt="Logo">
         <section class="sidebar-logo flex no-select">
             <h3>SK Administrator</h3>
         </section>
-        <button class="user-information flex no-select" type="button" @click="toggleProfileSwitcher()"
-            title="Click to switch user profile.">
-            <menu v-if="sideBarStore.profiles.length > 1" class="flex-col">
-                <button v-for="profile in sideBarStore.getInactiveProfiles" :key="profile.id" class="flex" type="button"
-                    @click="switchProfile(profile.id)">{{ profile.name }}</button>
-                <!-- Profile switcher dropdown content goes here -->
-            </menu>
-            <img :src="getImageUrl(userStore.user)" alt="Profile Picture">
+        <button class="user-information flex no-select" type="button" :class="{ 'active': isProfileSwitcherOpen }"
+            @click="isProfileSwitcherOpen = !isProfileSwitcherOpen"
+            :title="translations.click_switch_profile![userStore.getLanguage]">
+            <img :src="getImageUrl(userStore.user)" :alt="translations.profile_picture![userStore.getLanguage]"
+                :title="translations.profile_picture![userStore.getLanguage]">
             <div class="user-information-text flex-col">
                 <h3>{{ userStore.user?.firstName }}</h3>
-                <small title="Active Profile">{{ sideBarStore.getActiveProfile?.name }}</small>
+                <small :title="translations.active_profile![userStore.getLanguage]">
+                    {{ activeProfile }}
+                </small>
             </div>
-            <i class="fa-regular fa-angle-down profile-switcher"></i>
-
+            <i class="fa-regular fa-angle-down profile-switcher" :class="{ 'active': isProfileSwitcherOpen }"></i>
+            <menu v-if="sideBarStore.profiles.length > 1 && isProfileSwitcherOpen" class="flex-col">
+                <button v-for="profile in sideBarStore.getInactiveProfiles" :key="profile.id"
+                    class="flex-col profile-switcher-item" type="button" @click="switchProfile(profile.id)">
+                    <strong>{{ profile.name }}</strong>
+                    <small>{{ profile.description }}</small>
+                    <span class="click-item"></span>
+                </button>
+            </menu>
         </button>
         <section class="sidebar-content flex-col">
             <div class="sidebar-content-item flex-col">
@@ -92,7 +128,7 @@ async function switchProfile(profileId: number): Promise<boolean> {
             </div>
             <NuxtLink to="/panel/preferences" v-slot="{ isActive }" class="sidebar-link sidebar-link-bottom">
                 <i :class="isActive ? ' fa-solid fa-gear' : 'fa-regular fa-gear'"></i>
-                <p>Preferences</p>
+                <p>{{ translations.preferences![userStore.getLanguage] }}</p>
             </NuxtLink>
         </section>
     </nav>
@@ -111,10 +147,21 @@ nav {
 }
 
 nav section {
-    z-index: 2;
+    z-index: 1;
 }
 
-/* Header */
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: var(--color-background);
+    opacity: 0.3;
+    z-index: 2;
+    cursor: pointer;
+}
+
 .sidebar-logo-image {
     height: 400px;
     width: 1000px;
@@ -124,7 +171,6 @@ nav section {
     pointer-events: none;
     left: -400px;
     top: -140px;
-    z-index: 2;
     rotate: 30deg;
 }
 
@@ -143,10 +189,11 @@ nav section {
     border-radius: 100px;
     padding: 8px;
     box-sizing: border-box;
-    width: 95%;
+    width: 215px;
     margin-left: -8px;
-    z-index: 4;
+    z-index: 3;
     position: relative;
+    border: 1px solid transparent;
 }
 
 .user-information-text {
@@ -180,14 +227,30 @@ nav section {
 
 .user-information menu {
     position: absolute;
-    width: 100%;
-    height: 200px;
+    width: 215px;
     top: 33px;
-    left: 0;
-    border-radius: 0 0 40px 40px;
+    left: -1px;
+    border-radius: 0 0 var(--border-radius-high) var(--border-radius-high);
     padding: 8px;
     box-sizing: border-box;
     background-color: var(--color-background);
+    gap: 10px;
+    border: 1px solid var(--color-fill);
+    border-top: none;
+}
+
+.profile-switcher-item:first-child {
+    margin-top: 30px;
+}
+
+.profile-switcher-item:last-child {
+    margin-bottom: 10px;
+}
+
+.profile-switcher-item {
+    text-align: left;
+    position: relative;
+    gap: 0;
 }
 
 /* Content */
@@ -234,5 +297,15 @@ nav section {
 
 .sidebar-link-top.router-link-active {
     background-color: var(--color-background);
+}
+
+button.active {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-fill);
+}
+
+i.active {
+    rotate: 180deg;
+    opacity: 1;
 }
 </style>

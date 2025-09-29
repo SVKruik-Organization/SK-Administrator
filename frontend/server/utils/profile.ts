@@ -11,9 +11,8 @@ import { Languages, Module, Profile, ProfileData, TopLink } from "~/assets/custo
 export async function getProfileData(userId: number, profileId: number, connection: Pool): Promise<ProfileData> {
     // Retrieve the user profile
     const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, date_last_usage FROM user_profile WHERE user_id = ? ORDER BY date_last_usage DESC, position DESC;", [userId]);
-    const activeProfile = rawUserProfiles[0];
     const userProfiles = rawUserProfiles.sort((a, b) => a.position - b.position);
-    let chosenProfileId = profileId === 0 ? activeProfile.id : profileId;
+    let chosenProfileId = profileId === 0 ? rawUserProfiles[0].id : profileId;
 
     // Retrieve the modules and module items from the database
     const moduleData: Array<{
@@ -69,7 +68,7 @@ export async function getProfileData(userId: number, profileId: number, connecti
     await connection.query("UPDATE user_profile SET date_last_usage = CURRENT_TIMESTAMP WHERE user_id = ? AND id = ?;", [userId, profileId]);
 
     return {
-        "activeProfileId": activeProfile.id,
+        "activeProfileId": chosenProfileId,
         "profiles": userProfiles,
         "topItems": topItems,
         "modules": modules,

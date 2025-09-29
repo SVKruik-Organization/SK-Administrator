@@ -8,7 +8,7 @@ import { Pool } from "mariadb";
  * 
  * @param data The data to log to the file.
  * @param rawType The type of message. For example: warning, alert, info, fatal, none.
- * @returns Status.
+ * @returns Status of the operation.
  */
 export function log(data: string, type: keyof typeof LogTypes): boolean {
     try {

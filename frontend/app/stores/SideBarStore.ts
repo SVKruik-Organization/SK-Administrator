@@ -43,6 +43,7 @@ export const useSideBarStore = defineStore("SideBarStore", {
         async switchProfile(profileId: number): Promise<boolean> {
             const response: ProfileData = await useFetchProfile(profileId);
             this.setSideBar(response.activeProfileId, response.profiles, response.topItems, response.modules);
+            useUserStore().user!.language = response.language;
             return true;
         },
         /**
@@ -57,9 +58,11 @@ export const useSideBarStore = defineStore("SideBarStore", {
     },
     getters: {
         getActiveProfile(): Profile | null {
+            console.log("Getting active profile");
             return this.profiles.find(profile => profile.id === this.active_profile_id) || null;
         },
         getInactiveProfiles(): Array<Profile> {
+            console.log("Getting inactive profiles");
             return this.profiles.filter(profile => profile.id !== this.active_profile_id);
         }
     }
