@@ -18,7 +18,6 @@ export async function createUserSession(event: H3Event, user: {
     email: string | null,
     type: UserTypes,
     imageName: string | null
-    language: Languages
 }, connection: Pool): Promise<UserData> {
     await setUserSession(event, {
         user: {
@@ -28,7 +27,6 @@ export async function createUserSession(event: H3Event, user: {
             "email": user.email,
             "type": user.type,
             "imageName": user.imageName,
-            "language": user.language,
         },
         loggedInAt: new Date(),
     });

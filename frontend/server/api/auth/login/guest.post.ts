@@ -43,7 +43,6 @@ export default defineEventHandler(async (event): Promise<UserData> => {
             "email": null,
             "type": UserTypes.GUEST,
             "imageName": user.image_name,
-            "language": user.language
         }, connection);
 
         await connection.end();

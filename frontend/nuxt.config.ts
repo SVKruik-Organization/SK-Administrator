@@ -119,8 +119,5 @@ export default defineNuxtConfig({
         options: {
             scrollBehaviorType: 'smooth'
         }
-    },
-    routeRules: {
-        "/panel": { redirect: "/panel/dashboard" },
     }
 });

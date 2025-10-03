@@ -24,10 +24,9 @@ export default defineEventHandler(async (event): Promise<ProfileData> => {
         const connection: Pool = await database("ska");
         const session = await getUserSession(event);
         if (!session.user) throw new Error("You must be logged in to access this resource.", { cause: { statusCode: 1401 } });
-        const profileData: ProfileData = await getProfileData(session.user.id, profileId, connection);
+        const profileData: ProfileData = await getProfileData(session.user.id, profileId, false, connection);
 
         // Update language preference in session
-        session.user.language = profileData.language;
         await setUserSession(event, session);
 
         await connection.end();

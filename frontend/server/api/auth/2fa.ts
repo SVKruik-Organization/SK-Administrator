@@ -41,7 +41,7 @@ export default defineEventHandler(async (event): Promise<LoginResponse> => {
         const user = response[0];
         if (!user) throw new Error("Email or password is incorrect. Please check your credentials and try again.", { cause: { statusCode: 1401 } });
 
-        const profileData: ProfileData = await getProfileData(user.id, 0, connection);
+        const profileData: ProfileData = await getProfileData(user.id, 0, false, connection);
 
         // Create the session
         const session = await createUserSession(event, {
@@ -51,16 +51,17 @@ export default defineEventHandler(async (event): Promise<LoginResponse> => {
             "email": email,
             "type": UserTypes.USER,
             "imageName": user.image_name,
-            "language": profileData.language,
         }, connection);
 
         await connection.end();
         return {
             "user": session,
             "activeProfileId": profileData.activeProfileId,
+            "firstItemUrl": profileData.firstItemUrl,
             "profiles": profileData.profiles,
             "topItems": profileData.topItems,
             "modules": profileData.modules,
+            "language": profileData.language,
         };
     } catch (error: any) {
         throw formatApiError(error);

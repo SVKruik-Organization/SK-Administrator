@@ -27,9 +27,7 @@ function closePopup() {
 onMounted(() => {
     // Fade In
     setTimeout(() => {
-        if (popupItem.value) {
-            popupItem.value.classList.add("visible");
-        }
+        if (popupItem.value) popupItem.value.classList.add("visible");
     }, 250);
 
     // Self-Destruct
@@ -43,7 +41,7 @@ onMounted(() => {
     <button ref="popupItem" class="popup shadow" title="Close Popup" type="button">
         <div class="left">
             <span :style="`background-color: var(--color-${popupData.type});`" class="color-indicator"></span>
-            <p class="message ellipsis">{{ popupData.message }}</p>
+            <p class="message">{{ popupData.message }}</p>
         </div>
         <div class="right">
             <div class="close-popup-button">
@@ -59,7 +57,7 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
+    min-height: 50px;
     background-color: var(--color-fill);
     border-radius: var(--border-radius-low);
     cursor: pointer;
@@ -78,13 +76,19 @@ onMounted(() => {
     align-items: center;
     gap: 10px;
     height: 100%;
+    text-align: left;
 }
 
 .color-indicator {
-    height: 100%;
+    height: -webkit-fill-available;
     width: 5px;
     border-top-left-radius: var(--border-radius-low);
     border-bottom-left-radius: var(--border-radius-low);
+}
+
+.message {
+    max-width: 95%;
+    margin: 5px 0;
 }
 
 .close-popup-button {

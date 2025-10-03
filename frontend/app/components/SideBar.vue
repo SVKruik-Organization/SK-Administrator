@@ -2,6 +2,7 @@
 import { useUserStore } from "~/stores/UserStore";
 import { Languages, PromptTypes, type PopupItem } from "~/assets/customTypes";
 import { getImageUrl } from "~/utils/image";
+import { normalizeUrl } from "~/utils/format";
 const userStore = useUserStore();
 const sideBarStore = useSideBarStore();
 const { $event } = useNuxtApp();
@@ -42,32 +43,22 @@ const activeProfile: Ref<string> = ref(sideBarStore.getActiveProfile?.name || ""
 // Methods
 
 /**
- * Normalizes a URL by replacing spaces with hyphens and converting to lowercase.
- * @param url The URL to normalize.
- * @returns The normalized URL.
- */
-function normalizeUrl(url: string | { [lang in Languages]: string }): string {
-    if (typeof url === "object") return url[Languages.EN].replaceAll(" ", "-").toLowerCase();
-    return url.replaceAll(" ", "-").toLowerCase();
-}
-
-/**
  * Switches the active user profile.
  * @param profileId The ID of the profile to switch to.
  * @returns Status of the operation.
  */
 async function switchProfile(profileId: number): Promise<boolean> {
     try {
-        console.log("Switching profile to ID:", profileId);
         const response: boolean = await sideBarStore.switchProfile(profileId);
         activeProfile.value = sideBarStore.getActiveProfile?.name || "";
         isProfileSwitcherOpen.value = false;
+        navigateTo(sideBarStore.firstItemUrl);
         return response;
     } catch (error: any) {
         $event("popup", {
             id: createTicket(4),
             type: PromptTypes.danger,
-            message: error.message || translations.error![userStore.getLanguage],
+            message: error.message || translations.error![sideBarStore.getLanguage],
             duration: 3,
         } as PopupItem);
         return false;
@@ -79,17 +70,18 @@ async function switchProfile(profileId: number): Promise<boolean> {
     <div class="overlay" v-if="isProfileSwitcherOpen" @click="isProfileSwitcherOpen = false"></div>
     <nav class="flex-col">
         <img class="sidebar-logo-image no-select" src="/mesh_1.png" alt="Logo">
-        <section class="sidebar-logo flex no-select">
+        <button class="sidebar-logo flex" @click="navigateTo(sideBarStore.firstItemUrl)" type="button"
+            title="SK Administrator">
             <h3>SK Administrator</h3>
-        </section>
+        </button>
         <button class="user-information flex no-select" type="button" :class="{ 'active': isProfileSwitcherOpen }"
             @click="isProfileSwitcherOpen = !isProfileSwitcherOpen"
-            :title="translations.click_switch_profile![userStore.getLanguage]">
-            <img :src="getImageUrl(userStore.user)" :alt="translations.profile_picture![userStore.getLanguage]"
-                :title="translations.profile_picture![userStore.getLanguage]">
+            :title="translations.click_switch_profile![sideBarStore.getLanguage]">
+            <img :src="getImageUrl(userStore.user)" :alt="translations.profile_picture![sideBarStore.getLanguage]"
+                :title="translations.profile_picture![sideBarStore.getLanguage]">
             <div class="user-information-text flex-col">
                 <h3>{{ userStore.user?.firstName }}</h3>
-                <small :title="translations.active_profile![userStore.getLanguage]">
+                <small :title="translations.active_profile![sideBarStore.getLanguage]">
                     {{ activeProfile }}
                 </small>
             </div>
@@ -110,25 +102,25 @@ async function switchProfile(profileId: number): Promise<boolean> {
                         :to="`/panel/${normalizeUrl(item.name)}`" v-slot="{ isActive }"
                         class="sidebar-link sidebar-link-top">
                         <i :class="isActive ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
-                        <p>{{ item.name[userStore.getLanguage] }}</p>
+                        <p>{{ item.name[sideBarStore.getLanguage] }}</p>
                     </NuxtLink>
                 </menu>
             </div>
             <div class="sidebar-content-item flex-col" v-for="module in sideBarStore.modules" :key="module.name.en">
                 <NuxtLink :to="`/panel/${normalizeUrl(module.name)}`" v-slot="{ isActive }" class="flex">
                     <i :class="isActive ? `fa-solid ${module.icon}` : `fa-regular ${module.icon}`"></i>
-                    <h4>{{ module.name[userStore.getLanguage] }}</h4>
+                    <h4>{{ module.name[sideBarStore.getLanguage] }}</h4>
                 </NuxtLink>
                 <menu>
                     <NuxtLink v-for="item, key in module.links" :key="key"
                         :to="`/panel/${normalizeUrl(module.name.en + '/' + item.en)}`" class="sidebar-link">
-                        <p>{{ item[userStore.getLanguage] }}</p>
+                        <p>{{ item[sideBarStore.getLanguage] }}</p>
                     </NuxtLink>
                 </menu>
             </div>
             <NuxtLink to="/panel/preferences" v-slot="{ isActive }" class="sidebar-link sidebar-link-bottom">
                 <i :class="isActive ? ' fa-solid fa-gear' : 'fa-regular fa-gear'"></i>
-                <p>{{ translations.preferences![userStore.getLanguage] }}</p>
+                <p>{{ translations.preferences![sideBarStore.getLanguage] }}</p>
             </NuxtLink>
         </section>
     </nav>
@@ -181,6 +173,19 @@ nav section {
 
 .sidebar-logo {
     margin-left: 5px;
+    z-index: 1;
+}
+
+.sidebar-logo h3 {
+    background: url(/mesh_2.png);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 110%;
+    font-weight: bolder;
+    filter: brightness(0.8);
 }
 
 .user-information {

@@ -5,7 +5,6 @@ import NotificationItem from "./NotificationItem.vue";
 import { getImageUrl } from "~/utils/image";
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
-const router = useRouter();
 
 // Reactive Data
 const userDropdownIcon: Ref<HTMLElement | null> = useTemplateRef("userDropdownIcon");
@@ -87,7 +86,7 @@ function closeNotificationDropdown(): void {
  */
 function signOut() {
     userStore.signOut();
-    router.push("/");
+    navigateTo("/");
 }
 </script>
 
@@ -156,7 +155,7 @@ function signOut() {
                         <small>Handy resources & links.</small>
                         <span class="splitter"></span>
                     </section>
-                    <NuxtLink class="user-dropdown-item" to="/panel/dashboard">Home</NuxtLink>
+                    <NuxtLink class="user-dropdown-item" to="/panel">Home</NuxtLink>
                     <NuxtLink class="user-dropdown-item" to="/panel/preferences">Preferences</NuxtLink>
                     <span class="splitter"></span>
                     <button class="sign-out-button user-dropdown-item" title="Sign Out" type="button"

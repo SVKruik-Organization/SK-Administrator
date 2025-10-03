@@ -5,8 +5,7 @@ export type UserData = {
     "lastName": string,
     "email": string,
     "type": UserTypes,
-    "imageName": string,
-    "language": Languages,
+    "imageName": string
 }
 
 export enum UserTypes {
@@ -148,21 +147,20 @@ export enum NotificationTypes {
     acknowledge = "ack",
 }
 
-export type LoginResponse = {
-    "user": UserData,
+type BaseProfileData = {
     "activeProfileId": number,
-    "profiles": Array<Profile>,
-    "topItems": Array<TopLink>,
-    "modules": Array<Module>,
-}
-
-export type ProfileData = {
-    "activeProfileId": number,
+    "firstItemUrl": string,
     "profiles": Array<Profile>,
     "topItems": Array<TopLink>,
     "modules": Array<Module>,
     "language": Languages,
 }
+
+export type LoginResponse = {
+    "user": UserData,
+} & BaseProfileData;
+
+export type ProfileData = BaseProfileData;
 
 export type Profile = {
     "id": number,

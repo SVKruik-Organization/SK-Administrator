@@ -61,8 +61,9 @@ async function submit2fa(): Promise<boolean> {
 
         if (!emailInput.value.length || !verificationInput.value.length) throw new Error("The form is not completed correctly. Please try again.");
         const response: LoginResponse = await useFetchSubmit2FA(emailInput.value, verificationInput.value);
-        userStore.setUser(response.user);
-        sideBarStore.setSideBar(response.activeProfileId, response.profiles, response.topItems, response.modules);
+        const { user, ...rest } = response;
+        userStore.setUser(user);
+        sideBarStore.setSideBar(rest);
 
         $event("popup", {
             id: createTicket(4),
@@ -70,7 +71,7 @@ async function submit2fa(): Promise<boolean> {
             message: `Login successful! Welcome back ${userStore.user?.firstName}.`,
             duration: 3,
         } as PopupItem);
-        navigateTo("/panel/dashboard");
+        navigateTo("/panel");
         return true;
     } catch (error: any) {
         $event("popup", {
@@ -104,7 +105,7 @@ async function submitGuest(): Promise<boolean> {
             message: `Login successful! Welcome ${userStore.user?.firstName}.`,
             duration: 3,
         } as PopupItem);
-        navigateTo("/panel/dashboard");
+        navigateTo("/panel");
         return true;
     } catch (error: any) {
         $event("popup", {

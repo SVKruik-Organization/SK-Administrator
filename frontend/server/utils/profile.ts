@@ -1,5 +1,6 @@
 import { Pool } from "mariadb/*";
 import { Languages, Module, Profile, ProfileData, TopLink } from "~/assets/customTypes";
+import { normalizeUrl } from "~/utils/format";
 
 /**
  * Retrieves the profile data for a user.
@@ -8,11 +9,14 @@ import { Languages, Module, Profile, ProfileData, TopLink } from "~/assets/custo
  * @param connection An active database connection.
  * @returns The profile data for the user.
  */
-export async function getProfileData(userId: number, profileId: number, connection: Pool): Promise<ProfileData> {
+export async function getProfileData(userId: number, profileId: number, recursion: boolean, connection: Pool): Promise<ProfileData> {
     // Retrieve the user profile
-    const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, date_last_usage FROM user_profile WHERE user_id = ? ORDER BY date_last_usage DESC, position DESC;", [userId]);
-    const userProfiles = rawUserProfiles.sort((a, b) => a.position - b.position);
-    let chosenProfileId = profileId === 0 ? rawUserProfiles[0].id : profileId;
+    const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, date_last_usage FROM user_profile WHERE user_id = ? ORDER BY date_last_usage DESC, position ASC;", [userId]);
+    const userProfiles: Array<Profile> = rawUserProfiles.sort((a, b) => a.position - b.position);
+    const chosenProfile: Profile | undefined = profileId === 0
+        ? rawUserProfiles[0] // Most recently used
+        : rawUserProfiles.find(profile => profile.id === profileId); // Specific profile
+    if (!chosenProfile) throw new Error(`The selected profile ${profileId} does not exist.`, { cause: { statusCode: 1403 } });
 
     // Retrieve the modules and module items from the database
     const moduleData: Array<{
@@ -21,21 +25,31 @@ export async function getProfileData(userId: number, profileId: number, connecti
         "module_icon": string | null,
         "module_item_name": { [lang in Languages]: string },
         "module_item_icon": string | null,
+        "module_item_id": number | null,
         "language": Languages | null
     }> = await connection.query(`
             SELECT
-                IFNULL(module.id, 0) as module_id,
+                IFNULL(module.id, 0) AS module_id,
                 module.name AS module_name,
                 module.icon AS module_icon,
                 module_item.name AS module_item_name,
                 module_item.icon AS module_item_icon,
+                module_item.id AS module_item_id,
                 language
             FROM
                 module
                 LEFT JOIN user_profile_module ON module_id = module.id
                 LEFT JOIN user_profile ON user_profile.id = user_profile_module.user_profile_id
                 RIGHT JOIN module_item ON module_item.module_id = module.id
-            WHERE user_profile.id = ? AND user_profile.user_id = ? OR module_item.module_id IS NULL;`, [chosenProfileId, userId]);
+                LEFT JOIN user ON user.id = ?
+                LEFT JOIN role ON role.id = user.role_id
+                LEFT JOIN \`grant\` ON \`grant\`.role_id = user.role_id
+            WHERE
+                (user_profile.id = ?
+                AND user_profile.user_id = ?
+                OR module_item.module_id IS NULL)
+                AND \`grant\`.module_item_id = module_item.id
+                AND \`grant\`.read = 1;`, [userId, chosenProfile.id, userId]);
     const moduleMap = new Map<number, Module>();
     const topItems: Array<TopLink> = [];
     let language: Languages = Languages.EN;
@@ -65,10 +79,36 @@ export async function getProfileData(userId: number, profileId: number, connecti
     const modules = Array.from(moduleMap.values());
 
     // Update their profile's last usage date
-    await connection.query("UPDATE user_profile SET date_last_usage = CURRENT_TIMESTAMP WHERE user_id = ? AND id = ?;", [userId, profileId]);
+    await connection.query("UPDATE user_profile SET date_last_usage = CURRENT_TIMESTAMP WHERE user_id = ? AND id = ?;", [userId, chosenProfile.id]);
+
+    // First item URL for default redirects
+    let firstItemUrl = "/";
+    if (topItems.length > 0 && topItems[0]?.name?.en) {
+        firstItemUrl = normalizeUrl(`/panel/${topItems[0].name.en}`);
+    } else if (
+        modules.length > 0 &&
+        modules[0]?.name?.en &&
+        modules[0].links?.length &&
+        modules[0].links[0]?.en
+    ) {
+        firstItemUrl = normalizeUrl(`/panel/${modules[0].name.en}/${modules[0].links[0].en}`);
+    }
+
+    if (firstItemUrl === "/" && !recursion) {
+        // Find another profile with available modules
+        const otherProfiles = userProfiles.filter(profile => profile.id !== chosenProfile.id);
+        for (const profile of otherProfiles) {
+            const profileData = await getProfileData(userId, profile.id, true, connection);
+            if (profileData.firstItemUrl !== "/") return profileData;
+        }
+
+        // No modules found for any profile, throw an error
+        throw new Error(`Your last used profile '${chosenProfile.name}' does not have any accessible modules. Contact an Administrator as you do not have any alternative profiles to try.`, { cause: { statusCode: 1403 } });
+    }
 
     return {
-        "activeProfileId": chosenProfileId,
+        "activeProfileId": chosenProfile.id,
+        "firstItemUrl": firstItemUrl,
         "profiles": userProfiles,
         "topItems": topItems,
         "modules": modules,

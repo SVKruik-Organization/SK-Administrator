@@ -1,10 +1,6 @@
 <script lang="ts" setup>
 const error = useError();
 
-if (error?.value?.statusCode === 404) clearError({
-    redirect: "/panel/dashboard"
-});
-
 const handleRedirect = () => clearError({ redirect: "/" });
 </script>
 <template>

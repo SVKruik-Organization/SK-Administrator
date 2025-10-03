@@ -20,13 +20,14 @@ const pendingPopups = ref<Array<PopupItem>>([]);
 <style scoped>
 .popup-container {
     gap: 10px;
-    width: 700px;
+    width: 95%;
+    max-width: 700px;
     position: absolute;
     left: 0;
     right: 0;
     bottom: 15px;
     margin-left: auto;
     margin-right: auto;
-    z-index: 3;
+    z-index: 4;
 }
 </style>

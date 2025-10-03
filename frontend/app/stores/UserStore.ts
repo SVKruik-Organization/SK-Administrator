@@ -1,4 +1,4 @@
-import { Languages, type UserData } from "~/assets/customTypes";
+import type { UserData } from "~/assets/customTypes";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("userStore", {
@@ -32,8 +32,5 @@ export const useUserStore = defineStore("userStore", {
         isLoggedIn(): boolean {
             return !!this.user?.id;
         },
-        getLanguage(): Languages {
-            return this.user?.language ?? Languages.EN;
-        }
     },
 });

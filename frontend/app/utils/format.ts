@@ -1,4 +1,5 @@
 import { H3Error } from "h3";
+import { Languages } from "~/assets/customTypes";
 
 /**
  * Converts a Date object to a human-readable time ago format.
@@ -28,6 +29,16 @@ export function formatNumber(num: number): string {
     } else {
         return num.toString();
     }
+}
+
+/**
+ * Normalizes a URL by replacing spaces with hyphens and converting to lowercase.
+ * @param url The URL to normalize.
+ * @returns The normalized URL.
+ */
+export function normalizeUrl(url: string | { [lang in Languages]: string }): string {
+    if (typeof url === "object") return url[Languages.EN].replaceAll(" ", "-").toLowerCase();
+    return url.replaceAll(" ", "-").toLowerCase();
 }
 
 /**

@@ -2,7 +2,6 @@
 import { useNotificationStore } from "~/stores/NotificationStore";
 import type { NotificationItem } from "~/assets/customTypes";
 const notificationStore = useNotificationStore();
-const router = useRouter();
 
 // Props
 const props = defineProps<{
@@ -18,7 +17,11 @@ function deleteNotification(): void {
     notificationStore.delete(props.message.ticket);
 }
 function openDetails(): void {
-    router.push(`/panel/notifications?ticket=${props.message.ticket}`);
+    markAsRead();
+    navigateTo({
+        path: "/panel/notifications",
+        query: { "ticket": props.message.ticket },
+    });
 }
 </script>
 
