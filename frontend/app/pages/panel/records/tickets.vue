@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { TabComponentItem } from "@/assets/customTypes";
-import TabComponent from "@/components/TabComponent.vue";
 
 // Reactive Data
 const navigationTabs = ref<Array<TabComponentItem>>([

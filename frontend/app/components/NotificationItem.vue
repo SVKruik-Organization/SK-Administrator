@@ -9,13 +9,25 @@ const props = defineProps<{
 }>();
 
 // Methods
+
+/**
+ * Marks the notification as read. Removes the unread indicator.
+ */
 function markAsRead(): void {
     if (props.message.is_read) return;
     notificationStore.markAsRead(props.message.ticket);
 }
+
+/**
+ * Deletes the notification.
+ */
 function deleteNotification(): void {
     notificationStore.delete(props.message.ticket);
 }
+
+/**
+ * Navigates to the notification details page.
+ */
 function openDetails(): void {
     markAsRead();
     navigateTo({
@@ -27,23 +39,20 @@ function openDetails(): void {
 
 <template>
     <div :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`" class="notification-item">
-        <section class="notification-item-left">
+        <button class="notification-item-left" @click="openDetails()" type="button">
             <span :style="`background-color: var(--color-${message.level});`" class="type-indicator"></span>
-            <p class="ellipsis">{{ typeof message.data === 'object' ? message.data.message : message.data }}</p>
-            <button class="click-item" title="Open Details" type="button" @click="openDetails()"></button>
-        </section>
+            <p>{{ typeof message.data === 'object' ? message.data?.message : message.data }}</p>
+        </button>
         <section class="notification-item-right">
             <button v-if="!message.is_read"
                 :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`"
                 class="notification-action-button" title="Mark as Read" type="button" @click="markAsRead()">
                 <i class="fa-regular fa-envelope-circle-check"></i>
-                <span class="click-item"></span>
             </button>
             <button :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`"
                 class="notification-action-button" title="Delete Notification" type="button"
                 @click="deleteNotification()">
                 <i class="fa-regular fa-envelope-open"></i>
-                <span class="click-item"></span>
             </button>
         </section>
     </div>

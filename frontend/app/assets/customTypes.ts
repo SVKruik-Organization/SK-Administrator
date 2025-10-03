@@ -39,10 +39,14 @@ export type NotificationItem = {
     "user_id": number;
     "type": NotificationTypes;
     "level": PromptTypes;
-    "data": any; // JSON payload
+    "data": {
+        "message": string;
+        "details"?: string;
+    };
     "url": string;
     "source": string;
     "is_read": boolean;
+    "is_silent": boolean;
     "ticket": string;
     "date_expiry": Date;
     "date_creation": Date;

@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <button ref="popupItem" class="popup shadow" title="Close Popup" type="button">
+    <button ref="popupItem" class="popup shadow" title="Close Popup" type="button" @click="closePopup()">
         <div class="left">
             <span :style="`background-color: var(--color-${popupData.type});`" class="color-indicator"></span>
             <p class="message">{{ popupData.message }}</p>
@@ -48,7 +48,6 @@ onMounted(() => {
                 <i class="fa-solid fa-xmark close-icon"></i>
             </div>
         </div>
-        <span class="click-item" @click="closePopup()"></span>
     </button>
 </template>
 

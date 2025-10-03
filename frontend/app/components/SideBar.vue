@@ -91,7 +91,6 @@ async function switchProfile(profileId: number): Promise<boolean> {
                     class="flex-col profile-switcher-item" type="button" @click="switchProfile(profile.id)">
                     <strong>{{ profile.name }}</strong>
                     <small>{{ profile.description }}</small>
-                    <span class="click-item"></span>
                 </button>
             </menu>
         </button>
@@ -140,18 +139,6 @@ nav {
 
 nav section {
     z-index: 1;
-}
-
-.overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: var(--color-background);
-    opacity: 0.3;
-    z-index: 2;
-    cursor: pointer;
 }
 
 .sidebar-logo-image {

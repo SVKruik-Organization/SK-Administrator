@@ -1,7 +1,7 @@
 import { NotificationItem } from "~/assets/customTypes";
 import { getPeer } from "./registry";
 import type { Pool } from "mariadb";
-import { getExclusions } from "#imports";
+import { getNotificationExclusions } from "~/utils/settings";
 
 /**
  * Sends a notification to a peer via RTD.
@@ -14,7 +14,7 @@ export async function sendPeer(data: NotificationItem): Promise<boolean> {
         const connection: Pool = await database("ska");
 
         // Persist notification
-        if (!getExclusions().includes(data.type)) await connection.query("INSERT INTO user_notification (user_id, type, data, source, url, ticket, date_expiry, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [
+        if (!getNotificationExclusions().includes(data.type)) await connection.query("INSERT INTO user_notification (user_id, type, data, source, url, ticket, date_expiry, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [
             data.user_id,
             data.type,
             data.data,

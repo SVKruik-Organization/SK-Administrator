@@ -7,7 +7,7 @@ import { NotificationTypes } from "~/assets/customTypes";
  * This does not prohibit sending them to the client.
  * @returns An array of notification types that should be excluded.
  */
-export function getExclusions(): Array<NotificationTypes> {
+export function getNotificationExclusions(): Array<NotificationTypes> {
     return [
         NotificationTypes.initialize,
         NotificationTypes.acknowledge,

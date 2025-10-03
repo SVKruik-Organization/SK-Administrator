@@ -13,16 +13,19 @@ export const useAppWebSocket = () => {
         socketInstance = useWebSocket(config.public.wsUrl, {
             onConnected: () =>
                 socketInstance?.send(JSON.stringify({
-                    user_id: userStore.user?.id,
-                    type: NotificationTypes.initialize,
-                    level: PromptTypes.info,
-                    data: null,
-                    source: "RTD - Client",
-                    url: "/",
-                    is_read: false,
-                    ticket: createTicket(),
-                    date_expiry: new Date(Date.now() + 1000 * 60),
-                    date_creation: new Date(),
+                    "user_id": userStore.user?.id,
+                    "type": NotificationTypes.initialize,
+                    "level": PromptTypes.info,
+                    "data": {
+                        "message": "Initializing connection.",
+                    },
+                    "source": "RTD - Client",
+                    "url": "/",
+                    "is_read": false,
+                    "is_silent": true,
+                    "ticket": createTicket(),
+                    "date_expiry": new Date(Date.now() + 1000 * 60),
+                    "date_creation": new Date(),
                 } as NotificationItem)),
             autoReconnect: {
                 retries: 3,

@@ -37,6 +37,7 @@ function showNotificationItem(): void {
         "source": "Dashboard Page",
         "url": "/",
         "is_read": false,
+        "is_silent": false,
         "ticket": createTicket(),
         "date_expiry": new Date(Date.now() + 1000 * 60),
         "date_creation": new Date(),
