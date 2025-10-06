@@ -5,7 +5,7 @@ import { getImageUrl } from "~/utils/image";
 import { normalizeUrl } from "~/utils/format";
 const userStore = useUserStore();
 const sideBarStore = useSideBarStore();
-const { $event } = useNuxtApp();
+const { $event, $listen } = useNuxtApp();
 
 // Lifecycle Hooks
 onMounted(async () => {
@@ -64,6 +64,20 @@ async function switchProfile(profileId: number): Promise<boolean> {
         return false;
     }
 }
+
+/**
+ * Opens or closes the profile switcher menu.
+ * Also emits an event to close the navbar.
+ */
+function openProfileSwitcher() {
+    isProfileSwitcherOpen.value = !isProfileSwitcherOpen.value;
+    $event("close-navbar");
+}
+
+// Emitters
+$listen("close-sidebar", () => {
+    isProfileSwitcherOpen.value = false;
+});
 </script>
 
 <template>
@@ -75,8 +89,7 @@ async function switchProfile(profileId: number): Promise<boolean> {
             <h3>SK Administrator</h3>
         </button>
         <button class="user-information flex no-select" type="button" :class="{ 'active': isProfileSwitcherOpen }"
-            @click="isProfileSwitcherOpen = !isProfileSwitcherOpen"
-            :title="translations.click_switch_profile![sideBarStore.getLanguage]">
+            @click="openProfileSwitcher()" :title="translations.click_switch_profile![sideBarStore.getLanguage]">
             <img :src="getImageUrl(userStore.user)" :alt="translations.profile_picture![sideBarStore.getLanguage]"
                 :title="translations.profile_picture![sideBarStore.getLanguage]">
             <div class="user-information-text flex-col">

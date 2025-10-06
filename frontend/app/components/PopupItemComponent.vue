@@ -39,8 +39,8 @@ onMounted(() => {
 
 <template>
     <button ref="popupItem" class="popup shadow" title="Close Popup" type="button" @click="closePopup()">
+        <span :style="`background-color: var(--color-${popupData.type});`" class="color-indicator"></span>
         <div class="left">
-            <span :style="`background-color: var(--color-${popupData.type});`" class="color-indicator"></span>
             <p class="message">{{ popupData.message }}</p>
         </div>
         <div class="right">
@@ -54,7 +54,6 @@ onMounted(() => {
 <style scoped>
 .popup {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     min-height: 50px;
     background-color: var(--color-fill);
@@ -74,20 +73,32 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 100%;
     text-align: left;
+    height: 100%;
+}
+
+.left {
+    flex: 1;
 }
 
 .color-indicator {
-    height: -webkit-fill-available;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
     width: 5px;
     border-top-left-radius: var(--border-radius-low);
     border-bottom-left-radius: var(--border-radius-low);
 }
 
 .message {
-    max-width: 95%;
-    margin: 5px 0;
+    height: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+}
+
+.right {
+    margin-left: auto;
 }
 
 .close-popup-button {
@@ -96,8 +107,6 @@ onMounted(() => {
     width: 30px;
     opacity: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .popup:hover .close-popup-button {

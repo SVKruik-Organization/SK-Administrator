@@ -5,6 +5,7 @@ import { getImageUrl } from "~/utils/image";
 import type { NotificationItem } from "~/assets/customTypes";
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
+const { $event, $listen } = useNuxtApp();
 const { data: wsStream, status: wsStatus } = useAppWebSocket();
 
 // Reactive Data
@@ -26,16 +27,36 @@ watch(() => wsStream.value, (newValue: any) => {
 // Methods
 
 /**
- * Clear store and redirect to homepage.
+ * Toggles the visibility of a dropdown menu.
+ * Also closes any other open dropdowns and emits an event to close the sidebar.
+ * @param menu The menu to toggle.
  */
-function signOut() {
-    userStore.signOut();
-    navigateTo("/");
+function toggleDropdown(menu: HTMLMenuElement | null) {
+    $event("close-sidebar");
+
+    if (menu === userDropdownMenu.value) {
+        notificationDropdownMenu.value?.classList.remove("open");
+        userDropdownMenu.value?.classList.toggle("open");
+    } else if (menu === notificationDropdownMenu.value) {
+        userDropdownMenu.value?.classList.remove("open");
+        notificationDropdownMenu.value?.classList.toggle("open");
+    } else {
+        // Close all dropdowns if null is passed
+        userDropdownMenu.value?.classList.remove("open");
+        notificationDropdownMenu.value?.classList.remove("open");
+        isDropdownOpen.value = false;
+        return;
+    }
+
+    isDropdownOpen.value = true;
 }
+
+// Emitters
+$listen("close-navbar", () => toggleDropdown(null));
 </script>
 
 <template>
-    <div class="overlay" v-if="isDropdownOpen" @click="isDropdownOpen = false"></div>
+    <div class="overlay" v-if="isDropdownOpen" @click="isDropdownOpen = false; toggleDropdown(null)"></div>
     <nav>
         <!-- TODO: #4 -->
         <button class="flex navbar-item" @click="searchBar?.focus()" type="button">
@@ -45,8 +66,8 @@ function signOut() {
         <!-- TODO: #5 -->
         <section class="flex">
             <!-- Notifications -->
-            <div class="menu-parent notfication-parent">
-                <button class="navbar-item navbar-item-small" @click="console.log('trigger A')"
+            <div class="menu-parent notification-parent">
+                <button class="navbar-item navbar-item-small" @click="toggleDropdown(notificationDropdownMenu)"
                     title="Show Notifications" type="button">
                     <i v-if="notificationStore.unreadNotifications.length === 0"
                         :style="`color: var(--color-${notificationStore.highestPriority})`"
@@ -54,7 +75,7 @@ function signOut() {
                     <i v-else :style="`color: var(--color-${notificationStore.highestPriority})`"
                         class="fa-regular fa-envelope-dot"></i>
                 </button>
-                <menu ref="notificationDropdownMenu" class="flex-col">
+                <menu ref="notificationDropdownMenu" class="flex-col shadow">
                     <template v-if="notificationStore.notifications.length === 0">
                         <section class="flex-col">
                             <strong>Notification Center</strong>
@@ -72,7 +93,8 @@ function signOut() {
                             :key="notification.ticket" :message="notification">
                         </NotificationItem>
                         <span class="splitter"></span>
-                        <NuxtLink to="/panel/notifications">
+                        <NuxtLink to="/panel/notifications" @click="toggleDropdown(null)" class="flex-between"
+                            title="View All Notifications">
                             <p>See all ({{ notificationStore.notifications.length }})</p>
                             <i class="fa-regular fa-arrow-right"></i>
                         </NuxtLink>
@@ -81,7 +103,8 @@ function signOut() {
             </div>
             <!-- User Menu -->
             <div class="menu-parent user-menu-parent">
-                <button class="flex navbar-item" @click="console.log('trigger B')" title="Open User Menu" type="button">
+                <button class="flex navbar-item" @click="toggleDropdown(userDropdownMenu)" title="Open User Menu"
+                    type="button">
                     <div class="image-container">
                         <img :src="getImageUrl(userStore.user)" alt="Profile Picture">
                         <span class="status-indicator" :class="{ 'status-online': wsStatus === 'OPEN' }"></span>
@@ -89,7 +112,7 @@ function signOut() {
                     <p>{{ userStore.user?.firstName }} {{ userStore.user?.lastName }}</p>
                     <i class="fa-regular fa-angle-down"></i>
                 </button>
-                <menu ref="userDropdownMenu" class="flex-col">
+                <menu ref="userDropdownMenu" class="flex-col shadow">
                     <section class="flex-col">
                         <strong>Quick Access</strong>
                         <small>Handy resources & links.</small>
@@ -98,7 +121,7 @@ function signOut() {
                     <NuxtLink to="/panel">Home</NuxtLink>
                     <NuxtLink to="/panel/preferences">Preferences</NuxtLink>
                     <span class="splitter"></span>
-                    <button @click="signOut()" title="Sign Out" type="button">
+                    <button @click="userStore.signOut()" title="Sign Out" type="button" class="flex-between">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket color-danger"></i>
                     </button>
@@ -140,24 +163,41 @@ nav {
     background-color: var(--color-fill-dark);
 }
 
+.navbar-item:hover .status-indicator,
+.navbar-item:focus-within .status-indicator {
+    border-color: var(--color-fill-dark);
+}
+
 /* Generic Menu */
 .menu-parent {
     position: relative;
+    z-index: 3;
 }
 
 .menu-parent menu {
     position: absolute;
     top: 60px;
     right: 0;
-    width: 300px;
+    width: 400px;
     max-height: 400px;
     background-color: var(--color-fill);
     display: none;
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: var(--border-radius-low);
+}
+
+.menu-parent menu.open {
+    display: flex;
 }
 
 /* Notification Menu */
-.notfication-parent button > i {
+.notification-parent button > i {
     font-size: 20px;
+}
+
+.user-menu-parent menu {
+    width: 220px;
 }
 
 /* User Profile Picture */

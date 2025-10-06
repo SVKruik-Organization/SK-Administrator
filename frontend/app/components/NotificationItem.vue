@@ -2,6 +2,7 @@
 import { useNotificationStore } from "~/stores/NotificationStore";
 import type { NotificationItem } from "~/assets/customTypes";
 const notificationStore = useNotificationStore();
+const { $event } = useNuxtApp();
 
 // Props
 const props = defineProps<{
@@ -30,6 +31,7 @@ function deleteNotification(): void {
  */
 function openDetails(): void {
     markAsRead();
+    $event("close-navbar");
     navigateTo({
         path: "/panel/notifications",
         query: { "ticket": props.message.ticket },
@@ -38,21 +40,20 @@ function openDetails(): void {
 </script>
 
 <template>
-    <div :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`" class="notification-item">
-        <button class="notification-item-left" @click="openDetails()" type="button">
+    <div :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`"
+        class="flex-between notification-item" :class="{ 'notification-item-read': message.is_read }">
+        <button class="flex notification-item-left" @click="openDetails()" type="button">
             <span :style="`background-color: var(--color-${message.level});`" class="type-indicator"></span>
-            <p>{{ typeof message.data === 'object' ? message.data?.message : message.data }}</p>
+            <p class="ellipsis">{{ typeof message.data === 'object' ? message.data?.message : message.data }}</p>
         </button>
-        <section class="notification-item-right">
-            <button v-if="!message.is_read"
-                :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`"
-                class="notification-action-button" title="Mark as Read" type="button" @click="markAsRead()">
-                <i class="fa-regular fa-envelope-circle-check"></i>
-            </button>
-            <button :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`"
-                class="notification-action-button" title="Delete Notification" type="button"
-                @click="deleteNotification()">
+        <section class="flex notification-item-right">
+            <button v-if="!message.is_read" class="notification-action-button notification-action-button-read"
+                title="Mark as Read" type="button" @click="markAsRead()">
                 <i class="fa-regular fa-envelope-open"></i>
+            </button>
+            <button class="notification-action-button" :class="{ 'notification-action-button-read': !message.is_read }"
+                title="Delete Notification" type="button" @click="deleteNotification()">
+                <i class="fa-regular fa-trash-can"></i>
             </button>
         </section>
     </div>
@@ -60,30 +61,36 @@ function openDetails(): void {
 
 <style scoped>
 .notification-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    width: fit-content;
-    min-width: 400px;
+    width: 100%;
     height: 30px;
-    border-top-right-radius: var(--border-radius-low);
-    border-bottom-right-radius: var(--border-radius-low);
-    background-color: var(--color-background);
+    background-color: var(--color-fill-dark);
+    border-radius: var(--border-radius-low);
     position: relative;
+    gap: 0;
 }
 
 .notification-item-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     height: 100%;
-    width: fit-content;
-    position: relative;
+    flex: 1;
+    min-width: 0;
+    gap: 0;
+}
+
+.notification-item-left p {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 4.5px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    margin-left: -1px;
+}
+
+.notification-item-read p {
+    border-color: var(--color-border-dark) transparent;
 }
 
 .type-indicator {
-    display: block;
     height: 100%;
     width: 5px;
     border-top-left-radius: var(--border-radius-low);
@@ -91,14 +98,26 @@ function openDetails(): void {
 }
 
 .notification-item-right {
-    display: flex;
-    align-items: center;
-    opacity: 0;
     gap: 5px;
-    margin-right: 5px;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    padding: 4.5px;
+    height: 30px;
+    margin-left: -1px;
+    border-top-right-radius: var(--border-radius-low);
+    border-bottom-right-radius: var(--border-radius-low);
 }
 
-.notification-item:hover .notification-item-right {
+.notification-item-read .notification-item-right {
+    border-color: var(--color-border-dark);
+    border-left: transparent;
+}
+
+.notification-item-right button {
+    opacity: 0;
+}
+
+.notification-item:hover button {
     opacity: 1;
 }
 
@@ -117,5 +136,9 @@ function openDetails(): void {
 
 .notification-action-button i {
     font-size: small;
+}
+
+.notification-action-button-read {
+    background-color: var(--color-fill);
 }
 </style>

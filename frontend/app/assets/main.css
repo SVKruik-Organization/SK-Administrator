@@ -1,4 +1,5 @@
-:root {
+:root,
+:root.default {
     /* Informational */
     --color-info: #7aa0c4;
     --color-success: #599862;
@@ -10,10 +11,7 @@
     --border-radius-low: 5px;
     --border-radius-mid: 10px;
     --border-radius-high: 20px;
-}
 
-/* Themes */
-:root.default {
     --color-background: #FFFFFF;
     --color-fill: #F4F7FB;
     --color-fill-dark: #E3EAF5;
@@ -133,6 +131,12 @@ h1 {
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .flex {
     display: flex;
     align-items: center;
@@ -142,6 +146,13 @@ h1 {
 .flex-col {
     display: flex;
     flex-direction: column;
+    gap: 5px;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 5px;
 }
 

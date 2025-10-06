@@ -160,13 +160,14 @@ function toggleButtonState(button: HTMLButtonElement | null, disabled: boolean) 
                     <label for="email" v-if="!emailInput.length" class="flex">
                         Email<span>*</span>
                     </label>
-                    <input type="email" v-model="emailInput" required id="email" name="email" />
+                    <input type="email" v-model="emailInput" required id="email" name="email" autocomplete="email" />
                 </div>
                 <div class="flex input-container">
                     <label for="password" v-if="!passwordInput.length" class="flex">
                         Password<span>*</span>
                     </label>
-                    <input type="password" v-model="passwordInput" required id="password" name="password" />
+                    <input type="password" v-model="passwordInput" required id="password" name="password"
+                        autocomplete="current-password" />
                 </div>
                 <button type="submit" class="flex button-login" ref="loginButton"
                     title="Submit your credentials to login.">
@@ -197,7 +198,7 @@ function toggleButtonState(button: HTMLButtonElement | null, disabled: boolean) 
                         2FA PIN<span>*</span>
                     </label>
                     <input type="text" v-model="verificationInput" required id="verification" name="verification"
-                        minlength="6" maxlength="6" />
+                        minlength="6" maxlength="6" autocomplete="off" />
                 </div>
                 <div style="height: 41px;"></div>
                 <button type="submit" class="flex button-login" ref="verificationButton"
@@ -221,7 +222,7 @@ function toggleButtonState(button: HTMLButtonElement | null, disabled: boolean) 
                         Guest PIN<span>*</span>
                     </label>
                     <input type="text" v-model="guestInput" required id="guest" name="guest" minlength="32"
-                        maxlength="32" />
+                        maxlength="32" autocomplete="off" />
                 </div>
                 <div style="height: 41px;"></div>
                 <button type="submit" class="flex button-login" ref="guestButton"

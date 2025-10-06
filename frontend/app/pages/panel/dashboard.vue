@@ -25,11 +25,11 @@ function showPopupItem(): void {
 /**
  * Temporary test function.
  */
-function showNotificationItem(): void {
+function showNotificationItem(level: PromptTypes): void {
     notificationStore.newNotification({
         "user_id": userStore.user?.id,
         "type": NotificationTypes.acknowledge,
-        "level": "danger",
+        "level": level,
         "data": {
             "message": "This is a test notification.",
             "details": "This is a longer description of the notification.",
@@ -65,8 +65,17 @@ function themeSwitch(theme: UIThemes): void {
         <div class="temp flex-col">
             <strong>Functionality Testing:</strong>
             <button title="New Popup" type="button" @click="showPopupItem()">New Popup (success, 3 seconds)</button>
-            <button title="New Notification" type="button" @click="showNotificationItem()">New Notification (unread,
-                danger)
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.info)">New
+                Notification (unread, info)
+            </button>
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.success)">New
+                Notification (unread, success)
+            </button>
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.warning)">New
+                Notification (unread, warning)
+            </button>
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.danger)">New
+                Notification (unread, danger)
             </button>
             <div class="flex">
                 <button title="Theme Switch" type="button" @click="themeSwitch(UIThemes.default)">Default</button>
