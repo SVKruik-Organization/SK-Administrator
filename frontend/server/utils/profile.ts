@@ -1,17 +1,18 @@
 import { Pool } from "mariadb/*";
-import { Languages, Module, Profile, ProfileData, TopLink } from "~/assets/customTypes";
+import { Languages, Module, Profile, ProfileData, TopLink, UserTypes } from "~/assets/customTypes";
 import { normalizeUrl } from "~/utils/format";
 
 /**
  * Retrieves the profile data for a user.
- * @param userId The user ID, the owner of the profiles.
+ * @param objectId The user ID, the owner of the profiles.
+ * @param objectType The type of user (User or Guest).
  * @param profileId The specific profile to load, or 0 for the most recently used profile.
  * @param connection An active database connection.
  * @returns The profile data for the user.
  */
-export async function getProfileData(userId: number, profileId: number, recursion: boolean, connection: Pool): Promise<ProfileData> {
+export async function getProfileData(objectId: number, objectType: UserTypes, profileId: number, recursion: boolean, connection: Pool): Promise<ProfileData> {
     // Retrieve the user profile
-    const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, date_last_usage FROM user_profile WHERE user_id = ? ORDER BY date_last_usage DESC, position ASC;", [userId]);
+    const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, date_last_usage FROM user_profile WHERE object_id = ? AND object_type = ? ORDER BY date_last_usage DESC, position ASC;", [objectId, objectType]);
     const userProfiles: Array<Profile> = rawUserProfiles.sort((a, b) => a.position - b.position);
     const chosenProfile: Profile | undefined = profileId === 0
         ? rawUserProfiles[0] // Most recently used
@@ -46,19 +47,20 @@ export async function getProfileData(userId: number, profileId: number, recursio
                 LEFT JOIN \`grant\` ON \`grant\`.role_id = user.role_id
             WHERE
                 (user_profile.id = ?
-                AND user_profile.user_id = ?
+                AND user_profile.object_id = ?
+                AND user_profile.object_type = ?
                 OR module_item.module_id IS NULL)
                 AND \`grant\`.module_item_id = module_item.id
-                AND \`grant\`.read = 1;`, [userId, chosenProfile.id, userId]);
+                AND \`grant\`.read = 1;`, [objectId, chosenProfile.id, objectId, objectType]);
     const moduleMap = new Map<number, Module>();
-    const topItems: Array<TopLink> = [];
+    const topLinks: Array<TopLink> = [];
     let language: Languages = Languages.EN;
     for (const rawModule of moduleData) {
         language = rawModule.language ? rawModule.language : language;
 
         // Loose item (no module, just a top-level item)
         if (!rawModule.module_id || !rawModule.module_name) {
-            topItems.push({
+            topLinks.push({
                 "name": rawModule.module_item_name,
                 "icon": rawModule.module_item_icon || "fa-link",
             });
@@ -79,12 +81,12 @@ export async function getProfileData(userId: number, profileId: number, recursio
     const modules = Array.from(moduleMap.values());
 
     // Update their profile's last usage date
-    await connection.query("UPDATE user_profile SET date_last_usage = CURRENT_TIMESTAMP WHERE user_id = ? AND id = ?;", [userId, chosenProfile.id]);
+    await connection.query("UPDATE user_profile SET date_last_usage = CURRENT_TIMESTAMP WHERE id = ?;", [chosenProfile.id]);
 
     // First item URL for default redirects
     let firstItemUrl = "/";
-    if (topItems.length > 0 && topItems[0]?.name?.en) {
-        firstItemUrl = normalizeUrl(`/panel/${topItems[0].name.en}`);
+    if (topLinks.length > 0 && topLinks[0]?.name?.en) {
+        firstItemUrl = normalizeUrl(`/panel/${topLinks[0].name.en}`);
     } else if (
         modules.length > 0 &&
         modules[0]?.name?.en &&
@@ -98,7 +100,7 @@ export async function getProfileData(userId: number, profileId: number, recursio
         // Find another profile with available modules
         const otherProfiles = userProfiles.filter(profile => profile.id !== chosenProfile.id);
         for (const profile of otherProfiles) {
-            const profileData = await getProfileData(userId, profile.id, true, connection);
+            const profileData = await getProfileData(objectId, objectType, profile.id, true, connection);
             if (profileData.firstItemUrl !== "/") return profileData;
         }
 
@@ -110,7 +112,7 @@ export async function getProfileData(userId: number, profileId: number, recursio
         "activeProfileId": chosenProfile.id,
         "firstItemUrl": firstItemUrl,
         "profiles": userProfiles,
-        "topItems": topItems,
+        "topLinks": topLinks,
         "modules": modules,
         "language": language
     };

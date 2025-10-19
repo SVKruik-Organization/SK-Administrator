@@ -9,6 +9,7 @@ const { $event, $listen } = useNuxtApp();
 // Lifecycle Hooks
 onMounted(async () => {
     await sideBarStore.loadModules();
+    navigateTo(sideBarStore.firstItemUrl);
 });
 
 // Localizations
@@ -37,22 +38,20 @@ const translations: { [key: string]: { [lang in Languages]: string } } = {
 
 // Reactive Data
 const isProfileSwitcherOpen: Ref<boolean> = ref(false);
-const activeProfile: Ref<string> = ref(sideBarStore.getActiveProfile?.name || "");
+const activeProfile: Ref<string> = ref(sideBarStore.activeProfile?.name || "");
 
 // Methods
 
 /**
  * Switches the active user profile.
  * @param profileId The ID of the profile to switch to.
- * @returns Status of the operation.
  */
-async function switchProfile(profileId: number): Promise<boolean> {
+async function switchProfile(profileId: number): Promise<void> {
     try {
-        const response: boolean = await sideBarStore.switchProfile(profileId);
-        activeProfile.value = sideBarStore.getActiveProfile?.name || "";
+        await sideBarStore.switchProfile(profileId);
+        activeProfile.value = sideBarStore.activeProfile?.name || "";
         isProfileSwitcherOpen.value = false;
         navigateTo(sideBarStore.firstItemUrl);
-        return response;
     } catch (error: any) {
         $event("popup", {
             id: createTicket(4),
@@ -60,7 +59,6 @@ async function switchProfile(profileId: number): Promise<boolean> {
             message: error.message || getTranslation("error"),
             duration: 3,
         } as PopupItem);
-        return false;
     }
 }
 
@@ -68,7 +66,8 @@ async function switchProfile(profileId: number): Promise<boolean> {
  * Opens or closes the profile switcher menu.
  * Also emits an event to close the navbar.
  */
-function toggleProfileSwitcher() {
+function toggleProfileSwitcher(): void {
+    if (sideBarStore.profiles.length <= 1) return;
     isProfileSwitcherOpen.value = !isProfileSwitcherOpen.value;
     $event("close-navbar");
 }
@@ -79,7 +78,7 @@ function toggleProfileSwitcher() {
  * @returns The translated string.
  */
 function getTranslation(key: string): string {
-    return translations[key]?.[sideBarStore.getLanguage] || key;
+    return translations[key]?.[sideBarStore.language] || key;
 }
 
 // Emitters
@@ -106,7 +105,7 @@ $listen("close-sidebar", () => isProfileSwitcherOpen.value = false);
             </div>
             <i class="fa-regular fa-angle-down profile-switcher" :class="{ 'active': isProfileSwitcherOpen }"></i>
             <menu v-if="sideBarStore.profiles.length > 1 && isProfileSwitcherOpen" class="flex-col">
-                <button v-for="profile in sideBarStore.getInactiveProfiles" :key="profile.id"
+                <button v-for="profile in sideBarStore.inactiveProfiles" :key="profile.id"
                     class="flex-col profile-switcher-item" type="button" @click="switchProfile(profile.id)">
                     <strong>{{ profile.name }}</strong>
                     <small>{{ profile.description }}</small>
@@ -116,23 +115,23 @@ $listen("close-sidebar", () => isProfileSwitcherOpen.value = false);
         <section class="sidebar-content flex-col">
             <div class="sidebar-content-item flex-col">
                 <menu>
-                    <NuxtLink v-for="item, key in sideBarStore.topItems" :key="key"
+                    <NuxtLink v-for="item, key in sideBarStore.topLinks" :key="key"
                         :to="`/panel/${normalizeUrl(item.name)}`" v-slot="{ isActive }"
                         class="sidebar-link sidebar-link-top">
                         <i :class="isActive ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
-                        <p>{{ item.name[sideBarStore.getLanguage] }}</p>
+                        <p>{{ item.name[sideBarStore.language] }}</p>
                     </NuxtLink>
                 </menu>
             </div>
             <div class="sidebar-content-item flex-col" v-for="module in sideBarStore.modules" :key="module.name.en">
                 <NuxtLink :to="`/panel/${normalizeUrl(module.name)}`" v-slot="{ isActive }" class="flex">
                     <i :class="isActive ? `fa-solid ${module.icon}` : `fa-regular ${module.icon}`"></i>
-                    <h4>{{ module.name[sideBarStore.getLanguage] }}</h4>
+                    <h4>{{ module.name[sideBarStore.language] }}</h4>
                 </NuxtLink>
                 <menu>
                     <NuxtLink v-for="item, key in module.links" :key="key"
                         :to="`/panel/${normalizeUrl(module.name.en + '/' + item.en)}`" class="sidebar-link">
-                        <p>{{ item[sideBarStore.getLanguage] }}</p>
+                        <p>{{ item[sideBarStore.language] }}</p>
                     </NuxtLink>
                 </menu>
             </div>

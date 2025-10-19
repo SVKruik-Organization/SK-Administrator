@@ -10,12 +10,8 @@ export const useFetchProfile = async (profileId: number): Promise<ProfileData> =
     try {
         return await $fetch("/api/user/profile", {
             method: "PATCH",
-            params: {
-                profileId,
-            },
-            headers: {
-                "Content-Type": "application/json",
-            },
+            params: { profileId },
+            headers: { "Content-Type": "application/json" },
         });
     } catch (error: any) {
         throw formatError(error);

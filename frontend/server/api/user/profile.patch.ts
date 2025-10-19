@@ -24,7 +24,7 @@ export default defineEventHandler(async (event): Promise<ProfileData> => {
         const connection: Pool = await database("central");
         const session = await getUserSession(event);
         if (!session.user) throw new Error("You must be logged in to access this resource.", { cause: { statusCode: 1401 } });
-        const profileData: ProfileData = await getProfileData(session.user.id, profileId, false, connection);
+        const profileData: ProfileData = await getProfileData(session.user.id, session.user.type, profileId, false, connection);
 
         // Update language preference in session
         await setUserSession(event, session);

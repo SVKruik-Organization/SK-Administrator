@@ -107,7 +107,7 @@ function toggleDropdown(menu: HTMLMenuElement | null) {
  * @returns The translated string.
  */
 function getTranslation(key: string): string {
-    return translations[key]?.[sideBarStore.getLanguage] || key;
+    return translations[key]?.[sideBarStore.language] || key;
 }
 
 /**
@@ -119,7 +119,7 @@ async function signOut(): Promise<void> {
     useThemeStore().clear();
 
     await userSession.clear();
-    navigateTo('/');
+    navigateTo("/");
 }
 
 // Emitters

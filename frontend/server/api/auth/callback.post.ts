@@ -1,12 +1,18 @@
 import { Pool } from "mariadb/*";
 import { z } from "zod";
-import { ProfileData } from "~/assets/customTypes";
-import { formatApiError } from "~/utils/format";
+import { Languages, ProfileData, UserTypes } from "~/assets/customTypes";
+import { formatApiError, formatInterBackendError } from "~/utils/format";
+import { GuestEntity } from "~~/server/core/ges/guest";
 import { UserEntity } from "~~/server/core/ges/user";
 
 // Validation schema for the request body
 const bodySchema = z.object({
     token: z.string()
+});
+
+const userInformationSchema = z.object({
+    object_id: z.number(),
+    object_type: z.string(),
 });
 
 /**
@@ -21,24 +27,31 @@ export default defineEventHandler(async (event): Promise<ProfileData> => {
         const config = useRuntimeConfig();
 
         // Retrieve user ID by token from Overway
-        const userId: number = await $fetch(`${config.public.authProviderURL}/api/auth/administrator/validate-token`, {
-            method: "POST",
-            body: {
-                token
-            },
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!userId || typeof userId !== "number") throw new Error("Invalid token provided.", { cause: { statusCode: 1401 } });
+        let userInformation: z.infer<typeof userInformationSchema>;
+        try {
+            userInformation = await $fetch(`${config.public.authProviderURL}/api/auth/administrator/validate-token`, {
+                method: "POST",
+                body: { token },
+                headers: { "Content-Type": "application/json" },
+            });
+        } catch (error: any) {
+            throw formatInterBackendError(error);
+        }
+
+        if (!userInformation) throw new Error("The provided token is invalid. Please try again.", { cause: { statusCode: 1401 } });
+        const userInformationParse = userInformationSchema.safeParse(userInformation);
+        if (!userInformationParse.success || !Object.values(UserTypes).includes(userInformationParse.data.object_type as UserTypes)) throw new Error("The provided token is invalid. Please try again.", { cause: { statusCode: 1401 } });
+
+        const { object_id, object_type } = userInformationParse.data;
         const connection: Pool = await database("central");
 
+        const entity: UserEntity | GuestEntity = object_type === UserTypes.USER
+            ? new UserEntity(object_id, null, connection)
+            : new GuestEntity(object_id, null, connection);
+        const profileData: ProfileData = await getProfileData(object_id, object_type as UserTypes, 0, false, connection);
 
-        // Retrieve the user and profile data
-        const user: UserEntity = new UserEntity(userId, null, connection);
-        const profileData: ProfileData = await getProfileData(userId, 0, false, connection);
-
-        await user.login(event, {
+        // Login the user/guest
+        await entity.login(event, {
             language: profileData.language,
         });
         return profileData;

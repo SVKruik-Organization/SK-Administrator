@@ -5,13 +5,8 @@ import { useFetchProfile } from "~/utils/fetch/user/useFetchProfile";
 export const useSideBarStore = defineStore("SideBarStore", {
     state: () => {
         return {
-            activeProfileId: 1 as number,
-            firstItemUrl: "/" as string,
-            profiles: [] as Array<Profile>,
-            topItems: [] as Array<TopLink>,
-            modules: [] as Array<Module>,
-            language: Languages.EN as Languages,
-        } satisfies ProfileData
+            profileData: null as ProfileData | null,
+        }
     },
     persist: {
         storage: piniaPluginPersistedstate.localStorage(),
@@ -22,35 +17,23 @@ export const useSideBarStore = defineStore("SideBarStore", {
          * @param force Force reload of the modules even if they are already loaded.
          */
         async loadModules(force: boolean = false): Promise<void> {
-            if (!this.profiles.length || force) await this.switchProfile(0);
+            if (!this.profileData?.profiles.length || force) await this.switchProfile(0);
         },
         /**
          * Sets the sidebar state.
-         * @param activeProfileId The ID of the active profile.
-         * @param firstItemUrl The URL to navigate to on first login.
-         * @param profiles The list of user profiles.
-         * @param topItems The list of top-level items.
-         * @param modules The list of modules.
+         * @param data The profile data to set in the sidebar.
          */
         setSideBar(data: ProfileData): void {
-            this.activeProfileId = data.activeProfileId;
-            this.firstItemUrl = data.firstItemUrl;
-            this.profiles = data.profiles;
-            this.topItems = data.topItems;
-            this.modules = data.modules;
-            this.language = data.language || Languages.EN;
-            document.documentElement.setAttribute("lang", this.getLanguage);
+            this.profileData = data;
+            document.documentElement.setAttribute("lang", this.language);
         },
         /**
          * Switches the active user profile.
          * @param profileId The ID of the profile to switch to. Use 0 to switch to the most recently used profile.
-         * @returns Status of the operation.
          */
-        async switchProfile(profileId: number): Promise<boolean> {
+        async switchProfile(profileId: number): Promise<void> {
             try {
-                const response: ProfileData = await useFetchProfile(profileId);
-                this.setSideBar(response);
-                return true;
+                this.setSideBar(await useFetchProfile(profileId));
             } catch (error: any) {
                 const { $event } = useNuxtApp();
                 $event("popup", {
@@ -59,28 +42,41 @@ export const useSideBarStore = defineStore("SideBarStore", {
                     message: error.message,
                     duration: 3,
                 } as PopupItem);
-                return false;
             }
         },
         /**
          * Clears the sidebar state.
          */
         clear(): void {
-            this.activeProfileId = 1;
-            this.profiles = [];
-            this.topItems = [];
-            this.modules = [];
+            this.profileData = null;
         }
     },
     getters: {
-        getActiveProfile(): Profile | null {
-            return this.profiles.find(profile => profile.id === this.activeProfileId) || null;
+        activeProfile(): Profile | null {
+            if (!this.profileData) return null;
+            return this.profileData.profiles.find(profile => profile.id === this.profileData?.activeProfileId) || null;
         },
-        getInactiveProfiles(): Array<Profile> {
-            return this.profiles.filter(profile => profile.id !== this.activeProfileId);
+        inactiveProfiles(): Array<Profile> {
+            if (!this.profileData) return [];
+            return this.profileData.profiles.filter(profile => profile.id !== this.profileData?.activeProfileId) || [];
         },
-        getLanguage(): Languages {
-            return this.language || Languages.EN;
-        }
+        activeProfileId(): number | null {
+            return this.profileData?.activeProfileId || null;
+        },
+        firstItemUrl(): string {
+            return this.profileData?.firstItemUrl || "/";
+        },
+        profiles(): Array<Profile> {
+            return this.profileData?.profiles || [];
+        },
+        topLinks(): Array<TopLink> {
+            return this.profileData?.topLinks || [];
+        },
+        modules(): Array<Module> {
+            return this.profileData?.modules || [];
+        },
+        language(): Languages {
+            return this.profileData?.language || Languages.EN;
+        },
     }
 });

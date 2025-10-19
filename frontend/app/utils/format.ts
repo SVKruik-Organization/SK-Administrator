@@ -1,5 +1,6 @@
 import { H3Error } from "h3";
 import { Languages } from "~/assets/customTypes";
+import { FetchError } from "ofetch";
 
 /**
  * Converts a Date object to a human-readable time ago format.
@@ -13,6 +14,15 @@ export function formatTimeAgo(date: Date): string {
     if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
     return `${Math.floor(seconds / 86400)}d ago`;
+}
+
+/**
+ * Uppercases the first letter of a string.
+ * @param string The string to format
+ * @returns Formatted string
+ */
+export function uppercaseFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 /**
@@ -42,10 +52,11 @@ export function normalizeUrl(url: string | { [lang in Languages]: string }): str
 }
 
 /**
- * Formats an H3 error for the popup notification.
+ * Formats an H3 (backend) error for the popup.
  * Use this function only in the backend.
  * Specifically for backend errors.
  * @param error The error to handle.
+ * @returns Formatted H3 error.
  */
 export function formatApiError(error: any): H3Error {
     const statusCode = error?.cause?.statusCode || (() => { logError(error); return 500; })();
@@ -54,6 +65,22 @@ export function formatApiError(error: any): H3Error {
     return createError({
         "statusCode": statusCode > 1000 ? statusCode - 1000 : statusCode,
         "message": formattedErrorMessage
+    });
+}
+
+/**
+ * Special formatting for inter-backend communication errors.
+ * @param error The error to handle.
+ * @returns Formatted H3 error or throws an error.
+ */
+export function formatInterBackendError(error: any): H3Error | Error {
+    if (error instanceof FetchError) {
+        const status = (error.response?.status ?? error.status ?? 500);
+        const message = (error.data?.message ?? error.message ?? "Something went wrong on our end. Please try again later.");
+        throw createError({ statusCode: status, message });
+    }
+    throw new Error("Something went wrong on our end. Please try again later.", {
+        cause: { statusCode: 1500 },
     });
 }
 

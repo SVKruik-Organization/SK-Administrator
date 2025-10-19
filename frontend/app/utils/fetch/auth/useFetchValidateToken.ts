@@ -11,9 +11,8 @@ export const useFetchValidateToken = async (token: string): Promise<ProfileData>
     try {
         const response: ProfileData = await $fetch("/api/auth/callback", {
             method: "POST",
-            body: {
-                token,
-            }
+            body: { token },
+            headers: { "Content-Type": "application/json" },
         });
         await useUserSession().fetch();
         return response;

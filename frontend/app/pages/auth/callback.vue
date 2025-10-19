@@ -7,7 +7,7 @@ const { $event } = useNuxtApp();
 
 const query = useRoute().query;
 const token = query.token as string | undefined;
-if (!token) navigateTo("/");
+if (!token) navigateTo("/login");
 
 onMounted(async () => {
     try {
@@ -40,7 +40,7 @@ const translations: { [key: string]: { [lang in Languages]: string } } = {
  * @returns The translated string.
  */
 function getTranslation(key: string): string {
-    return translations[key]?.[sideBarStore.getLanguage] || key;
+    return translations[key]?.[sideBarStore.language] || key;
 }
 </script>
 

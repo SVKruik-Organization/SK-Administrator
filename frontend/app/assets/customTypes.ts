@@ -109,7 +109,7 @@ export type ProfileData = {
     "activeProfileId": number,
     "firstItemUrl": string,
     "profiles": Array<Profile>,
-    "topItems": Array<TopLink>,
+    "topLinks": Array<TopLink>,
     "modules": Array<Module>,
     "language": Languages,
 }

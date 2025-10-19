@@ -1,11 +1,6 @@
 <script lang="ts" setup>
-const sideBarStore = useSideBarStore();
 definePageMeta({
     middleware: ["auth"],
-});
-
-onMounted(() => {
-    navigateTo(sideBarStore.firstItemUrl);
 });
 </script>
 

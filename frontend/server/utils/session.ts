@@ -24,7 +24,9 @@ export async function createUserSession(event: H3Event, user: User, connection: 
             "language": user.language,
         },
         loggedInAt: new Date(),
-    });
+    }, user.type === UserTypes.GUEST ? {
+        maxAge: 60 * 60 * 4, // 4 hours for guests
+    } : undefined);
 
     // Update the last login date in the database
     const tableName: string = user.type === UserTypes.USER ? "user" : "guest";

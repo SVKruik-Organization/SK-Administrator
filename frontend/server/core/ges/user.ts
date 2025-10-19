@@ -44,7 +44,6 @@ export class UserEntity {
             "language": config?.language || Languages.EN
         }, this.database);
 
-        // Create session token
         if (!config?.disableEndConnection) await this.database.end();
     }
 }
