@@ -8,12 +8,12 @@ export const useAppWebSocket = () => {
     const config = useRuntimeConfig();
 
     if (!socketInstance) {
-        const userStore = useUserStore();
+        const userSession = useUserSession();
 
         socketInstance = useWebSocket(config.public.wsUrl, {
             onConnected: () =>
                 socketInstance?.send(JSON.stringify({
-                    "user_id": userStore.user?.id,
+                    "user_id": userSession.user.value?.id,
                     "type": NotificationTypes.initialize,
                     "level": PromptTypes.info,
                     "data": {

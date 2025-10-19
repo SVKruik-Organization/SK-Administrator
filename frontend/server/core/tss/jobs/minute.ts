@@ -6,7 +6,7 @@ import { CronJobTypes } from "~/assets/customTypes";
 export default defineCronHandler("everyMinute", async () => {
     try {
         // Retrieve expired jobs from the database
-        const connection: Pool = await database("ska");
+        const connection: Pool = await database("central");
         const expiredJobs: Array<{
             "id": number,
             "type": keyof typeof CronJobTypes,

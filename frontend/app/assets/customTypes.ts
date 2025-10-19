@@ -1,13 +1,3 @@
-// Login Response
-export type UserData = {
-    "id": number,
-    "firstName": string,
-    "lastName": string,
-    "email": string,
-    "type": UserTypes,
-    "imageName": string
-}
-
 export enum UserTypes {
     USER = "User",
     GUEST = "Guest",
@@ -64,42 +54,6 @@ export type TabComponentItem = {
     "route": string,
 }
 
-export type OperatorUser = {
-    "id": number,
-    "snowflake": string,
-    "username": string,
-    "email": string,
-    "service_tag": string,
-    "date_creation": Date,
-    "date_update": Date,
-    "status": boolean,
-    [key: string]: string | number | boolean | Date;
-}
-
-export type PaginationValues = {
-    "lowerBound": number,
-    "upperBound": number
-}
-
-export type TableColumn = {
-    "title": string,
-    "comparator": string,
-    "id": number
-}
-
-export type DateFormat = {
-    "date": string,
-    "time": string,
-    "today": Date
-}
-
-export type BooleanTableData = {
-    "trueColor": PromptTypes,
-    "falseColor": PromptTypes,
-    "trueMessage": string,
-    "falseMessage": string
-}
-
 export enum LogTypes {
     info = "INFO",
     warning = "WARNING",
@@ -114,32 +68,32 @@ export enum CronJobTypes {
 
 // MeiliSearch Response
 export type SearchResponse = {
-    results: Array<{
-        id: number;
-        username?: string;
-        name?: string;
-        title?: string;
-        description?: string;
-        avatar?: string;
-        _federation: {
-            indexUid: string;
-            queriesPosition: number;
-            weightedRankingScore: number;
+    "results": Array<{
+        "id": number;
+        "username"?: string;
+        "name"?: string;
+        "title"?: string;
+        "description"?: string;
+        "avatar"?: string;
+        "_federation": {
+            "indexUid": string;
+            "queriesPosition": number;
+            "weightedRankingScore": number;
         };
     }>;
-    count: number;
-    duration: number;
+    "count": number;
+    "duration": number;
 };
 
 // Uplink Network Payload
 export type UplinkMessage = {
-    sender: string;
-    recipient: string;
-    triggerSource: string;
-    reason: string;
-    task: string;
-    content: string;
-    timestamp: Date;
+    "sender": string;
+    "recipient": string;
+    "triggerSource": string;
+    "reason": string;
+    "task": string;
+    "content": string;
+    "timestamp": Date;
 };
 
 export enum FileTypes {
@@ -151,7 +105,7 @@ export enum NotificationTypes {
     acknowledge = "ack",
 }
 
-type BaseProfileData = {
+export type ProfileData = {
     "activeProfileId": number,
     "firstItemUrl": string,
     "profiles": Array<Profile>,
@@ -159,12 +113,6 @@ type BaseProfileData = {
     "modules": Array<Module>,
     "language": Languages,
 }
-
-export type LoginResponse = {
-    "user": UserData,
-} & BaseProfileData;
-
-export type ProfileData = BaseProfileData;
 
 export type Profile = {
     "id": number,

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { useUserStore } from "~/stores/UserStore";
 import { useNotificationStore } from "~/stores/NotificationStore";
 import { getImageUrl } from "~/utils/image";
+import { Languages } from "~/assets/customTypes";
 import type { NotificationItem } from "~/assets/customTypes";
-const userStore = useUserStore();
+const sideBarStore = useSideBarStore();
+const userSession = useUserSession();
 const notificationStore = useNotificationStore();
 const { $event, $listen } = useNuxtApp();
 const { data: wsStream, status: wsStatus } = useAppWebSocket();
@@ -24,6 +25,55 @@ watch(() => wsStream.value, (newValue: any) => {
     notificationStore.notifications.push(data);
 }, { immediate: true });
 
+
+// Localizations
+const translations: { [key: string]: { [lang in Languages]: string } } = {
+    "error": {
+        [Languages.EN]: "Something went wrong on our end. Please try again later.",
+        [Languages.NL]: "Er is iets misgegaan. Probeer het later opnieuw.",
+    },
+    "search": {
+        [Languages.EN]: "Search",
+        [Languages.NL]: "Zoeken",
+    },
+    "notification_center": {
+        [Languages.EN]: "Notification Center",
+        [Languages.NL]: "Meldingen Centrum",
+    },
+    "caught_up": {
+        [Languages.EN]: "You are all caught up!",
+        [Languages.NL]: "Je bent helemaal bij!",
+    },
+    "notifications_recent": {
+        [Languages.EN]: "Most recent notifications.",
+        [Languages.NL]: "Meest recente meldingen.",
+    },
+    "notifications_all": {
+        [Languages.EN]: "See all",
+        [Languages.NL]: "Bekijk alles",
+    },
+    "quick_access": {
+        [Languages.EN]: "Quick Access",
+        [Languages.NL]: "Snelle Toegang",
+    },
+    "profile_picture": {
+        [Languages.EN]: "Profile Picture",
+        [Languages.NL]: "Profielfoto",
+    },
+    "home": {
+        [Languages.EN]: "Home",
+        [Languages.NL]: "Home",
+    },
+    "preferences": {
+        [Languages.EN]: "Preferences",
+        [Languages.NL]: "Voorkeuren",
+    },
+    "sign_out": {
+        [Languages.EN]: "Sign Out",
+        [Languages.NL]: "Uitloggen",
+    },
+};
+
 // Methods
 
 /**
@@ -32,7 +82,6 @@ watch(() => wsStream.value, (newValue: any) => {
  * @param menu The menu to toggle.
  */
 function toggleDropdown(menu: HTMLMenuElement | null) {
-    $event("close-sidebar");
 
     if (menu === userDropdownMenu.value) {
         notificationDropdownMenu.value?.classList.remove("open");
@@ -48,7 +97,29 @@ function toggleDropdown(menu: HTMLMenuElement | null) {
         return;
     }
 
+    $event("close-sidebar");
     isDropdownOpen.value = true;
+}
+
+/**
+ * Retrieves the translation for a given key based on the current language.
+ * @param key The key to translate.
+ * @returns The translated string.
+ */
+function getTranslation(key: string): string {
+    return translations[key]?.[sideBarStore.getLanguage] || key;
+}
+
+/**
+ * Signs the user out by clearing the session and relevant stores.
+ */
+async function signOut(): Promise<void> {
+    notificationStore.clear();
+    sideBarStore.clear();
+    useThemeStore().clear();
+
+    await userSession.clear();
+    navigateTo('/');
 }
 
 // Emitters
@@ -61,7 +132,7 @@ $listen("close-navbar", () => toggleDropdown(null));
         <!-- TODO: #4 -->
         <button class="flex navbar-item" @click="searchBar?.focus()" type="button">
             <i class="fa-regular fa-magnifying-glass"></i>
-            <input ref="searchBar" placeholder="Search" type="text">
+            <input ref="searchBar" :placeholder="getTranslation('search')" type="text">
         </button>
         <!-- TODO: #5 -->
         <section class="flex">
@@ -78,14 +149,14 @@ $listen("close-navbar", () => toggleDropdown(null));
                 <menu ref="notificationDropdownMenu" class="flex-col shadow">
                     <template v-if="notificationStore.notifications.length === 0">
                         <section class="flex-col">
-                            <strong>Notification Center</strong>
-                            <small>You are all caught up!</small>
+                            <strong>{{ getTranslation('notifications_caught_up') }}</strong>
+                            <small>{{ getTranslation('notifications_all') }}</small>
                         </section>
                     </template>
                     <template v-else>
                         <section class="flex-col">
-                            <strong>Notification Center</strong>
-                            <small>Most recent notifications.</small>
+                            <strong>{{ getTranslation('notifications_center') }}</strong>
+                            <small>{{ getTranslation('notifications_recent') }}</small>
                         </section>
                         <span class="splitter"></span>
                         <NotificationItem
@@ -94,8 +165,9 @@ $listen("close-navbar", () => toggleDropdown(null));
                         </NotificationItem>
                         <span class="splitter"></span>
                         <NuxtLink to="/panel/notifications" @click="toggleDropdown(null)" class="flex-between"
-                            title="View All Notifications">
-                            <p>See all ({{ notificationStore.notifications.length }})</p>
+                            :title="getTranslation('notifications_all')">
+                            <p>{{ getTranslation('notifications_all') }} ({{ notificationStore.notifications.length }})
+                            </p>
                             <i class="fa-regular fa-arrow-right"></i>
                         </NuxtLink>
                     </template>
@@ -106,23 +178,21 @@ $listen("close-navbar", () => toggleDropdown(null));
                 <button class="flex navbar-item" @click="toggleDropdown(userDropdownMenu)" title="Open User Menu"
                     type="button">
                     <div class="image-container">
-                        <img :src="getImageUrl(userStore.user)" alt="Profile Picture">
+                        <img :src="getImageUrl(userSession.user.value)" :alt="getTranslation('profile_picture')">
                         <span class="status-indicator" :class="{ 'status-online': wsStatus === 'OPEN' }"></span>
                     </div>
-                    <p>{{ userStore.user?.firstName }} {{ userStore.user?.lastName }}</p>
+                    <p>{{ userSession.user.value?.firstName }} {{ userSession.user.value?.lastName }}</p>
                     <i class="fa-regular fa-angle-down"></i>
                 </button>
                 <menu ref="userDropdownMenu" class="flex-col shadow">
-                    <section class="flex-col">
-                        <strong>Quick Access</strong>
-                        <small>Handy resources & links.</small>
-                        <span class="splitter"></span>
-                    </section>
-                    <NuxtLink to="/panel">Home</NuxtLink>
-                    <NuxtLink to="/panel/preferences">Preferences</NuxtLink>
+                    <strong>{{ getTranslation('quick_access') }}</strong>
                     <span class="splitter"></span>
-                    <button @click="userStore.signOut()" title="Sign Out" type="button" class="flex-between">
-                        <p>Sign Out</p>
+                    <NuxtLink to="/panel" @click="toggleDropdown(null)">{{ getTranslation('home') }}</NuxtLink>
+                    <NuxtLink to="/panel/preferences" @click="toggleDropdown(null)">{{ getTranslation('preferences') }}
+                    </NuxtLink>
+                    <span class="splitter"></span>
+                    <button @click="signOut" :title="getTranslation('sign_out')" type="button" class="flex-between">
+                        <p>{{ getTranslation('sign_out') }}</p>
                         <i class="fa-regular fa-arrow-right-from-bracket color-danger"></i>
                     </button>
                 </menu>
@@ -163,11 +233,6 @@ nav {
     background-color: var(--color-fill-dark);
 }
 
-.navbar-item:hover .status-indicator,
-.navbar-item:focus-within .status-indicator {
-    border-color: var(--color-fill-dark);
-}
-
 /* Generic Menu */
 .menu-parent {
     position: relative;
@@ -196,11 +261,15 @@ nav {
     font-size: 20px;
 }
 
+/* User Menu */
 .user-menu-parent menu {
     width: 220px;
 }
 
-/* User Profile Picture */
+.user-menu-parent button > i {
+    margin-left: auto;
+}
+
 .image-container {
     position: relative;
     height: 30px;
@@ -224,12 +293,13 @@ nav {
     background-color: var(--color-danger);
 }
 
-.status-online {
-    background-color: var(--color-success);
+.navbar-item:hover .status-indicator,
+.navbar-item:focus-within .status-indicator {
+    border-color: var(--color-fill-dark);
 }
 
-.user-menu-parent button > i {
-    margin-left: auto;
+.status-online {
+    background-color: var(--color-success);
 }
 
 /* TODO #5 */

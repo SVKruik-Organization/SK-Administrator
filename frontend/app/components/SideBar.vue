@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { useUserStore } from "~/stores/UserStore";
 import { Languages, PromptTypes, type PopupItem } from "~/assets/customTypes";
 import { getImageUrl } from "~/utils/image";
 import { normalizeUrl } from "~/utils/format";
-const userStore = useUserStore();
 const sideBarStore = useSideBarStore();
+const userSession = useUserSession();
 const { $event, $listen } = useNuxtApp();
 
 // Lifecycle Hooks
@@ -58,7 +57,7 @@ async function switchProfile(profileId: number): Promise<boolean> {
         $event("popup", {
             id: createTicket(4),
             type: PromptTypes.danger,
-            message: error.message || translations.error![sideBarStore.getLanguage],
+            message: error.message || getTranslation("error"),
             duration: 3,
         } as PopupItem);
         return false;
@@ -69,15 +68,22 @@ async function switchProfile(profileId: number): Promise<boolean> {
  * Opens or closes the profile switcher menu.
  * Also emits an event to close the navbar.
  */
-function openProfileSwitcher() {
+function toggleProfileSwitcher() {
     isProfileSwitcherOpen.value = !isProfileSwitcherOpen.value;
     $event("close-navbar");
 }
 
+/**
+ * Retrieves the translation for a given key based on the current language.
+ * @param key The key to translate.
+ * @returns The translated string.
+ */
+function getTranslation(key: string): string {
+    return translations[key]?.[sideBarStore.getLanguage] || key;
+}
+
 // Emitters
-$listen("close-sidebar", () => {
-    isProfileSwitcherOpen.value = false;
-});
+$listen("close-sidebar", () => isProfileSwitcherOpen.value = false);
 </script>
 
 <template>
@@ -89,12 +95,12 @@ $listen("close-sidebar", () => {
             <h3>SK Administrator</h3>
         </button>
         <button class="user-information flex no-select" type="button" :class="{ 'active': isProfileSwitcherOpen }"
-            @click="openProfileSwitcher()" :title="translations.click_switch_profile![sideBarStore.getLanguage]">
-            <img :src="getImageUrl(userStore.user)" :alt="translations.profile_picture![sideBarStore.getLanguage]"
-                :title="translations.profile_picture![sideBarStore.getLanguage]">
+            @click="toggleProfileSwitcher()" :title="getTranslation('click_switch_profile')">
+            <img :src="getImageUrl(userSession.user.value)" :alt="getTranslation('profile_picture')"
+                :title="getTranslation('profile_picture')">
             <div class="user-information-text flex-col">
-                <h3>{{ userStore.user?.firstName }}</h3>
-                <small :title="translations.active_profile![sideBarStore.getLanguage]">
+                <h3>{{ userSession.user.value?.firstName }}</h3>
+                <small :title="getTranslation('active_profile') + ': ' + activeProfile">
                     {{ activeProfile }}
                 </small>
             </div>
@@ -132,7 +138,7 @@ $listen("close-sidebar", () => {
             </div>
             <NuxtLink to="/panel/preferences" v-slot="{ isActive }" class="sidebar-link sidebar-link-bottom">
                 <i :class="isActive ? ' fa-solid fa-gear' : 'fa-regular fa-gear'"></i>
-                <p>{{ translations.preferences![sideBarStore.getLanguage] }}</p>
+                <p>{{ getTranslation('preferences') }}</p>
             </NuxtLink>
         </section>
     </nav>
@@ -233,6 +239,7 @@ nav section {
 .user-information menu {
     position: absolute;
     width: 215px;
+    min-height: 110px;
     top: 33px;
     left: -1px;
     border-radius: 0 0 var(--border-radius-high) var(--border-radius-high);
@@ -240,7 +247,6 @@ nav section {
     box-sizing: border-box;
     background-color: var(--color-background);
     gap: 10px;
-    border: 1px solid var(--color-fill);
     border-top: none;
 }
 
@@ -306,7 +312,6 @@ nav section {
 
 button.active {
     background-color: var(--color-background);
-    border: 1px solid var(--color-fill);
 }
 
 i.active {

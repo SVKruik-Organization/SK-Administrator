@@ -3,9 +3,9 @@ import { type NotificationItem, NotificationTypes, type PopupItem, PromptTypes, 
 import { useNotificationStore } from "#imports";
 import { createTicket } from "@/utils/ticket";
 import { useThemeStore } from "#imports";
-const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 const themeStore = useThemeStore();
+const userSession = useUserSession();
 const { $event } = useNuxtApp();
 
 // Methods
@@ -27,7 +27,7 @@ function showPopupItem(): void {
  */
 function showNotificationItem(level: PromptTypes): void {
     notificationStore.newNotification({
-        "user_id": userStore.user?.id,
+        "user_id": userSession.user.value?.id,
         "type": NotificationTypes.acknowledge,
         "level": level,
         "data": {

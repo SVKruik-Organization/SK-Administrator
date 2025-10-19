@@ -21,7 +21,7 @@ export default defineEventHandler(async (event): Promise<ProfileData> => {
         const { profileId } = parseResult.data;
 
         // Retrieve the profile from the database
-        const connection: Pool = await database("ska");
+        const connection: Pool = await database("central");
         const session = await getUserSession(event);
         if (!session.user) throw new Error("You must be logged in to access this resource.", { cause: { statusCode: 1401 } });
         const profileData: ProfileData = await getProfileData(session.user.id, profileId, false, connection);

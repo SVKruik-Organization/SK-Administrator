@@ -11,7 +11,7 @@ import { getNotificationExclusions } from "~/utils/settings";
  */
 export async function sendPeer(data: NotificationItem): Promise<boolean> {
     try {
-        const connection: Pool = await database("ska");
+        const connection: Pool = await database("central");
 
         // Persist notification
         if (!getNotificationExclusions().includes(data.type)) await connection.query("INSERT INTO user_notification (user_id, type, data, source, url, ticket, date_expiry, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [

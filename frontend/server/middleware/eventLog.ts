@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
                 data.description = session.user.firstName + " " + session.user.lastName;
             }
 
-            const connection: Pool = await database("ska");
+            const connection: Pool = await database("central");
             await connection.query("INSERT INTO event_log (object_type, object_id, description, endpoint) VALUES (?, ?, ?, ?)", [...Object.values(data)]);
             await connection.end();
             log(`New request: ${JSON.stringify(data)}`, "info");

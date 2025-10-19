@@ -35,7 +35,7 @@ function attributeTableLookup(table: string): Array<string> {
 export async function generateIndex(indexName: string): Promise<boolean> {
     try {
         if (!isValidIndex(indexName)) throw new Error("Invalid index");
-        const connection = await database("ska");
+        const connection = await database("central");
         const search = await masterEngine();
 
         // Prepare the query

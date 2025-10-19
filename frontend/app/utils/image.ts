@@ -1,4 +1,5 @@
-import { UserTypes, type UserData } from "~/assets/customTypes";
+import type { User } from "#auth-utils";
+import { UserTypes } from "~/assets/customTypes";
 
 /**
  * Get the image URL for a user or guest.
@@ -6,7 +7,7 @@ import { UserTypes, type UserData } from "~/assets/customTypes";
  * @param userType The type of user (USER or GUEST).
  * @returns The URL of the image.
  */
-export function getImageUrl(user: UserData | null): string {
+export function getImageUrl(user: User | null): string {
     // TEMPORARY until CDN is set up
     return `/${user?.imageName}.png` || "";
 

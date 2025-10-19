@@ -30,10 +30,18 @@ export default defineNuxtConfig({
         storesDirs: ["./app/stores/**"],
     },
     runtimeConfig: {
+        session: {
+            maxAge: 60 * 60 * 24 * 30, // 30 days
+            name: "sk_administrator_session",
+            password: process.env.NUXT_SESSION_PASSWORD || "",
+            cookie: {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+            }
+        },
         databaseHost: "",
         databasePort: "",
-        databaseNameSkp: "",
-        databaseNameSka: "",
         databaseUsername: "",
         databasePassword: "",
         mailHost: "",
@@ -54,7 +62,8 @@ export default defineNuxtConfig({
         sftpUsername: "",
         sftpPassword: "",
         public: {
-            wsUrl: ""
+            wsUrl: "",
+            authProviderURL: "",
         }
     },
     app: {
