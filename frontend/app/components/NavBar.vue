@@ -40,7 +40,7 @@ const translations: { [key: string]: { [lang in Languages]: string } } = {
         [Languages.EN]: "Notification Center",
         [Languages.NL]: "Meldingen Centrum",
     },
-    "caught_up": {
+    "notifications_caught_up": {
         [Languages.EN]: "You are all caught up!",
         [Languages.NL]: "Je bent helemaal bij!",
     },

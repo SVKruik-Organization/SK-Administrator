@@ -2,6 +2,7 @@ import { User, UserSession } from "#auth-utils";
 import type { H3Event } from "h3";
 import { Pool } from "mariadb";
 import { UserTypes } from "~/assets/customTypes";
+import { getSessionTTL } from "~/utils/settings";
 
 /**
  * Creates and returns a user session.
@@ -14,19 +15,9 @@ import { UserTypes } from "~/assets/customTypes";
  */
 export async function createUserSession(event: H3Event, user: User, connection: Pool): Promise<User> {
     const userSession: UserSession = await replaceUserSession(event, {
-        user: {
-            "id": user.id,
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            "email": user.email,
-            "type": user.type,
-            "imageName": user.imageName,
-            "language": user.language,
-        },
-        loggedInAt: new Date(),
-    }, user.type === UserTypes.GUEST ? {
-        maxAge: 60 * 60 * 4, // 4 hours for guests
-    } : undefined);
+        "user": user,
+        "loggedInAt": new Date(),
+    }, getSessionTTL(user.type));
 
     // Update the last login date in the database
     const tableName: string = user.type === UserTypes.USER ? "user" : "guest";

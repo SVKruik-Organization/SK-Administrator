@@ -102,7 +102,7 @@ export enum FileTypes {
 
 export enum NotificationTypes {
     initialize = "initialize",
-    acknowledge = "ack",
+    acknowledge = "acknowledge",
 }
 
 export type ProfileData = {

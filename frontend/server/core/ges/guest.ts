@@ -4,6 +4,7 @@ import { H3Event } from "h3";
 
 type LoginConfig = {
     disableEndConnection?: boolean; // true to disable ending the DB connection after login
+    language?: Languages; // Language preference for the user session
 }
 
 export class GuestEntity {
@@ -42,7 +43,7 @@ export class GuestEntity {
             "email": null,
             "type": UserTypes.GUEST,
             "imageName": additionalData[0].image_name,
-            "language": Languages.EN
+            "language": config?.language || Languages.EN
         }, this.database);
 
         if (!config?.disableEndConnection) await this.database.end();
