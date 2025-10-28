@@ -55,7 +55,6 @@ export async function generateIndex(indexName: string): Promise<boolean> {
             filterableAttributes: columns,
         });
 
-        connection.end();
         return true;
     } catch (error: any) {
         throw formatApiError(error);

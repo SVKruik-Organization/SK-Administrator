@@ -27,7 +27,6 @@ export async function sendPeer(data: NotificationItem): Promise<boolean> {
 
         // RTD
         getPeer(data.user_id)?.send(JSON.stringify(data));
-        await connection.end();
         return true;
     } catch (error: any) {
         logError(error);

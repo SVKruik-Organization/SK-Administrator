@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
 
             const connection: Pool = await database("central");
             await connection.query("INSERT INTO event_log (object_type, object_id, description, endpoint) VALUES (?, ?, ?, ?)", [...Object.values(data)]);
-            await connection.end();
             log(`New request: ${JSON.stringify(data)}`, "info");
         } catch (error: any) {
             logError(error);

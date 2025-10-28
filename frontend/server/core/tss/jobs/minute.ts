@@ -12,7 +12,7 @@ export default defineCronHandler("everyMinute", async () => {
             "type": keyof typeof CronJobTypes,
             "data": any,
         }> = await connection.query("SELECT id, type, data FROM scheduled_task WHERE status = 'pending_auto' AND date_schedule <= NOW()");
-        if (!expiredJobs || expiredJobs.length === 0) return await connection.end();
+        if (!expiredJobs || expiredJobs.length === 0) return;
 
         // Setup storage
         log(`[CRON / Minute] Running with ${expiredJobs.length} pending jobs.`, "info");
@@ -41,7 +41,6 @@ export default defineCronHandler("everyMinute", async () => {
         if (failedJobs.length > 0) await connection.query("UPDATE scheduled_task SET status = 'failed' WHERE id IN (?);", [failedJobs]);
 
         log(`[CRON / Minute] Completed ${resolvedJobs.length} job(s) and failed ${failedJobs.length} job(s).`, "info");
-        return await connection.end();
     } catch (error: any) {
         logError(error);
     }

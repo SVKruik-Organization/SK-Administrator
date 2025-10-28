@@ -29,7 +29,6 @@ export default defineEventHandler(async (event): Promise<ProfileData> => {
         // Update language preference in session
         await setUserSession(event, session);
 
-        await connection.end();
         return profileData;
     } catch (error: any) {
         throw formatApiError(error);
