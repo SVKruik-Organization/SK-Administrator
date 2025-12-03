@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useNotificationStore } from "~/stores/NotificationStore";
-import type { NotificationItem } from "~/assets/customTypes";
+import type { NotificationItem } from "@/assets/customTypes";
+import { useNotificationStore } from "@/stores/NotificationStore";
 const notificationStore = useNotificationStore();
 const { $event } = useNuxtApp();
 

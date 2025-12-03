@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import { Languages, PromptTypes, type PopupItem } from "~/assets/customTypes";
-import { getImageUrl } from "~/utils/image";
-import { normalizeUrl } from "~/utils/format";
+import { Languages, PromptTypes, type PopupItem } from "@/assets/customTypes";
+import { getImageUrl } from "@/utils/image";
+import { normalizeUrl } from "@/utils/format";
+import { createTicket } from "@svkruik/sk-platform-formatters";
+import { useSideBarStore } from "@/stores/SideBarStore";
 const sideBarStore = useSideBarStore();
 const userSession = useUserSession();
 const { $event, $listen } = useNuxtApp();

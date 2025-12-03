@@ -1,7 +1,8 @@
-import { NotificationItem } from "~/assets/customTypes";
+import { NotificationItem } from "@/assets/customTypes";
 import { getPeer } from "./registry";
 import type { Pool } from "mariadb";
-import { getNotificationExclusions } from "~/utils/settings";
+import { getNotificationExclusions } from "@/utils/settings";
+import { logError } from "@svkruik/sk-platform-formatters";
 
 /**
  * Sends a notification to a peer via RTD.

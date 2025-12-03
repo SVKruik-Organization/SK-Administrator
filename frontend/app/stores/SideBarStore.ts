@@ -1,6 +1,7 @@
+import { createTicket } from "@svkruik/sk-platform-formatters";
 import { defineStore } from "pinia";
-import { Languages, PromptTypes, type Module, type PopupItem, type Profile, type ProfileData, type TopLink } from "~/assets/customTypes";
-import { useFetchProfile } from "~/utils/fetch/user/useFetchProfile";
+import { Languages, PromptTypes, type Module, type PopupItem, type Profile, type ProfileData, type TopLink } from "@/assets/customTypes";
+import { useFetchProfile } from "@/utils/fetch/user/useFetchProfile";
 
 export const useSideBarStore = defineStore("SideBarStore", {
     state: () => {

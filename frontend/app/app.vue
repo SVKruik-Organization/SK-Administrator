@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { useThemeStore } from "~/stores/ThemeStore";
+import { useThemeStore } from "@/stores/ThemeStore";
+
 const themeStore = useThemeStore();
 
 // Lifecycle Hooks

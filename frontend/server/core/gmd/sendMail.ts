@@ -2,6 +2,7 @@ import { createTransport } from "nodemailer";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import mjml2html from "mjml";
+import { logData, logError } from "@svkruik/sk-platform-formatters";
 
 export async function sendMail(
     to: string,
@@ -35,7 +36,7 @@ export async function sendMail(
             );
         });
         if (templateFile.includes("{{")) {
-            log("MJML template error: Missing replacements.", "error");
+            logData("MJML template error: Missing replacements.", "error");
             throw new Error("Something went wrong while sending the email.", {
                 cause: { statusCode: 1500 },
             });
@@ -49,7 +50,7 @@ export async function sendMail(
             },
         });
         if (html.errors.length > 0) {
-            log(`MJML parsing errors: ${JSON.stringify(html.errors)}`, "error");
+            logData(`MJML parsing errors: ${JSON.stringify(html.errors)}`, "error");
             throw new Error("Something went wrong while sending the email.", {
                 cause: { statusCode: 1500 },
             });
@@ -66,7 +67,7 @@ export async function sendMail(
                 },
                 (error, _info) => {
                     if (error) {
-                        log(`Error sending mail: ${error.message}`, "error");
+                        logData(`Error sending mail: ${error.message}`, "error");
                         reject(false);
                     } else resolve(true);
                 },

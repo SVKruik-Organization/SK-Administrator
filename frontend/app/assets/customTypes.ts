@@ -54,15 +54,6 @@ export type TabComponentItem = {
     "route": string,
 }
 
-export enum LogTypes {
-    info = "INFO",
-    warning = "WARNING",
-    alert = "ALERT",
-    error = "ERROR",
-    fatal = "FATAL",
-    none = "NONE",
-}
-
 export enum CronJobTypes {
 }
 
@@ -83,17 +74,6 @@ export type SearchResponse = {
     }>;
     "count": number;
     "duration": number;
-};
-
-// Uplink Network Payload
-export type UplinkMessage = {
-    "sender": string;
-    "recipient": string;
-    "triggerSource": string;
-    "reason": string;
-    "task": string;
-    "content": string;
-    "timestamp": Date;
 };
 
 export enum FileTypes {

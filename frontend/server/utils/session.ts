@@ -1,8 +1,8 @@
 import { User, UserSession } from "#auth-utils";
 import type { H3Event } from "h3";
 import { Pool } from "mariadb";
-import { UserTypes } from "~/assets/customTypes";
-import { getSessionTTL } from "~/utils/settings";
+import { UserTypes } from "@/assets/customTypes";
+import { getSessionTTL } from "@/utils/settings";
 
 /**
  * Creates and returns a user session.

@@ -1,7 +1,8 @@
+import { logData } from "@svkruik/sk-platform-formatters";
 import type { Peer } from "crossws";
 
 const peerMap = new Map<number, Peer>();
-log("[RTD / Server] Peer registry initialized.", "info");
+logData("[RTD / Server] Peer registry initialized.", "info");
 
 /**
  * Regster a RTD connection peer by user ID.

@@ -1,4 +1,4 @@
-import { formatApiError } from "~/utils/format";
+import { formatApiError } from "@/utils/format";
 
 export default defineEventHandler(async (event) => {
     try {

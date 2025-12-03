@@ -1,4 +1,4 @@
-import { FileTypes } from "~/assets/customTypes";
+import { FileTypes } from "@/assets/customTypes";
 import { sftpClient } from "./sftp";
 import sharp from "sharp";
 import ffmpegPath from "ffmpeg-static";

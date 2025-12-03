@@ -1,5 +1,5 @@
 import type { Peer, Message } from "crossws"
-import { NotificationItem } from "~/assets/customTypes";
+import { NotificationItem } from "@/assets/customTypes";
 import { handleWebSocketMessage } from "../core/rtd/handlers";
 
 export default defineWebSocketHandler({

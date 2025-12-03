@@ -1,6 +1,6 @@
 // Website settings and configuration
 
-import { NotificationTypes, UserTypes } from "~/assets/customTypes";
+import { NotificationTypes, UserTypes } from "@/assets/customTypes";
 
 /**
  * Returns an array of notification types that should not be shown nor persisted.

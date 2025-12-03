@@ -1,5 +1,5 @@
 import { Pool } from "mariadb";
-import { CronJobTypes } from "~/assets/customTypes";
+import { CronJobTypes } from "@/assets/customTypes";
 
 export async function registerCron(payload: {
     "type": keyof typeof CronJobTypes;

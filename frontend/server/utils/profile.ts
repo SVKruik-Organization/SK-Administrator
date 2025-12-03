@@ -1,6 +1,6 @@
 import { Pool } from "mariadb/*";
-import { Languages, Module, Profile, ProfileData, TopLink, UserTypes } from "~/assets/customTypes";
-import { normalizeUrl } from "~/utils/format";
+import { Languages, Module, Profile, ProfileData, TopLink, UserTypes } from "@/assets/customTypes";
+import { normalizeUrl } from "@/utils/format";
 
 /**
  * Retrieves the profile data for a user.

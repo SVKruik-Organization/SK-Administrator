@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { PopupItem } from "~/assets/customTypes";
+import type { PopupItem } from "@/assets/customTypes";
 
 // Props
 const props = defineProps<{

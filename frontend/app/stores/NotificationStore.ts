@@ -1,4 +1,4 @@
-import { type NotificationItem, PromptTypes } from "~/assets/customTypes";
+import { type NotificationItem, PromptTypes } from "@/assets/customTypes";
 import { defineStore } from "pinia";
 
 export const useNotificationStore = defineStore("NotificationStore", {

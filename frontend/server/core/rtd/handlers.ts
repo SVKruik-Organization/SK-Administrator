@@ -1,8 +1,8 @@
-import { NotificationItem, NotificationTypes, PromptTypes } from "~/assets/customTypes";
+import { NotificationItem, NotificationTypes, PromptTypes } from "@/assets/customTypes";
 import type { Peer } from "crossws";
 import { registerPeer } from "./registry";
 import { sendPeer } from "./out";
-import { createTicket } from "~/utils/ticket";
+import { createTicket } from "@svkruik/sk-platform-formatters";
 
 /**
  * Handles incoming WebSocket messages for the RTD service.

@@ -1,7 +1,7 @@
 import { Pool } from "mariadb/*";
 import { z } from "zod";
-import { Languages, ProfileData, UserTypes } from "~/assets/customTypes";
-import { formatApiError, formatInterBackendError } from "~/utils/format";
+import { ProfileData, UserTypes } from "@/assets/customTypes";
+import { formatApiError, formatInterBackendError } from "@/utils/format";
 import { GuestEntity } from "~~/server/core/ges/guest";
 import { UserEntity } from "~~/server/core/ges/user";
 

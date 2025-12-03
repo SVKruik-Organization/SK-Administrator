@@ -1,4 +1,4 @@
-import { formatApiError } from "~/utils/format";
+import { formatApiError } from "@/utils/format";
 import { isValidIndex, masterEngine } from "./searchEngine";
 import { Index } from "meilisearch";
 

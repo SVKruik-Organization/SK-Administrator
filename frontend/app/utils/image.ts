@@ -1,5 +1,5 @@
 import type { User } from "#auth-utils";
-import { UserTypes } from "~/assets/customTypes";
+import { UserTypes } from "@/assets/customTypes";
 
 /**
  * Get the image URL for a user or guest.

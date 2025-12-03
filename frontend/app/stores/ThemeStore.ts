@@ -1,4 +1,4 @@
-import { UIThemes } from "~/assets/customTypes";
+import { UIThemes } from "@/assets/customTypes";
 import { defineStore } from "pinia";
 
 export const useThemeStore = defineStore("ThemeStore", {

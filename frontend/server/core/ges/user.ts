@@ -1,5 +1,5 @@
 import { Pool } from "mariadb/*";
-import { Languages, UserTypes } from "~/assets/customTypes";
+import { Languages, UserTypes } from "@/assets/customTypes";
 import { H3Event } from "h3";
 
 type LoginConfig = {

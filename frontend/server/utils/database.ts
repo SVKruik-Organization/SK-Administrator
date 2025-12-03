@@ -1,3 +1,4 @@
+import { logError } from "@svkruik/sk-platform-formatters";
 import mariadb from "mariadb";
 import type { Pool } from "mariadb";
 

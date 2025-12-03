@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { TabComponentItem } from "~/assets/customTypes";
+import type { TabComponentItem } from "@/assets/customTypes";
 
 // Props
 defineProps<{

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { PopupItem } from "~/assets/customTypes";
+import type { PopupItem } from "@/assets/customTypes";
 const { $listen } = useNuxtApp();
 
 $listen("popup", (event: any) => {

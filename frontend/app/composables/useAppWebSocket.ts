@@ -1,6 +1,7 @@
 import { useWebSocket } from "@vueuse/core";
 import { useRuntimeConfig } from "#app";
-import { NotificationTypes, PromptTypes, type NotificationItem } from "~/assets/customTypes";
+import { NotificationTypes, PromptTypes, type NotificationItem } from "@/assets/customTypes";
+import { createTicket } from "@svkruik/sk-platform-formatters";
 
 let socketInstance: ReturnType<typeof useWebSocket> | null = null;
 

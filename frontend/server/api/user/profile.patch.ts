@@ -1,8 +1,8 @@
 import type { Pool } from "mariadb";
 import { database } from "#imports";
 import { z } from "zod";
-import { formatApiError } from "~/utils/format";
-import { ProfileData } from "~/assets/customTypes";
+import { formatApiError } from "@/utils/format";
+import { ProfileData } from "@/assets/customTypes";
 import { getProfileData } from "#imports";
 
 // Validation schema for the request body

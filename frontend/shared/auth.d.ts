@@ -1,4 +1,4 @@
-import type { Languages, UserTypes } from "~/assets/customTypes";
+import type { Languages, UserTypes } from "@/assets/customTypes";
 
 declare module "#auth-utils" {
     // General User

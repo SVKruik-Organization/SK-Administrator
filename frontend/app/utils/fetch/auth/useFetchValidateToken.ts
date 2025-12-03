@@ -1,4 +1,4 @@
-import type { ProfileData } from "~/assets/customTypes";
+import type { ProfileData } from "@/assets/customTypes";
 
 /**
  * Handle the login callback from the auth provider.

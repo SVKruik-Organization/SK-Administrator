@@ -1,6 +1,7 @@
 import { defineCronHandler } from "#nuxt/cron"
+import { logData, logError } from "@svkruik/sk-platform-formatters";
 import { Pool } from "mariadb";
-import { CronJobTypes } from "~/assets/customTypes";
+import { CronJobTypes } from "@/assets/customTypes";
 
 // Jobs that should be ran every minute
 export default defineCronHandler("everyMinute", async () => {
@@ -15,7 +16,7 @@ export default defineCronHandler("everyMinute", async () => {
         if (!expiredJobs || expiredJobs.length === 0) return;
 
         // Setup storage
-        log(`[CRON / Minute] Running with ${expiredJobs.length} pending jobs.`, "info");
+        logData(`[CRON / Minute] Running with ${expiredJobs.length} pending jobs.`, "info");
         const resolvedJobs: Array<number> = [];
         const failedJobs: Array<number> = [];
 
@@ -40,7 +41,7 @@ export default defineCronHandler("everyMinute", async () => {
         if (resolvedJobs.length > 0) await connection.query("UPDATE scheduled_task SET status = 'completed' WHERE id IN (?);", [resolvedJobs]);
         if (failedJobs.length > 0) await connection.query("UPDATE scheduled_task SET status = 'failed' WHERE id IN (?);", [failedJobs]);
 
-        log(`[CRON / Minute] Completed ${resolvedJobs.length} job(s) and failed ${failedJobs.length} job(s).`, "info");
+        logData(`[CRON / Minute] Completed ${resolvedJobs.length} job(s) and failed ${failedJobs.length} job(s).`, "info");
     } catch (error: any) {
         logError(error);
     }

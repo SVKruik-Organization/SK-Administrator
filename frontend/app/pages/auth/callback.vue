@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { Languages, PromptTypes, type PopupItem } from '~/assets/customTypes';
-import { useFetchValidateToken } from '~/utils/fetch/auth/useFetchValidateToken';
+import { createTicket } from "@svkruik/sk-platform-formatters";
+import { Languages, PromptTypes, type PopupItem } from "@/assets/customTypes";
+import { useSideBarStore } from "@/stores/SideBarStore";
+import { useFetchValidateToken } from "@/utils/fetch/auth/useFetchValidateToken";
 const userSession = useUserSession();
 const sideBarStore = useSideBarStore();
 const { $event } = useNuxtApp();

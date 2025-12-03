@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { useNotificationStore } from "~/stores/NotificationStore";
-import { getImageUrl } from "~/utils/image";
-import { Languages } from "~/assets/customTypes";
-import type { NotificationItem } from "~/assets/customTypes";
+import { getImageUrl } from "@/utils/image";
+import { Languages } from "@/assets/customTypes";
+import type { NotificationItem } from "@/assets/customTypes";
+import { useSideBarStore } from "@/stores/SideBarStore";
+import { useNotificationStore } from "@/stores/NotificationStore";
+import { useThemeStore } from "@/stores/ThemeStore";
 const sideBarStore = useSideBarStore();
 const userSession = useUserSession();
 const notificationStore = useNotificationStore();

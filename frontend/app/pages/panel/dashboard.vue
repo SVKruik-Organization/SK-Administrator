@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { type NotificationItem, NotificationTypes, type PopupItem, PromptTypes, UIThemes } from "@/assets/customTypes";
-import { useNotificationStore } from "#imports";
-import { createTicket } from "@/utils/ticket";
-import { useThemeStore } from "#imports";
+import { createTicket } from "@svkruik/sk-platform-formatters";
+import { useNotificationStore } from "@/stores/NotificationStore";
+import { useThemeStore } from "@/stores/ThemeStore";
 const notificationStore = useNotificationStore();
 const themeStore = useThemeStore();
 const userSession = useUserSession();
