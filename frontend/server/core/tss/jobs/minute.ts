@@ -1,7 +1,7 @@
 import { defineCronHandler } from "#nuxt/cron"
 import { logData, logError } from "@svkruik/sk-platform-formatters";
-import { Pool } from "mariadb";
 import { CronJobTypes } from "@/assets/customTypes";
+import { Pool, database } from "@svkruik/sk-platform-db-conn";
 
 // Jobs that should be ran every minute
 export default defineCronHandler("everyMinute", async () => {

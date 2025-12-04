@@ -1,6 +1,5 @@
-import type { Pool } from "mariadb";
-import { database } from "#imports";
 import { logData, logError } from "@svkruik/sk-platform-formatters";
+import { Pool, database } from "@svkruik/sk-platform-db-conn";
 
 export default defineEventHandler(async (event) => {
     // Only for CUD operations

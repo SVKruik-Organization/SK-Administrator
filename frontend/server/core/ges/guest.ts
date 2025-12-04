@@ -1,6 +1,6 @@
-import { Pool } from "mariadb/*";
 import { Languages, UserTypes } from "@/assets/customTypes";
 import { H3Event } from "h3";
+import { Pool } from "@svkruik/sk-platform-db-conn";
 
 type LoginConfig = {
     language?: Languages; // Language preference for the user session

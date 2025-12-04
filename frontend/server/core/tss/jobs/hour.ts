@@ -1,6 +1,6 @@
 import { defineCronHandler } from "#nuxt/cron"
 import { logData, logError } from "@svkruik/sk-platform-formatters";
-import { Pool } from "mariadb";
+import { Pool, database } from "@svkruik/sk-platform-db-conn";
 
 export default defineCronHandler("hourly", async () => {
     try {

@@ -1,6 +1,6 @@
-import { Pool } from "mariadb/*";
 import { Languages, Module, Profile, ProfileData, TopLink, UserTypes } from "@/assets/customTypes";
 import { normalizeUrl } from "@/utils/format";
+import { Pool } from "@svkruik/sk-platform-db-conn";
 
 /**
  * Retrieves the profile data for a user.

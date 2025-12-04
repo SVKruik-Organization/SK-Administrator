@@ -1,9 +1,9 @@
-import { Pool } from "mariadb/*";
 import { z } from "zod";
 import { ProfileData, UserTypes } from "@/assets/customTypes";
 import { formatApiError, formatInterBackendError } from "@/utils/format";
 import { GuestEntity } from "~~/server/core/ges/guest";
 import { UserEntity } from "~~/server/core/ges/user";
+import { Pool, database } from "@svkruik/sk-platform-db-conn";
 
 // Validation schema for the request body
 const bodySchema = z.object({
