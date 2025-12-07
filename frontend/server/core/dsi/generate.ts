@@ -1,6 +1,7 @@
 import { formatApiError } from "@/utils/format";
 import { isValidIndex, masterEngine } from "./searchEngine";
 import { Index } from "meilisearch";
+import { database } from "@svkruik/sk-platform-db-conn"
 
 // Batching Memory
 // [0] - Current amount of items
