@@ -4,7 +4,7 @@ import { config } from "@svkruik/sk-platform-db-conn";
 /**
  * Nitro plugin to configure the database connection settings.
  * 
- * @see https://github.com/SVKruik-Organization/Uplink
+ * @see https://github.com/SVKruik-Organization/SK-Platform-DB-Conn
  */
 export default defineNitroPlugin(async (_nitroApp) => {
     try {
