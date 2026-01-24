@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Usage: ./cmd <command> [args...]"
+    echo "Example: ./cmd cache"
+    exit 1
+fi
+
+SCRIPT_NAME="s$1"
+SCRIPT_PATH="./scripts/$SCRIPT_NAME"
+
+if [ ! -f "$SCRIPT_PATH" ]; then
+    echo "Error: Script '$SCRIPT_PATH' not found"
+    exit 1
+fi
+
+chmod +x "$SCRIPT_PATH"
+
+exec "$SCRIPT_PATH" "${@:2}"
