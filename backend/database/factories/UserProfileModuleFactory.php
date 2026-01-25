@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\Module;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +19,6 @@ class UserProfileModuleFactory extends Factory
     public function definition(): array
     {
         return [
-            'module_id' => Module::factory(),
             'position' => fake()->numberBetween(0, 100),
         ];
     }

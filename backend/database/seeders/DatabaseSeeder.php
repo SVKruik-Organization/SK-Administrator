@@ -25,16 +25,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info('Creating modules...');
-        $modules = Module::factory(10)->create();
-
-        $this->command->info('Creating and attaching module items...');
-        $moduleItems = collect();
-        foreach ($modules as $module) {
-            $moduleItems = $moduleItems->merge(
-                ModuleItem::factory(10)->create(['module_id' => $module->id])
-            );
-        }
+        $this->call([
+            ModuleSeeder::class,
+            ModuleItemSeeder::class,
+        ]);
+        $modules = Module::all();
+        $moduleItems = ModuleItem::all();
 
         $this->command->info('Creating roles...');
         $roles = UserRole::factory(10)->create();
@@ -56,8 +52,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'me@stefankruik.nl',
             'password' => Hash::make('password'),
             'role_id' => UserRole::factory()->create([
-                'name' => 'Admin',
-                'description' => 'Admin role',
+                'name' => [
+                    'en' => 'Administrator',
+                    'nl' => 'Beheerder',
+                ],
+                'description' => [
+                    'en' => 'Admin role',
+                    'nl' => 'Beheerder rol',
+                ],
                 'position' => 1,
             ])->id,
         ]);
@@ -71,6 +73,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Creating guest users...');
         $guestUsers = GuestUser::factory(10)->create([
             'role_id' => $roles->random()->id,
+            'owner_id' => $adminUser->id,
         ]);
 
         $this->command->info('Creating and attaching user notifications for users...');
@@ -113,6 +116,7 @@ class DatabaseSeeder extends Seeder
         foreach ($userProfiles as $userProfile) {
             $userProfileModules = $userProfileModules->merge(UserProfileModule::factory(10)->create([
                 'user_profile_id' => $userProfile->id,
+                'module_id' => $modules->random()->id,
             ]));
         }
         $this->command->info('Creating and attaching user profile modules for guest users...');
@@ -120,6 +124,7 @@ class DatabaseSeeder extends Seeder
         foreach ($guestUserProfiles as $guestUserProfile) {
             $guestUserProfileModules = $guestUserProfileModules->merge(UserProfileModule::factory(10)->create([
                 'user_profile_id' => $guestUserProfile->id,
+                'module_id' => $modules->random()->id,
             ]));
         }
 

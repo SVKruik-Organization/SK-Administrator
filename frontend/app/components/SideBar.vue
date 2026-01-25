@@ -48,7 +48,7 @@ const activeProfile: Ref<string> = ref(sideBarStore.activeProfile?.name || "");
  * Switches the active user profile.
  * @param profileId The ID of the profile to switch to.
  */
-async function switchProfile(profileId: number): Promise<void> {
+async function switchProfile(profileId: string | null): Promise<void> {
     try {
         await sideBarStore.switchProfile(profileId);
         activeProfile.value = sideBarStore.activeProfile?.name || "";
@@ -100,17 +100,17 @@ $listen("close-sidebar", () => isProfileSwitcherOpen.value = false);
             <img :src="getImageUrl(userSession.user.value)" :alt="getTranslation('profile_picture')"
                 :title="getTranslation('profile_picture')">
             <div class="user-information-text flex-col">
-                <h3>{{ userSession.user.value?.firstName }}</h3>
-                <small :title="getTranslation('active_profile') + ': ' + activeProfile">
-                    {{ activeProfile }}
+                <h3>{{ userSession.user.value?.fullName }}</h3>
+                <small :title="getTranslation('active_profile') + ': ' + activeProfile[sideBarStore.language]">
+                    {{ activeProfile[sideBarStore.language] }}
                 </small>
             </div>
             <i class="fa-regular fa-angle-down profile-switcher" :class="{ 'active': isProfileSwitcherOpen }"></i>
             <menu v-if="sideBarStore.profiles.length > 1 && isProfileSwitcherOpen" class="flex-col">
                 <button v-for="profile in sideBarStore.inactiveProfiles" :key="profile.id"
                     class="flex-col profile-switcher-item" type="button" @click="switchProfile(profile.id)">
-                    <strong>{{ profile.name }}</strong>
-                    <small>{{ profile.description }}</small>
+                    <strong>{{ profile.name[sideBarStore.language] }}</strong>
+                    <small>{{ profile.description[sideBarStore.language] }}</small>
                 </button>
             </menu>
         </button>

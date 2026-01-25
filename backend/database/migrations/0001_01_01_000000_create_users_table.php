@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('full_name')->virtualAs('CONCAT_WS(" ", first_name, middle_name, last_name)');
             $table->string('email')->unique();
-            $table->timestamp('date_last_login')->nullable();
+            $table->timestamp('last_login_at')->nullable();
             $table->string('password');
             $table->rememberToken()->nullable();
             $table->timestamp('email_verified_at')->nullable();
@@ -34,6 +34,7 @@ return new class extends Migration
             $table->longText('payload');
             $table->string('app_name')->nullable();
             $table->integer('last_activity')->index();
+            $table->timestamp('expires_at')->nullable();
         });
     }
 

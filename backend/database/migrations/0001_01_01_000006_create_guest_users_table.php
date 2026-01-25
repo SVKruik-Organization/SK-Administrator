@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('full_name')->virtualAs('CONCAT_WS(" ", first_name, middle_name, last_name)');
             $table->string('email')->unique();
-            $table->timestamp('date_last_login')->nullable();
+            $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

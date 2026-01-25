@@ -19,8 +19,14 @@ class UserProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'description' => fake()->sentence(),
+            'name' => [
+                'en' => fake()->word(),
+                'nl' => fake()->word(),
+            ],
+            'description' => [
+                'en' => fake()->sentence(),
+                'nl' => fake()->sentence(),
+            ],
             'position' => fake()->numberBetween(0, 100),
             'language' => fake()->randomElement(['en', 'nl']),
         ];

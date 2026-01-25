@@ -28,6 +28,7 @@ class UserProfile extends Model
         'description',
         'position',
         'language',
+        'last_usage_at',
     ];
 
     /**
@@ -36,7 +37,10 @@ class UserProfile extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'name' => 'array',
+        'description' => 'array',
         'position' => 'integer',
+        'last_usage_at' => 'datetime',
     ];
 
     /**

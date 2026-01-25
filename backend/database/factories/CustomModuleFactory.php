@@ -19,7 +19,10 @@ class CustomModuleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word(),
+            'name' => [
+                'en' => fake()->word(),
+                'nl' => fake()->word(),
+            ],
         ];
     }
 }

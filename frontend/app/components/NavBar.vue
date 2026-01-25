@@ -5,6 +5,7 @@ import type { NotificationItem } from "@/assets/customTypes";
 import { useSideBarStore } from "@/stores/SideBarStore";
 import { useNotificationStore } from "@/stores/NotificationStore";
 import { useThemeStore } from "@/stores/ThemeStore";
+import { getNotificationExclusions } from "@/utils/settings";
 const sideBarStore = useSideBarStore();
 const userSession = useUserSession();
 const notificationStore = useNotificationStore();
@@ -21,10 +22,10 @@ const isDropdownOpen: Ref<boolean> = ref(false);
 // Watchers
 watch(() => wsStream.value, (newValue: any) => {
     if (!newValue) return;
-    const data: NotificationItem = JSON.parse(newValue as string);
-    if (!(data satisfies NotificationItem) || getNotificationExclusions().includes(data.type) || data.is_silent) return;
+    const notification: NotificationItem = JSON.parse(newValue as string);
+    if (!(notification satisfies NotificationItem) || getNotificationExclusions().includes(notification.data.type) || notification.is_silent) return;
 
-    notificationStore.notifications.push(data);
+    notificationStore.notifications.push(notification);
 }, { immediate: true });
 
 
@@ -163,7 +164,7 @@ $listen("close-navbar", () => toggleDropdown(null));
                         <span class="splitter"></span>
                         <NotificationItem
                             v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
-                            :key="notification.ticket" :message="notification">
+                            :key="notification.id" :notification="notification">
                         </NotificationItem>
                         <span class="splitter"></span>
                         <NuxtLink to="/panel/notifications" @click="toggleDropdown(null)" class="flex-between"
@@ -183,7 +184,7 @@ $listen("close-navbar", () => toggleDropdown(null));
                         <img :src="getImageUrl(userSession.user.value)" :alt="getTranslation('profile_picture')">
                         <span class="status-indicator" :class="{ 'status-online': wsStatus === 'OPEN' }"></span>
                     </div>
-                    <p>{{ userSession.user.value?.firstName }} {{ userSession.user.value?.lastName }}</p>
+                    <p>{{ userSession.user.value?.fullName }}</p>
                     <i class="fa-regular fa-angle-down"></i>
                 </button>
                 <menu ref="userDropdownMenu" class="flex-col shadow">

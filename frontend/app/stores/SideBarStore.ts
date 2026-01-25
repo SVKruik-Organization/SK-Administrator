@@ -18,7 +18,7 @@ export const useSideBarStore = defineStore("SideBarStore", {
          * @param force Force reload of the modules even if they are already loaded.
          */
         async loadModules(force: boolean = false): Promise<void> {
-            if (!this.profileData?.profiles.length || force) await this.switchProfile(0);
+            if (!this.profileData?.profiles.length || force) await this.switchProfile(null);
         },
         /**
          * Sets the sidebar state.
@@ -32,7 +32,7 @@ export const useSideBarStore = defineStore("SideBarStore", {
          * Switches the active user profile.
          * @param profileId The ID of the profile to switch to. Use 0 to switch to the most recently used profile.
          */
-        async switchProfile(profileId: number): Promise<void> {
+        async switchProfile(profileId: string | null): Promise<void> {
             try {
                 this.setSideBar(await useFetchProfile(profileId));
             } catch (error: any) {
@@ -61,7 +61,7 @@ export const useSideBarStore = defineStore("SideBarStore", {
             if (!this.profileData) return [];
             return this.profileData.profiles.filter(profile => profile.id !== this.profileData?.activeProfileId) || [];
         },
-        activeProfileId(): number | null {
+        activeProfileId(): string | null {
             return this.profileData?.activeProfileId || null;
         },
         firstItemUrl(): string {

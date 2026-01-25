@@ -1,7 +1,6 @@
 import { useWebSocket } from "@vueuse/core";
 import { useRuntimeConfig } from "#app";
-import { NotificationTypes, PromptType, type NotificationItem } from "@/assets/customTypes";
-import { createTicket } from "@svkruik/sk-platform-formatters";
+import { NotificationTypes, PromptType, UserTypes, type NotificationItem } from "@/assets/customTypes";
 
 let socketInstance: ReturnType<typeof useWebSocket> | null = null;
 
@@ -14,19 +13,20 @@ export const useAppWebSocket = () => {
         socketInstance = useWebSocket(config.public.wsUrl, {
             onConnected: () =>
                 socketInstance?.send(JSON.stringify({
-                    "user_id": userSession.user.value?.id,
-                    "type": NotificationTypes.initialize,
-                    "level": PromptType.info,
+                    "id": self.crypto.randomUUID(),
+                    "object_id": userSession.user.value?.id,
+                    "object_type": UserTypes.USER,
+                    "type": PromptType.info,
                     "data": {
                         "message": "Initializing connection.",
+                        "type": NotificationTypes.initialize,
                     },
                     "source": "RTD - Client",
                     "url": "/",
-                    "is_read": false,
                     "is_silent": true,
-                    "ticket": createTicket(),
-                    "date_expiry": new Date(Date.now() + 1000 * 60),
-                    "date_creation": new Date(),
+                    "created_at": new Date(Date.now() + 1000 * 60),
+                    "updated_at": null,
+                    "deleted_at": null,
                 } as NotificationItem)),
             autoReconnect: {
                 retries: 3,

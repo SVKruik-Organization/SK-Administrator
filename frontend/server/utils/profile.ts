@@ -6,53 +6,53 @@ import { Pool } from "@svkruik/sk-platform-db-conn";
  * Retrieves the profile data for a user.
  * @param objectId The user ID, the owner of the profiles.
  * @param objectType The type of user (User or Guest).
- * @param profileId The specific profile to load, or 0 for the most recently used profile.
+ * @param profileId The specific profile to load, or null for the most recently used profile.
  * @param connection An active database connection.
  * @returns The profile data for the user.
  */
-export async function getProfileData(objectId: number, objectType: UserTypes, profileId: number, recursion: boolean, connection: Pool): Promise<ProfileData> {
+export async function getProfileData(objectId: string, objectType: UserTypes, profileId: string | null, recursion: boolean, connection: Pool): Promise<ProfileData> {
     // Retrieve the user profile
-    const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, date_last_usage FROM user_profile WHERE object_id = ? AND object_type = ? ORDER BY date_last_usage DESC, position ASC;", [objectId, objectType]);
+    const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, last_usage_at FROM user_profiles WHERE object_id = ? AND object_type = ? ORDER BY last_usage_at DESC, position ASC;", [objectId, objectType]);
     const userProfiles: Array<Profile> = rawUserProfiles.sort((a, b) => a.position - b.position);
-    const chosenProfile: Profile | undefined = profileId === 0
-        ? rawUserProfiles[0] // Most recently used
-        : rawUserProfiles.find(profile => profile.id === profileId); // Specific profile
+    const chosenProfile: Profile | undefined = profileId ? rawUserProfiles.find(profile => profile.id === profileId) : rawUserProfiles[0]; // Specific profile or most recently used
     if (!chosenProfile) throw new Error(`The selected profile ${profileId} does not exist.`, { cause: { statusCode: 1403 } });
 
     // Retrieve the modules and module items from the database
     const moduleData: Array<{
-        "module_id": number,
+        "module_id": string,
         "module_name": { [lang in Languages]: string } | null,
         "module_icon": string | null,
         "module_item_name": { [lang in Languages]: string },
         "module_item_icon": string | null,
-        "module_item_id": number | null,
+        "module_item_id": string | null,
         "language": Languages | null
     }> = await connection.query(`
             SELECT
-                IFNULL(module.id, 0) AS module_id,
-                module.name AS module_name,
-                module.icon AS module_icon,
-                module_item.name AS module_item_name,
-                module_item.icon AS module_item_icon,
-                module_item.id AS module_item_id,
+                IFNULL(modules.id, 0) AS module_id,
+                modules.name AS module_name,
+                modules.icon AS module_icon,
+                module_items.name AS module_item_name,
+                module_items.icon AS module_item_icon,
+                module_items.id AS module_item_id,
                 language
             FROM
-                module
-                LEFT JOIN user_profile_module ON module_id = module.id
-                LEFT JOIN user_profile ON user_profile.id = user_profile_module.user_profile_id
-                RIGHT JOIN module_item ON module_item.module_id = module.id
-                LEFT JOIN user ON user.id = ?
-                LEFT JOIN role ON role.id = user.role_id
-                LEFT JOIN \`grant\` ON \`grant\`.role_id = user.role_id
+                modules
+                LEFT JOIN user_profile_modules ON module_id = modules.id
+                LEFT JOIN user_profiles ON user_profiles.id = user_profile_modules.user_profile_id
+                RIGHT JOIN module_items ON module_items.module_id = modules.id
+                LEFT JOIN users ON users.id = ?
+                LEFT JOIN user_roles ON user_roles.id = users.role_id
+                LEFT JOIN \`module_item_grants\` ON \`module_item_grants\`.role_id = users.role_id
             WHERE
-                (user_profile.id = ?
-                AND user_profile.object_id = ?
-                AND user_profile.object_type = ?
-                OR module_item.module_id IS NULL)
-                AND \`grant\`.module_item_id = module_item.id
-                AND \`grant\`.read = 1;`, [objectId, chosenProfile.id, objectId, objectType]);
-    const moduleMap = new Map<number, Module>();
+                (user_profiles.id = ?
+                AND user_profiles.object_id = ?
+                AND user_profiles.object_type = ?
+                OR module_items.module_id IS NULL)
+                `, [objectId, chosenProfile.id, objectId, objectType]);
+
+    // AND \`module_item_grants\`.module_item_id = module_items.id
+    //AND \`module_item_grants\`.can_read = 1;
+    const moduleMap = new Map<string, Module>();
     const topLinks: Array<TopLink> = [];
     let language: Languages = Languages.EN;
     for (const rawModule of moduleData) {
@@ -81,7 +81,7 @@ export async function getProfileData(objectId: number, objectType: UserTypes, pr
     const modules = Array.from(moduleMap.values());
 
     // Update their profile's last usage date
-    await connection.query("UPDATE user_profile SET date_last_usage = CURRENT_TIMESTAMP WHERE id = ?;", [chosenProfile.id]);
+    await connection.query("UPDATE user_profiles SET last_usage_at = CURRENT_TIMESTAMP WHERE id = ?;", [chosenProfile.id]);
 
     // First item URL for default redirects
     let firstItemUrl = "/";

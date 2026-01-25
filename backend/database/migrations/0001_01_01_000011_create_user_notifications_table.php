@@ -15,11 +15,12 @@ return new class extends Migration
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuidMorphs('object');
-            $table->enum('type', array_map(fn ($case) => $case->name, PromptType::cases()));
+            $table->enum('type', array_map(fn($case) => $case->name, PromptType::cases()));
             $table->json('data');
             $table->string('source')->nullable();
             $table->string('url')->nullable();
             $table->boolean('is_silent')->default(false);
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

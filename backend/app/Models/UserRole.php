@@ -29,6 +29,17 @@ class UserRole extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'name' => 'array',
+        'description' => 'array',
+        'position' => 'integer',
+    ];
+
+    /**
      * Get the users for the role.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\User, \App\Models\UserRole>

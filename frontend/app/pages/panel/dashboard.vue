@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type NotificationItem, NotificationTypes, type PopupItem, PromptType, UIThemes } from "@/assets/customTypes";
+import { type NotificationItem, NotificationTypes, type PopupItem, PromptType, UIThemes, UserTypes } from "@/assets/customTypes";
 import { createTicket } from "@svkruik/sk-platform-formatters";
 import { useNotificationStore } from "@/stores/NotificationStore";
 import { useThemeStore } from "@/stores/ThemeStore";
@@ -27,20 +27,21 @@ function showPopupItem(): void {
  */
 function showNotificationItem(level: PromptType): void {
     notificationStore.newNotification({
-        "user_id": userSession.user.value?.id,
-        "type": NotificationTypes.acknowledge,
-        "level": level,
+        "id": self.crypto.randomUUID(),
+        "object_id": userSession.user.value?.id,
+        "object_type": UserTypes.USER,
+        "type": level,
         "data": {
             "message": "This is a test notification.",
             "details": "This is a longer description of the notification.",
+            "type": NotificationTypes.acknowledge,
         },
         "source": "Dashboard Page",
         "url": "/",
-        "is_read": false,
         "is_silent": false,
-        "ticket": createTicket(),
-        "date_expiry": new Date(Date.now() + 1000 * 60),
-        "date_creation": new Date(),
+        "created_at": new Date(),
+        "updated_at": null,
+        "deleted_at": null,
     } as NotificationItem);
 }
 

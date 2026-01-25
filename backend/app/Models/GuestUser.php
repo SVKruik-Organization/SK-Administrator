@@ -31,7 +31,7 @@ class GuestUser extends Authenticatable
         'middle_name',
         'last_name',
         'email',
-        'date_last_login',
+        'last_login_at',
     ];
 
     /**
@@ -40,7 +40,7 @@ class GuestUser extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'date_last_login' => 'datetime',
+        'last_login_at' => 'datetime',
     ];
 
     /**

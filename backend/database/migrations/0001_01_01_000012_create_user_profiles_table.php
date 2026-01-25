@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuidMorphs('object');
-            $table->string('name');
-            $table->string('description')->nullable();
+            $table->json('name');
+            $table->json('description')->nullable();
             $table->integer('position')->default(0);
             $table->string('language')->default('en');
+            $table->timestamp('last_usage_at')->nullable();
             $table->timestamps();
         });
 

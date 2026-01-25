@@ -20,8 +20,8 @@ export async function createUserSession(event: H3Event, user: User, connection: 
     }, getSessionTTL(user.type));
 
     // Update the last login date in the database
-    const tableName: string = user.type === UserTypes.USER ? "user" : "guest";
-    await connection.query(`UPDATE ${tableName} SET date_last_login = CURRENT_TIMESTAMP WHERE id = ?;`, [user.id]);
+    const tableName: string = user.type === UserTypes.USER ? "users" : "guest_users";
+    await connection.query(`UPDATE ${tableName} SET last_login_at = CURRENT_TIMESTAMP WHERE id = ?;`, [user.id]);
 
     // Return the user data
     return userSession.user as User;

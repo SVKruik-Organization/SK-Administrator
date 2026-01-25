@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->json('name');
             $table->string('icon')->nullable();
             $table->timestamps();
         });

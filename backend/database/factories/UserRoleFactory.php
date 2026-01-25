@@ -19,8 +19,14 @@ class UserRoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->jobTitle(),
-            'description' => fake()->sentence(),
+            'name' => [
+                'en' => fake()->jobTitle(),
+                'nl' => fake()->jobTitle(),
+            ],
+            'description' => [
+                'en' => fake()->sentence(),
+                'nl' => fake()->sentence(),
+            ],
             'position' => fake()->numberBetween(0, 100),
         ];
     }

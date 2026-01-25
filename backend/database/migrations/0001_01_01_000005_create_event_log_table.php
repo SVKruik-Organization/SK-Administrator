@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('event_logs', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuidMorphs('object');
+            $table->increments('id');
+            $table->nullableUuidMorphs('object');
             $table->string('description')->nullable();
             $table->string('endpoint')->nullable();
             $table->string('method')->nullable();

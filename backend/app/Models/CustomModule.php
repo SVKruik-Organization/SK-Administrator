@@ -28,6 +28,15 @@ class CustomModule extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'name' => 'array',
+    ];
+
+    /**
      * Get the user profile associated with the custom module.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserProfile, \App\Models\CustomModule>

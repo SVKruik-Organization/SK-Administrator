@@ -9,20 +9,19 @@ export default defineCronHandler("everyMinute", async () => {
         // Retrieve expired jobs from the database
         const connection: Pool = await database("central");
         const expiredJobs: Array<{
-            "id": number,
-            "type": keyof typeof CronJobTypes,
+            "id": string,
+            "type": CronJobTypes,
             "data": any,
-        }> = await connection.query("SELECT id, type, data FROM scheduled_task WHERE status = 'pending_auto' AND date_schedule <= NOW()");
+        }> = await connection.query("SELECT id, type, data FROM scheduled_tasks WHERE status = 'PENDING_AUTO' AND scheduled_at <= NOW()");
         if (!expiredJobs || expiredJobs.length === 0) return;
 
         // Setup storage
         logData(`[CRON / Minute] Running with ${expiredJobs.length} pending jobs.`, "info");
-        const resolvedJobs: Array<number> = [];
-        const failedJobs: Array<number> = [];
+        const resolvedJobs: Array<string> = [];
+        const failedJobs: Array<string> = [];
 
         // Process each expired job
-        for (let i = 0; i < expiredJobs.length; i++) {
-            const job = expiredJobs[i];
+        for (const job of expiredJobs) {
             let response: boolean = false;
 
             switch (job.type) {
@@ -38,8 +37,8 @@ export default defineCronHandler("everyMinute", async () => {
         }
 
         // Update the status of the jobs in the database
-        if (resolvedJobs.length > 0) await connection.query("UPDATE scheduled_task SET status = 'completed' WHERE id IN (?);", [resolvedJobs]);
-        if (failedJobs.length > 0) await connection.query("UPDATE scheduled_task SET status = 'failed' WHERE id IN (?);", [failedJobs]);
+        if (resolvedJobs.length > 0) await connection.query("UPDATE scheduled_tasks SET status = 'COMPLETED' WHERE id IN (?);", [resolvedJobs]);
+        if (failedJobs.length > 0) await connection.query("UPDATE scheduled_tasks SET status = 'FAILED' WHERE id IN (?);", [failedJobs]);
 
         logData(`[CRON / Minute] Completed ${resolvedJobs.length} job(s) and failed ${failedJobs.length} job(s).`, "info");
     } catch (error: any) {

@@ -30,5 +30,16 @@ class Session extends Model
         'payload',
         'app_name',
         'last_activity',
+        'expires_at',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'last_activity' => 'integer',
+        'expires_at' => 'datetime',
     ];
 }

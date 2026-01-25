@@ -6,7 +6,7 @@ import type { ProfileData } from "@/assets/customTypes";
  * @param profileId The ID of the profile.
  * @returns The user profile data.
  */
-export const useFetchProfile = async (profileId: number): Promise<ProfileData> => {
+export const useFetchProfile = async (profileId: string | null): Promise<ProfileData> => {
     try {
         return await $fetch("/api/user/profile", {
             method: "PATCH",

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('module_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('module_id');
-            $table->foreign('module_id')->references('id')->on('modules');
-            $table->string('name');
+            $table->uuid('module_id')->nullable();
+            $table->foreign('module_id')->references('id')->on('modules')->nullOnDelete();
+            $table->json('name');
             $table->integer('position')->default(0);
             $table->string('icon')->nullable();
             $table->timestamps();

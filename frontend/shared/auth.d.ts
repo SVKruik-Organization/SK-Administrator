@@ -1,14 +1,12 @@
-import type { Languages, UserTypes } from "@/assets/customTypes";
+import type { Languages, UserTypes } from "~/assets/customTypes";
 
 declare module "#auth-utils" {
     // General User
     interface User {
-        id: number;
-        firstName: string;
-        lastName: string;
-        email: string | null;
+        id: string;
+        fullName: string;
+        email: string;
         type: UserTypes;
-        imageName: string | null;
         language: Languages;
     }
 

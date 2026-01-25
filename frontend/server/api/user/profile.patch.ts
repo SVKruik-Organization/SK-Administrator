@@ -6,7 +6,7 @@ import { Pool, database } from "@svkruik/sk-platform-db-conn";
 
 // Validation schema for the request body
 const bodySchema = z.object({
-    profileId: z.string().transform((val) => parseInt(val, 10))
+    profileId: z.string().nullable()
 });
 
 /**

@@ -26,6 +26,7 @@ class UserNotificationFactory extends Factory
             ],
             'url' => fake()->url(),
             'is_silent' => fake()->boolean(),
+            'expires_at' => fake()->dateTimeBetween('now', '+1 week'),
         ];
     }
 }

@@ -4,15 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Module extends Model
 {
-    /** @use HasFactory<\Database\Factories\ModuleFactory> */
-    use HasFactory;
-
     use HasTimestamps;
     use HasUuids;
 
@@ -24,6 +20,15 @@ class Module extends Model
     protected $fillable = [
         'name',
         'icon',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'name' => 'array',
     ];
 
     /**

@@ -7,11 +7,11 @@ type LoginConfig = {
 }
 
 export class UserEntity {
-    id: number | null = null;
+    id: string | null = null;
     email: string | null = null;
     database: Pool;
 
-    constructor(id: number | null, email: string | null, database: Pool) {
+    constructor(id: string | null, email: string | null, database: Pool) {
         this.id = id;
         this.email = email;
         this.database = database;
@@ -22,24 +22,20 @@ export class UserEntity {
 
         // Fetch additional PII
         const additionalData: Array<{
-            "id": number,
-            "first_name": string,
-            "last_name": string,
+            "id": string,
+            "fullName": string,
             "email": string,
-            "image_name": string,
-        }> = await this.database.query("SELECT id, first_name, last_name, email, image_name FROM user WHERE id = ? OR email = ?;", [this.id, this.email]);
-        if (!additionalData.length) throw new Error("Email or password is incorrect. Please check your credentials and try again.", { cause: { statusCode: 1401 } });
+        }> = await this.database.query("SELECT id, full_name, email FROM users WHERE id = ? OR email = ?;", [this.id, this.email]);
+        if (!additionalData.length || !additionalData[0]) throw new Error("Email or password is incorrect. Please check your credentials and try again.", { cause: { statusCode: 1401 } });
         this.id = additionalData[0].id;
         this.email = additionalData[0].email;
 
         // Create the session
         await createUserSession(event, {
             "id": this.id,
-            "firstName": additionalData[0].first_name,
-            "lastName": additionalData[0].last_name,
+            "fullName": additionalData[0].fullName,
             "email": this.email,
             "type": UserTypes.USER,
-            "imageName": additionalData[0].image_name,
             "language": config?.language || Languages.EN
         }, this.database);
     }

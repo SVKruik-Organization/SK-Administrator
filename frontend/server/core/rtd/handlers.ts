@@ -2,36 +2,37 @@ import { NotificationItem, NotificationTypes, PromptType } from "@/assets/custom
 import type { Peer } from "crossws";
 import { registerPeer } from "./registry";
 import { sendPeer } from "./out";
-import { createTicket } from "@svkruik/sk-platform-formatters";
+import { randomUUID } from "crypto";
 
 /**
  * Handles incoming WebSocket messages for the RTD service.
- * @param data The notification data received from the WebSocket.
+ * @param notification The notification data received from the WebSocket.
  * @param peer The RTD connection peer that sent the message.
  * @returns A promise that resolves to a boolean indicating success or failure.
  */
-export async function handleWebSocketMessage(data: NotificationItem, peer: Peer): Promise<boolean> {
-    switch (data.type) {
+export async function handleWebSocketMessage(notification: NotificationItem, peer: Peer): Promise<boolean> {
+    switch (notification.data.type) {
         case NotificationTypes.initialize:
-            registerPeer(data.user_id, peer);
+            registerPeer(notification.object_id, peer);
             break;
         default:
             return false;
     }
 
     return await sendPeer({
-        user_id: data.user_id,
-        type: NotificationTypes.acknowledge,
-        level: PromptType.info,
+        id: randomUUID(),
+        object_id: notification.object_id,
+        object_type: notification.object_type,
+        type: PromptType.info,
         data: {
             message: "Connection established.",
+            type: NotificationTypes.acknowledge,
         },
-        source: "RTD - Handlers",
+        source: "RTD - Server",
         url: "/",
-        is_read: false,
         is_silent: true,
-        ticket: createTicket(),
-        date_expiry: new Date(Date.now() + 1000 * 60 * 60 * 24),
-        date_creation: new Date(),
-    });
+        created_at: new Date(),
+        updated_at: null,
+        deleted_at: null,
+    } as NotificationItem);
 }

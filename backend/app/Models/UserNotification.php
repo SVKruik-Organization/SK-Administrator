@@ -33,6 +33,7 @@ class UserNotification extends Model
         'source',
         'url',
         'is_silent',
+        'expires_at',
     ];
 
     /**
@@ -44,5 +45,6 @@ class UserNotification extends Model
         'data' => 'array',
         'is_silent' => 'boolean',
         'type' => PromptType::class,
+        'expires_at' => 'datetime',
     ];
 }

@@ -1,6 +1,6 @@
 export enum UserTypes {
-    USER = "User",
-    GUEST = "Guest",
+    USER = "App\\Models\\User",
+    GUEST = "App\\Models\\GuestUser",
 }
 
 export enum Languages {
@@ -26,20 +26,17 @@ export enum PromptType {
 }
 
 export type NotificationItem = {
-    "user_id": number;
-    "type": NotificationTypes;
-    "level": PromptType;
-    "data": {
-        "message": string;
-        "details"?: string;
-    };
-    "url": string;
+    "id": string;
+    "object_id": string;
+    "object_type": UserTypes;
+    "type": PromptType;
+    "data": any;
     "source": string;
-    "is_read": boolean;
+    "url": string;
     "is_silent": boolean;
-    "ticket": string;
-    "date_expiry": Date;
-    "date_creation": Date;
+    "created_at": Date;
+    "updated_at": Date | null;
+    "deleted_at": Date | null;
 };
 
 // Global UI Themes
@@ -55,6 +52,19 @@ export type TabComponentItem = {
 }
 
 export enum CronJobTypes {
+    MAINTENANCE,
+    BACKUP,
+    REPORT,
+    NOTIFICATION,
+    OTHER,
+}
+
+export enum CronJobStatus {
+    PENDING_AUTO,
+    PENDING_MANUAL,
+    RUNNING,
+    COMPLETED,
+    FAILED,
 }
 
 // MeiliSearch Response
@@ -86,7 +96,7 @@ export enum NotificationTypes {
 }
 
 export type ProfileData = {
-    "activeProfileId": number,
+    "activeProfileId": string,
     "firstItemUrl": string,
     "profiles": Array<Profile>,
     "topLinks": Array<TopLink>,
@@ -95,11 +105,11 @@ export type ProfileData = {
 }
 
 export type Profile = {
-    "id": number,
+    "id": string,
     "name": string,
     "description": string,
     "position": number,
-    "date_last_usage": Date | null,
+    "last_usage_at": Date | null,
 }
 
 export type TopLink = {
@@ -108,7 +118,7 @@ export type TopLink = {
 }
 
 export type Module = {
-    "id": number,
+    "id": string,
     "name": { [lang in Languages]: string },
     "icon": string,
     "links"?: Array<{ [lang in Languages]: string }>,

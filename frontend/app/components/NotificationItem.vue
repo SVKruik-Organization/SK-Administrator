@@ -6,7 +6,7 @@ const { $event } = useNuxtApp();
 
 // Props
 const props = defineProps<{
-    message: NotificationItem;
+    notification: NotificationItem;
 }>();
 
 // Methods
@@ -15,15 +15,15 @@ const props = defineProps<{
  * Marks the notification as read. Removes the unread indicator.
  */
 function markAsRead(): void {
-    if (props.message.is_read) return;
-    notificationStore.markAsRead(props.message.ticket);
+    if (props.notification.deleted_at) return;
+    notificationStore.markAsRead(props.notification.id);
 }
 
 /**
  * Deletes the notification.
  */
 function deleteNotification(): void {
-    notificationStore.delete(props.message.ticket);
+    notificationStore.delete(props.notification.id);
 }
 
 /**
@@ -34,25 +34,27 @@ function openDetails(): void {
     $event("close-navbar");
     navigateTo({
         path: "/panel/notifications",
-        query: { "ticket": props.message.ticket },
+        query: { "id": props.notification.id },
     });
 }
 </script>
 
 <template>
-    <div :style="`background-color: var(--color-${message.is_read ? 'fill' : 'fill-dark'});`"
-        class="flex-between notification-item" :class="{ 'notification-item-read': message.is_read }">
+    <div :style="`background-color: var(--color-${notification.deleted_at ? 'fill' : 'fill-dark'});`"
+        class="flex-between notification-item" :class="{ 'notification-item-read': notification.deleted_at }">
         <button class="flex notification-item-left" @click="openDetails()" type="button">
-            <span :style="`background-color: var(--color-${message.level});`" class="type-indicator"></span>
-            <p class="ellipsis">{{ typeof message.data === 'object' ? message.data?.message : message.data }}</p>
+            <span :style="`background-color: var(--color-${notification.type});`" class="type-indicator"></span>
+            <p class="ellipsis">{{ typeof notification.data === 'object' ? notification.data?.message :
+                notification.data }}</p>
         </button>
         <section class="flex notification-item-right">
-            <button v-if="!message.is_read" class="notification-action-button notification-action-button-read"
+            <button v-if="!notification.deleted_at" class="notification-action-button notification-action-button-read"
                 title="Mark as Read" type="button" @click="markAsRead()">
                 <i class="fa-regular fa-envelope-open"></i>
             </button>
-            <button class="notification-action-button" :class="{ 'notification-action-button-read': !message.is_read }"
-                title="Delete Notification" type="button" @click="deleteNotification()">
+            <button class="notification-action-button"
+                :class="{ 'notification-action-button-read': !notification.deleted_at }" title="Delete Notification"
+                type="button" @click="deleteNotification()">
                 <i class="fa-regular fa-trash-can"></i>
             </button>
         </section>

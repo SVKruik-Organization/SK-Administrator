@@ -11,7 +11,7 @@ const bodySchema = z.object({
 });
 
 const userInformationSchema = z.object({
-    object_id: z.number(),
+    object_id: z.string(),
     object_type: z.string(),
 });
 
@@ -48,7 +48,7 @@ export default defineEventHandler(async (event): Promise<ProfileData> => {
         const entity: UserEntity | GuestEntity = object_type === UserTypes.USER
             ? new UserEntity(object_id, null, connection)
             : new GuestEntity(object_id, null, connection);
-        const profileData: ProfileData = await getProfileData(object_id, object_type as UserTypes, 0, false, connection);
+        const profileData: ProfileData = await getProfileData(object_id, object_type as UserTypes, null, false, connection);
 
         // Login the user/guest
         await entity.login(event, {

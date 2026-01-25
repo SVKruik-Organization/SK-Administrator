@@ -4,8 +4,8 @@ import { handleWebSocketMessage } from "../core/rtd/handlers";
 
 export default defineWebSocketHandler({
     async message(peer: Peer, message: Message) {
-        const data: NotificationItem = JSON.parse(message.toString());
-        if (!(data satisfies NotificationItem)) return;
-        await handleWebSocketMessage(data, peer);
+        const notification: NotificationItem = JSON.parse(message.toString());
+        if (!(notification satisfies NotificationItem)) return;
+        await handleWebSocketMessage(notification, peer);
     },
 });
