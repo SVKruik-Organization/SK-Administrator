@@ -12,13 +12,13 @@ export enum Languages {
 // Pop-up Item
 export type PopupItem = {
     "id": string,
-    "type": PromptTypes,
+    "type": PromptType,
     "message": string,
     "duration": number
 }
 
 // Prompt/Informational Message Types
-export enum PromptTypes {
+export enum PromptType {
     info = "info",
     success = "success",
     warning = "warning",
@@ -28,7 +28,7 @@ export enum PromptTypes {
 export type NotificationItem = {
     "user_id": number;
     "type": NotificationTypes;
-    "level": PromptTypes;
+    "level": PromptType;
     "data": {
         "message": string;
         "details"?: string;

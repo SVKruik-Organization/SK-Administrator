@@ -9,9 +9,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -23,6 +24,7 @@ class User extends Authenticatable
     use HasTimestamps;
     use HasUuids;
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -64,44 +66,66 @@ class User extends Authenticatable
     /**
      * Get the user's notifications.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<\App\Models\UserNotification, \App\Models\User>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserNotification, \App\Models\User>
      */
-    public function notifications(): MorphOne
+    public function notifications(): MorphMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphOne<\App\Models\UserNotification, \App\Models\User> */
-        return $this->morphOne(UserNotification::class, 'object');
+        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserNotification, \App\Models\User> */
+        return $this->morphMany(UserNotification::class, 'object');
     }
 
     /**
      * Get the user's role.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<\App\Models\UserRole, \App\Models\User>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserRole, \App\Models\User>
      */
-    public function role(): HasOne
+    public function role(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasOne<\App\Models\UserRole, \App\Models\User> */
-        return $this->hasOne(UserRole::class);
+        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserRole, \App\Models\User> */
+        return $this->belongsTo(UserRole::class);
     }
 
     /**
      * Get the guest users owned by the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Guest, \App\Models\User>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\GuestUser, \App\Models\User>
      */
     public function guestUsers(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Guest, \App\Models\User> */
-        return $this->hasMany(Guest::class, 'owner_id', 'id');
+        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\GuestUser, \App\Models\User> */
+        return $this->hasMany(GuestUser::class, 'owner_id', 'id');
     }
 
     /**
-     * Get the user profile for the user.
+     * Get the user profiles for the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<\App\Models\UserProfile, \App\Models\User>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserProfile, \App\Models\User>
      */
-    public function userProfile(): MorphOne
+    public function userProfiles(): MorphMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphOne<\App\Models\UserProfile, \App\Models\User> */
-        return $this->morphOne(UserProfile::class, 'object');
+        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserProfile, \App\Models\User> */
+        return $this->morphMany(UserProfile::class, 'object');
+    }
+
+    /**
+     * Get the sessions for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\Session, \App\Models\User>
+     */
+    public function sessions(): MorphMany
+    {
+        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\Session, \App\Models\User> */
+        return $this->morphMany(\App\Models\Session::class, 'object');
+    }
+
+    /**
+     * Get the event logs for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\EventLog, \App\Models\User>
+     */
+    public function eventLogs(): MorphMany
+    {
+        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\EventLog, \App\Models\User> */
+        return $this->morphMany(\App\Models\EventLog::class, 'object');
     }
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type NotificationItem, NotificationTypes, type PopupItem, PromptTypes, UIThemes } from "@/assets/customTypes";
+import { type NotificationItem, NotificationTypes, type PopupItem, PromptType, UIThemes } from "@/assets/customTypes";
 import { createTicket } from "@svkruik/sk-platform-formatters";
 import { useNotificationStore } from "@/stores/NotificationStore";
 import { useThemeStore } from "@/stores/ThemeStore";
@@ -16,7 +16,7 @@ const { $event } = useNuxtApp();
 function showPopupItem(): void {
     $event("popup", {
         "id": createTicket(),
-        "type": PromptTypes.success,
+        "type": PromptType.success,
         "message": "This is a test message.",
         "duration": 3
     } as PopupItem);
@@ -25,7 +25,7 @@ function showPopupItem(): void {
 /**
  * Temporary test function.
  */
-function showNotificationItem(level: PromptTypes): void {
+function showNotificationItem(level: PromptType): void {
     notificationStore.newNotification({
         "user_id": userSession.user.value?.id,
         "type": NotificationTypes.acknowledge,
@@ -52,7 +52,7 @@ function themeSwitch(theme: UIThemes): void {
     themeStore.setTheme(theme);
     $event("popup", {
         "id": createTicket(),
-        "type": PromptTypes.info,
+        "type": PromptType.info,
         "message": `New theme active: ${theme}`,
         "duration": 3
     } as PopupItem);
@@ -65,16 +65,16 @@ function themeSwitch(theme: UIThemes): void {
         <div class="temp flex-col">
             <strong>Functionality Testing:</strong>
             <button title="New Popup" type="button" @click="showPopupItem()">New Popup (success, 3 seconds)</button>
-            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.info)">New
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptType.info)">New
                 Notification (unread, info)
             </button>
-            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.success)">New
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptType.success)">New
                 Notification (unread, success)
             </button>
-            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.warning)">New
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptType.warning)">New
                 Notification (unread, warning)
             </button>
-            <button title="New Notification" type="button" @click="showNotificationItem(PromptTypes.danger)">New
+            <button title="New Notification" type="button" @click="showNotificationItem(PromptType.danger)">New
                 Notification (unread, danger)
             </button>
             <div class="flex">

@@ -14,7 +14,15 @@ return new class extends Migration
         Schema::create('user_roles', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('description')->nullable();
+            $table->integer('position')->default(0);
+            $table->string('icon')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->uuid('role_id')->after('id');
+            $table->foreign('role_id')->references('id')->on('user_roles');
         });
 
         Schema::table('guest_users', function (Blueprint $table) {
@@ -34,6 +42,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('user_roles');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['role_id']);
+            $table->dropColumn('role_id');
+        });
         Schema::table('guest_users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
             $table->dropColumn('role_id');

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\ScheduledTaskStatus;
+use App\Enums\ScheduledTaskType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('scheduled_tasks', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('type');
-            $table->json('data');
+            $table->enum('type', array_map(fn ($case) => $case->name, ScheduledTaskType::cases()));
             $table->enum('status', array_map(fn ($case) => $case->name, ScheduledTaskStatus::cases()));
+            $table->json('data')->nullable();
             $table->timestamp('scheduled_at');
-            $table->integer('tries');
+            $table->integer('tries')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

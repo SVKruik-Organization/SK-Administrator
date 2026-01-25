@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('event_logs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->nullableUuidMorphs('object');
-            $table->string('description');
-            $table->string('endpoint');
-            $table->string('method');
-            $table->string('ip_address');
+            $table->uuidMorphs('object');
+            $table->string('description')->nullable();
+            $table->string('endpoint')->nullable();
+            $table->string('method')->nullable();
+            $table->string('ip_address')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

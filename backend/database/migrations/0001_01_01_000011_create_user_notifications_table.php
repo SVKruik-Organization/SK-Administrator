@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\PromptTypes;
+use App\Enums\PromptType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,13 +14,12 @@ return new class extends Migration
     {
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->nullableUuidMorphs('object');
-            $table->string('type');
-            $table->enum('level', array_map(fn ($case) => $case->name, PromptTypes::cases()));
+            $table->uuidMorphs('object');
+            $table->enum('type', array_map(fn ($case) => $case->name, PromptType::cases()));
             $table->json('data');
-            $table->string('source');
-            $table->string('url');
-            $table->boolean('is_silent');
+            $table->string('source')->nullable();
+            $table->string('url')->nullable();
+            $table->boolean('is_silent')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

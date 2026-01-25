@@ -15,9 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('custom_module_id');
             $table->foreign('custom_module_id')->references('id')->on('custom_modules');
-            $table->integer('position');
+            $table->integer('position')->default(0);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

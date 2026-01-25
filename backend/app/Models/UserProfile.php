@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\HasObjectMorph;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class UserProfile extends Model
 {
+    /** @use HasFactory<\Database\Factories\UserProfileFactory> */
+    use HasFactory;
+
+    use HasObjectMorph;
     use HasTimestamps;
     use HasUuids;
 
@@ -19,8 +24,6 @@ class UserProfile extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'object_type',
-        'object_id',
         'name',
         'description',
         'position',
@@ -35,17 +38,6 @@ class UserProfile extends Model
     protected $casts = [
         'position' => 'integer',
     ];
-
-    /**
-     * Get the parent object (User or Guest) that owns this profile.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\App\Models\User|\App\Models\Guest, \App\Models\UserProfile>
-     */
-    public function object(): MorphTo
-    {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphTo<\App\Models\User|\App\Models\Guest, \App\Models\UserProfile> */
-        return $this->morphTo();
-    }
 
     /**
      * Get the custom modules for the user profile.

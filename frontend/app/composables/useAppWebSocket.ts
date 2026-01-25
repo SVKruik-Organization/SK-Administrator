@@ -1,6 +1,6 @@
 import { useWebSocket } from "@vueuse/core";
 import { useRuntimeConfig } from "#app";
-import { NotificationTypes, PromptTypes, type NotificationItem } from "@/assets/customTypes";
+import { NotificationTypes, PromptType, type NotificationItem } from "@/assets/customTypes";
 import { createTicket } from "@svkruik/sk-platform-formatters";
 
 let socketInstance: ReturnType<typeof useWebSocket> | null = null;
@@ -16,7 +16,7 @@ export const useAppWebSocket = () => {
                 socketInstance?.send(JSON.stringify({
                     "user_id": userSession.user.value?.id,
                     "type": NotificationTypes.initialize,
-                    "level": PromptTypes.info,
+                    "level": PromptType.info,
                     "data": {
                         "message": "Initializing connection.",
                     },

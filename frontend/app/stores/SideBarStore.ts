@@ -1,6 +1,6 @@
 import { createTicket } from "@svkruik/sk-platform-formatters";
 import { defineStore } from "pinia";
-import { Languages, PromptTypes, type Module, type PopupItem, type Profile, type ProfileData, type TopLink } from "@/assets/customTypes";
+import { Languages, PromptType, type Module, type PopupItem, type Profile, type ProfileData, type TopLink } from "@/assets/customTypes";
 import { useFetchProfile } from "@/utils/fetch/user/useFetchProfile";
 
 export const useSideBarStore = defineStore("SideBarStore", {
@@ -39,7 +39,7 @@ export const useSideBarStore = defineStore("SideBarStore", {
                 const { $event } = useNuxtApp();
                 $event("popup", {
                     id: createTicket(4),
-                    type: PromptTypes.danger,
+                    type: PromptType.danger,
                     message: error.message,
                     duration: 3,
                 } as PopupItem);

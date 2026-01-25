@@ -1,4 +1,4 @@
-import { type NotificationItem, PromptTypes } from "@/assets/customTypes";
+import { type NotificationItem, PromptType } from "@/assets/customTypes";
 import { defineStore } from "pinia";
 
 export const useNotificationStore = defineStore("NotificationStore", {
@@ -33,13 +33,13 @@ export const useNotificationStore = defineStore("NotificationStore", {
             return state.notifications.filter((notification: NotificationItem) => notification.is_read === false);
         },
         highestPriority(state): string {
-            if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptTypes.danger).length) {
+            if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptType.danger).length) {
                 return "danger";
-            } else if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptTypes.warning).length) {
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptType.warning).length) {
                 return "warning";
-            } else if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptTypes.success).length) {
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptType.success).length) {
                 return "success";
-            } else if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptTypes.info).length) {
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.level === PromptType.info).length) {
                 return "info";
             } else return "text-light";
         },

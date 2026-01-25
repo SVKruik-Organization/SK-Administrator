@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum PromptTypes
+enum PromptType
 {
     case INFO;
     case SUCCESS;

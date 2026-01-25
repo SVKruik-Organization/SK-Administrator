@@ -1,4 +1,4 @@
-import { NotificationItem, NotificationTypes, PromptTypes } from "@/assets/customTypes";
+import { NotificationItem, NotificationTypes, PromptType } from "@/assets/customTypes";
 import type { Peer } from "crossws";
 import { registerPeer } from "./registry";
 import { sendPeer } from "./out";
@@ -22,7 +22,7 @@ export async function handleWebSocketMessage(data: NotificationItem, peer: Peer)
     return await sendPeer({
         user_id: data.user_id,
         type: NotificationTypes.acknowledge,
-        level: PromptTypes.info,
+        level: PromptType.info,
         data: {
             message: "Connection established.",
         },

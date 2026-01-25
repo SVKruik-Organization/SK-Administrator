@@ -16,10 +16,9 @@ return new class extends Migration
             $table->uuid('module_id');
             $table->foreign('module_id')->references('id')->on('modules');
             $table->string('name');
-            $table->integer('position');
-            $table->string('icon');
+            $table->integer('position')->default(0);
+            $table->string('icon')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table('custom_module_items', function (Blueprint $table) {

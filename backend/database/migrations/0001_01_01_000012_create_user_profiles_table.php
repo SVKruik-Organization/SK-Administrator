@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->nullableUuidMorphs('object');
+            $table->uuidMorphs('object');
             $table->string('name');
-            $table->string('description');
-            $table->integer('position');
-            $table->string('language');
+            $table->string('description')->nullable();
+            $table->integer('position')->default(0);
+            $table->string('language')->default('en');
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::table('custom_modules', function (Blueprint $table) {

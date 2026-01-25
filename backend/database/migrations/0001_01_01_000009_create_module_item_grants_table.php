@@ -15,12 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('module_item_id');
             $table->foreign('module_item_id')->references('id')->on('module_items');
-            $table->boolean('can_create');
-            $table->boolean('can_read');
-            $table->boolean('can_update');
-            $table->boolean('can_delete');
+            $table->boolean('can_create')->default(false);
+            $table->boolean('can_read')->default(true);
+            $table->boolean('can_update')->default(false);
+            $table->boolean('can_delete')->default(false);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

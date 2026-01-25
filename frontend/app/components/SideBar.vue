@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Languages, PromptTypes, type PopupItem } from "@/assets/customTypes";
+import { Languages, PromptType, type PopupItem } from "@/assets/customTypes";
 import { getImageUrl } from "@/utils/image";
 import { normalizeUrl } from "@/utils/format";
 import { createTicket } from "@svkruik/sk-platform-formatters";
@@ -57,7 +57,7 @@ async function switchProfile(profileId: number): Promise<void> {
     } catch (error: any) {
         $event("popup", {
             id: createTicket(4),
-            type: PromptTypes.danger,
+            type: PromptType.danger,
             message: error.message || getTranslation("error"),
             duration: 3,
         } as PopupItem);

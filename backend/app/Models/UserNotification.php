@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\PromptTypes;
+use App\Enums\PromptType;
+use App\Traits\HasObjectMorph;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserNotification extends Model
 {
+    /** @use HasFactory<\Database\Factories\UserNotificationFactory> */
+    use HasFactory;
+
+    use HasObjectMorph;
     use HasTimestamps;
     use HasUuids;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +29,6 @@ class UserNotification extends Model
      */
     protected $fillable = [
         'type',
-        'level',
         'data',
         'source',
         'url',
@@ -37,17 +43,6 @@ class UserNotification extends Model
     protected $casts = [
         'data' => 'array',
         'is_silent' => 'boolean',
-        'level' => PromptTypes::class,
+        'type' => PromptType::class,
     ];
-
-    /**
-     * Get the user that owns the notification.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\App\Models\User|\App\Models\Guest, \App\Models\UserNotification>
-     */
-    public function object(): MorphTo
-    {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphTo<\App\Models\User|\App\Models\Guest, \App\Models\UserNotification> */
-        return $this->morphTo();
-    }
 }

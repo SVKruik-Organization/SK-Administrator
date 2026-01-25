@@ -17,9 +17,8 @@ return new class extends Migration
             $table->foreign('user_profile_id')->references('id')->on('user_profiles');
             $table->uuid('module_id');
             $table->foreign('module_id')->references('id')->on('modules');
-            $table->integer('position');
+            $table->integer('position')->default(0);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

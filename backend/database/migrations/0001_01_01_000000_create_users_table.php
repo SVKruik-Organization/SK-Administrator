@@ -14,22 +14,25 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
+            $table->string('full_name')->virtualAs('CONCAT_WS(" ", first_name, middle_name, last_name)');
             $table->string('email')->unique();
             $table->timestamp('date_last_login')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->rememberToken()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->uuidMorphs('object');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
+            $table->string('app_name')->nullable();
             $table->integer('last_activity')->index();
         });
     }

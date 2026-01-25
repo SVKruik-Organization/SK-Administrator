@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { createTicket } from "@svkruik/sk-platform-formatters";
-import { Languages, PromptTypes, type PopupItem } from "@/assets/customTypes";
+import { Languages, PromptType, type PopupItem } from "@/assets/customTypes";
 import { useSideBarStore } from "@/stores/SideBarStore";
 import { useFetchValidateToken } from "@/utils/fetch/auth/useFetchValidateToken";
 const userSession = useUserSession();
@@ -18,7 +18,7 @@ onMounted(async () => {
     } catch (error: any) {
         $event("popup", {
             id: createTicket(4),
-            type: PromptTypes.danger,
+            type: PromptType.danger,
             message: error.message || getTranslation("error"),
             duration: 3,
         } as PopupItem);

@@ -16,8 +16,9 @@ return new class extends Migration
             $table->uuid('owner_id')->nullable();
             $table->foreign('owner_id')->references('id')->on('users')->nullOnDelete();
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
+            $table->string('full_name')->virtualAs('CONCAT_WS(" ", first_name, middle_name, last_name)');
             $table->string('email')->unique();
             $table->timestamp('date_last_login')->nullable();
             $table->timestamps();
