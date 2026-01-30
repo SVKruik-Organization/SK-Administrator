@@ -28,6 +28,10 @@ watch(() => wsStream.value, (newValue: any) => {
     notificationStore.notifications.push(notification);
 }, { immediate: true });
 
+// Computed Properties
+const availableNotifications: ComputedRef<NotificationItem[]> = computed(() => {
+    return notificationStore.notifications.filter((notification: NotificationItem) => !notification.deleted_at).slice(0, notificationLimit.value);
+});
 
 // Localizations
 const translations: { [key: string]: { [lang in Languages]: string } } = {
@@ -162,9 +166,8 @@ $listen("close-navbar", () => toggleDropdown(null));
                             <small>{{ getTranslation('notifications_recent') }}</small>
                         </section>
                         <span class="splitter"></span>
-                        <NotificationItem
-                            v-for="notification in notificationStore.notifications.slice(0, notificationLimit)"
-                            :key="notification.id" :notification="notification">
+                        <NotificationItem v-for="notification in availableNotifications" :key="notification.id"
+                            :notification="notification">
                         </NotificationItem>
                         <span class="splitter"></span>
                         <NuxtLink to="/panel/notifications" @click="toggleDropdown(null)" class="flex-between"

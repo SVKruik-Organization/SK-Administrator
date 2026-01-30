@@ -33,13 +33,13 @@ export const useNotificationStore = defineStore("NotificationStore", {
             return state.notifications.filter((notification: NotificationItem) => notification.deleted_at === null);
         },
         highestPriority(state): string {
-            if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.danger).length) {
+            if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.danger && !notification.deleted_at).length) {
                 return "danger";
-            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.warning).length) {
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.warning && !notification.deleted_at).length) {
                 return "warning";
-            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.success).length) {
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.success && !notification.deleted_at).length) {
                 return "success";
-            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.info).length) {
+            } else if (state.notifications.filter((notification: NotificationItem) => notification.type === PromptType.info && !notification.deleted_at).length) {
                 return "info";
             } else return "text-light";
         },

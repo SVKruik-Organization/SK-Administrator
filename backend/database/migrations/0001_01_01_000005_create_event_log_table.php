@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('event_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->nullableUuidMorphs('object');
+            $table->nullableMorphs('object');
             $table->string('description')->nullable();
             $table->string('endpoint')->nullable();
             $table->string('method')->nullable();

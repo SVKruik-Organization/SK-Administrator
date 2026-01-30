@@ -106,8 +106,8 @@ export type ProfileData = {
 
 export type Profile = {
     "id": string,
-    "name": string,
-    "description": string,
+    "name": { [lang in Languages]: string },
+    "description": { [lang in Languages]: string },
     "position": number,
     "last_usage_at": Date | null,
 }

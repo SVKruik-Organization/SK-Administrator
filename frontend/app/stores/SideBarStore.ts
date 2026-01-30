@@ -77,7 +77,7 @@ export const useSideBarStore = defineStore("SideBarStore", {
             return this.profileData?.modules || [];
         },
         language(): Languages {
-            return this.profileData?.language || Languages.EN;
+            return this.profileData?.language as Languages || Languages.EN;
         },
     }
 });

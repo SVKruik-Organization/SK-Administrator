@@ -3,8 +3,14 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Index');
-})->name('home');
+Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('landing');
+
+Route::group(['prefix' => 'authentication'], function () {
+    Route::get('/login', [App\Http\Controllers\Authentication\LoginController::class, 'login'])->name('login');
+    Route::get('/callback', [App\Http\Controllers\Authentication\LoginController::class, 'callback'])->name('callback');
+});
+
+Route::group(['prefix' => 'panel', 'middleware' => 'auth:user'], function () {
+    Route::get('/', [App\Http\Controllers\PanelController::class, 'index'])->name('panel.index');
+});

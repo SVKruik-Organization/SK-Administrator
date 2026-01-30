@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Languages, PromptType, type PopupItem } from "@/assets/customTypes";
+import { Languages, PromptType, type PopupItem, type Profile } from "@/assets/customTypes";
 import { getImageUrl } from "@/utils/image";
 import { normalizeUrl } from "@/utils/format";
 import { createTicket } from "@svkruik/sk-platform-formatters";
@@ -40,7 +40,7 @@ const translations: { [key: string]: { [lang in Languages]: string } } = {
 
 // Reactive Data
 const isProfileSwitcherOpen: Ref<boolean> = ref(false);
-const activeProfile: Ref<string> = ref(sideBarStore.activeProfile?.name || "");
+const activeProfile: Ref<Profile | null> = ref(sideBarStore.activeProfile || null);
 
 // Methods
 
@@ -51,7 +51,7 @@ const activeProfile: Ref<string> = ref(sideBarStore.activeProfile?.name || "");
 async function switchProfile(profileId: string | null): Promise<void> {
     try {
         await sideBarStore.switchProfile(profileId);
-        activeProfile.value = sideBarStore.activeProfile?.name || "";
+        activeProfile.value = sideBarStore.activeProfile || null;
         isProfileSwitcherOpen.value = false;
         navigateTo(sideBarStore.firstItemUrl);
     } catch (error: any) {
@@ -99,10 +99,10 @@ $listen("close-sidebar", () => isProfileSwitcherOpen.value = false);
             @click="toggleProfileSwitcher()" :title="getTranslation('click_switch_profile')">
             <img :src="getImageUrl(userSession.user.value)" :alt="getTranslation('profile_picture')"
                 :title="getTranslation('profile_picture')">
-            <div class="user-information-text flex-col">
+            <div class="user-information-text flex-col" v-if="activeProfile">
                 <h3>{{ userSession.user.value?.fullName }}</h3>
-                <small :title="getTranslation('active_profile') + ': ' + activeProfile[sideBarStore.language]">
-                    {{ activeProfile[sideBarStore.language] }}
+                <small :title="getTranslation('active_profile') + ': ' + activeProfile.name[sideBarStore.language]">
+                    {{ activeProfile.name[sideBarStore.language] }}
                 </small>
             </div>
             <i class="fa-regular fa-angle-down profile-switcher" :class="{ 'active': isProfileSwitcherOpen }"></i>

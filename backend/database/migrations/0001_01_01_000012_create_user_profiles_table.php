@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuidMorphs('object');
+            $table->morphs('object');
             $table->json('name');
             $table->json('description')->nullable();
             $table->integer('position')->default(0);

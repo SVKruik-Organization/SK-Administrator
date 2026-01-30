@@ -1,0 +1,42 @@
+{
+  "folders": [
+    {
+      "path": "./",
+      "name": "Root"
+    },
+    {
+      "path": "./backend",
+      "name": "Backend - Laravel"
+    },
+    {
+      "path": "./frontend",
+      "name": "Frontend - Nuxt"
+    }
+  ],
+  "settings": {
+    "window.titleBarStyle": "custom",
+
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#3b4fd8",
+      "titleBar.activeForeground": "#ffffff",
+
+      "titleBar.inactiveBackground": "#2a347a",
+      "titleBar.inactiveForeground": "#c7c9ff",
+
+      "commandCenter.background": "#3b4fd8",
+      "commandCenter.foreground": "#ffffff",
+      "commandCenter.activeBackground": "#5a6cff",
+
+      "activityBar.background": "#1f2554",
+      "activityBar.foreground": "#ffffff",
+      "activityBar.inactiveForeground": "#9aa0ff",
+
+      "statusBar.background": "#1f2554",
+      "statusBar.foreground": "#ffffff",
+      "statusBar.noFolderBackground": "#1f2554",
+
+      "window.activeBorder": "#5a6cff",
+      "window.inactiveBorder": "#1f2554"
+    }
+  }
+}

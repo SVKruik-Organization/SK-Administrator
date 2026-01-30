@@ -45,4 +45,4 @@ package-lock.json
 /backend/.zed
 /backend/.cursor
 /backend/.github
-backend/boost.json
+/backend/boost.json
