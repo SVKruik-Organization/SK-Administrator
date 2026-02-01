@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Authentication;
 
 use App\Http\Controllers\Controller;
-use App\Models\GuestUser;
+use App\Models\User;
 use App\Services\OverwayService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ class LoginController extends Controller
             throw new \Exception('Overway URL is not set');
         }
 
-        return redirect()->away($overwayURL . '/login/administrator');
+        return redirect()->away($overwayURL.'/login/administrator');
     }
 
     public function callback(Request $request): RedirectResponse
@@ -37,15 +37,13 @@ class LoginController extends Controller
         $token = $request->query('token') ?? throw new \Exception('Token is required');
         $user = $this->overwayService->fetchUserFromAuthAPI($token);
 
-        if ($user instanceof GuestUser) {
-            Auth::guard('guest')->login($user);
-        } else {
-            Auth::guard('user')->login($user);
-        }
+        Auth::logout();
 
-        // Explicitly regenerate and save session to ensure it persists
-        $request->session()->regenerate();
-        $request->session()->save();
+        if ($user instanceof User) {
+            Auth::guard('user')->login($user);
+        } else {
+            Auth::guard('guest')->login($user);
+        }
 
         return redirect()->route('panel.index');
     }

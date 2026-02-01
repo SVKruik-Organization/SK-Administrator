@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Models\GuestUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,13 +39,22 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $user = $request->user('user') ?? $request->user('guest');
+        /** @var \App\Models\User|\App\Models\GuestUser|null $user */
+        $user = $request->user('user') ?? $request->user('guest') ?? null;
+
+        if ($user) {
+            $userType = $user instanceof User ? User::class : GuestUser::class;
+            $user->load('role');
+        } else {
+            $userType = null;
+        }
 
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $user,
+                'user_type' => $userType,
             ],
         ];
     }

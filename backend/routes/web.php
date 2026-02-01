@@ -11,6 +11,6 @@ Route::group(['prefix' => 'authentication'], function () {
     Route::get('/callback', [App\Http\Controllers\Authentication\LoginController::class, 'callback'])->name('callback');
 });
 
-Route::group(['prefix' => 'panel', 'middleware' => 'auth:user'], function () {
+Route::group(['prefix' => 'panel', 'middleware' => 'auth.guest'], function () {
     Route::get('/', [App\Http\Controllers\PanelController::class, 'index'])->name('panel.index');
 });

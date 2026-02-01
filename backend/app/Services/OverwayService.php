@@ -18,19 +18,17 @@ class OverwayService
             }
 
             /** @var array{object_id: string, object_type: string} */
-            $response = Http::post($overwayURL . '/api/auth/administrator/validate-token', [
+            $response = Http::post($overwayURL.'/api/auth/administrator/validate-token', [
                 'token' => $token,
             ])->json();
 
-            return User::findOrFail($response['user_id']);
+            if ($response['user_type'] === User::class) {
+                return User::findOrFail($response['user_id']);
+            } elseif ($response['user_type'] === GuestUser::class) {
+                return GuestUser::findOrFail($response['user_id']);
+            }
 
-            // if ($response['object_type'] === User::class) {
-            //     return User::findOrFail($response['object_id']);
-            // } elseif ($response['object_type'] === GuestUser::class) {
-            //     return GuestUser::findOrFail($response['object_id']);
-            // }
-
-            throw new \Exception('Invalid object type');
+            throw new \Exception('Invalid user type');
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
             throw new \Exception('Failed to fetch user from Auth API');

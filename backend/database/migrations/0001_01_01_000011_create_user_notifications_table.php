@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->morphs('object');
-            $table->enum('type', array_map(fn($case) => $case->name, PromptType::cases()));
+            $table->enum('type', array_map(fn ($case) => $case->name, PromptType::cases()));
             $table->json('data');
             $table->string('source')->nullable();
             $table->string('url')->nullable();
