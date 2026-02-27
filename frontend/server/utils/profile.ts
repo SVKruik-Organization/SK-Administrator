@@ -10,7 +10,7 @@ import { Pool } from "@svkruik/sk-platform-db-conn";
  * @param connection An active database connection.
  * @returns The profile data for the user.
  */
-export async function getProfileData(objectId: string, objectType: UserTypes, profileId: string | null, recursion: boolean, connection: Pool): Promise<ProfileData> {
+export async function getProfileData(objectId: number, objectType: UserTypes, profileId: string | null, recursion: boolean, connection: Pool): Promise<ProfileData> {
     // Retrieve the user profile
     const rawUserProfiles: Array<Profile> = await connection.query("SELECT id, name, description, position, last_usage_at FROM user_profiles WHERE object_id = ? AND object_type = ? ORDER BY last_usage_at DESC, position ASC;", [objectId, objectType]);
     const userProfiles: Array<Profile> = rawUserProfiles.sort((a, b) => a.position - b.position);
@@ -42,7 +42,6 @@ export async function getProfileData(objectId: string, objectType: UserTypes, pr
                 RIGHT JOIN module_items ON module_items.module_id = modules.id
                 LEFT JOIN users ON users.id = ?
                 LEFT JOIN user_roles ON user_roles.id = users.role_id
-                LEFT JOIN \`module_item_grants\` ON \`module_item_grants\`.role_id = users.role_id
             WHERE
                 (user_profiles.id = ?
                 AND user_profiles.object_id = ?

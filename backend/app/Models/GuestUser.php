@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
@@ -44,66 +46,55 @@ class GuestUser extends Authenticatable
     /**
      * Get the guest user's notifications.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserNotification, \App\Models\GuestUser>
+     * @return MorphMany<UserNotification, GuestUser>
      */
     public function notifications(): MorphMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserNotification, \App\Models\GuestUser> */
+        /** @var MorphMany<UserNotification, GuestUser> */
         return $this->morphMany(UserNotification::class, 'object');
     }
 
     /**
      * Get the guest's role.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserRole, \App\Models\GuestUser>
+     * @return BelongsTo<UserRole, GuestUser>
      */
     public function role(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserRole, \App\Models\GuestUser> */
+        /** @var BelongsTo<UserRole, GuestUser> */
         return $this->belongsTo(UserRole::class);
     }
 
     /**
      * Get the owner of the guest. The owner is a user who created the guest.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\GuestUser>
+     * @return BelongsTo<User, GuestUser>
      */
     public function owner(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\GuestUser> */
+        /** @var BelongsTo<User, GuestUser> */
         return $this->belongsTo(User::class, 'owner_id', 'id');
     }
 
     /**
      * Get the user profiles for the guest.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserProfile, \App\Models\GuestUser>
+     * @return MorphMany<UserProfile, GuestUser>
      */
     public function userProfiles(): MorphMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\UserProfile, \App\Models\GuestUser> */
+        /** @var MorphMany<UserProfile, GuestUser> */
         return $this->morphMany(UserProfile::class, 'object');
-    }
-
-    /**
-     * Get the sessions for the guest user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\Session, \App\Models\GuestUser>
-     */
-    public function sessions(): MorphMany
-    {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\Session, \App\Models\GuestUser> */
-        return $this->morphMany(\App\Models\Session::class, 'object');
     }
 
     /**
      * Get the event logs for the guest user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\EventLog, \App\Models\GuestUser>
+     * @return MorphMany<EventLog, GuestUser>
      */
     public function eventLogs(): MorphMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\EventLog, \App\Models\GuestUser> */
-        return $this->morphMany(\App\Models\EventLog::class, 'object');
+        /** @var MorphMany<EventLog, GuestUser> */
+        return $this->morphMany(EventLog::class, 'object');
     }
 }

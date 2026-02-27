@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
@@ -46,22 +48,22 @@ class ModuleItemGrant extends Model
     /**
      * Get the module item that owns the grant.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\ModuleItem, \App\Models\ModuleItemGrant>
+     * @return BelongsTo<ModuleItem, ModuleItemGrant>
      */
     public function moduleItem(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\ModuleItem, \App\Models\ModuleItemGrant> */
+        /** @var BelongsTo<ModuleItem, ModuleItemGrant> */
         return $this->belongsTo(ModuleItem::class);
     }
 
     /**
      * Get the role that owns the grant.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserRole, \App\Models\ModuleItemGrant>
+     * @return BelongsTo<UserRole, ModuleItemGrant>
      */
     public function role(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserRole, \App\Models\ModuleItemGrant> */
+        /** @var BelongsTo<UserRole, ModuleItemGrant> */
         return $this->belongsTo(UserRole::class);
     }
 }

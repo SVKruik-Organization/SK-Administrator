@@ -21,9 +21,9 @@ class DatabaseSessionHandler extends BaseDatabaseSessionHandler
         $user = $this->getAuthenticatedUser();
 
         if ($user instanceof Authenticatable) {
-            $payload['user_type'] = get_class($user);
+            $payload['object_type'] = get_class($user);
         } else {
-            $payload['user_type'] = null;
+            $payload['object_type'] = null;
         }
 
         return $this;

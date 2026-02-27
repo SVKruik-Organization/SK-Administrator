@@ -11,7 +11,7 @@ const bodySchema = z.object({
 });
 
 const userInformationSchema = z.object({
-    object_id: z.string(),
+    object_id: z.number(),
     object_type: z.string(),
 });
 

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\ModuleItemResource;
+use App\Http\Resources\UserProfileResource;
 use App\Models\GuestUser;
+use App\Models\ModuleItem;
 use App\Models\User;
+use App\Services\UserProfileService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -39,7 +43,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        /** @var \App\Models\User|\App\Models\GuestUser|null $user */
+        /** @var User|GuestUser|null $user */
         $user = $request->user('user') ?? $request->user('guest') ?? null;
 
         if ($user) {
@@ -49,13 +53,27 @@ class HandleInertiaRequests extends Middleware
             $userType = null;
         }
 
+        $authPayload = [
+            'user' => $user,
+            'object_type' => $userType,
+            'top_module_items' => ModuleItemResource::collection(ModuleItem::where('module_id', null)->get())->toArray($request),
+        ];
+
+        if ($user) {
+            $userProfileService = app(UserProfileService::class);
+            $lastUsedProfile = $userProfileService->getLastUsedProfile($user);
+            $firstItemUrl = $userProfileService->getFirstItemUrl($lastUsedProfile);
+            $authPayload['first_item_url'] = $firstItemUrl;
+            $authPayload['active_profile'] = UserProfileResource::make($lastUsedProfile)->toArray($request);
+            $authPayload['profiles'] = $userProfileService->getUserProfiles($user);
+        }
+
+        // dd($authPayload);
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'auth' => [
-                'user' => $user,
-                'user_type' => $userType,
-            ],
+            'auth' => $authPayload,
         ];
     }
 }

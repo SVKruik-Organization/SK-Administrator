@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Traits\HasPanelUrl;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +17,7 @@ class CustomModule extends Model
     /** @use HasFactory<\Database\Factories\CustomModuleFactory> */
     use HasFactory;
 
+    use HasPanelUrl;
     use HasTimestamps;
     use HasUuids;
 
@@ -39,22 +43,33 @@ class CustomModule extends Model
     /**
      * Get the user profile associated with the custom module.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserProfile, \App\Models\CustomModule>
+     * @return BelongsTo<UserProfile, CustomModule>
      */
     public function userProfile(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserProfile, \App\Models\CustomModule> */
+        /** @var BelongsTo<UserProfile, CustomModule> */
         return $this->belongsTo(UserProfile::class);
     }
 
     /**
      * Get the custom module items for the custom module.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\CustomModuleItem, \App\Models\CustomModule>
+     * @return HasMany<CustomModuleItem, CustomModule>
      */
     public function customModuleItems(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\CustomModuleItem, \App\Models\CustomModule> */
+        /** @var HasMany<CustomModuleItem, CustomModule> */
         return $this->hasMany(CustomModuleItem::class);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function panelPathSegments(): array
+    {
+        /** @var array<string, string> $name */
+        $name = $this->name;
+
+        return [$name['en']];
     }
 }

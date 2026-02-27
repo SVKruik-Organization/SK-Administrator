@@ -7,11 +7,11 @@ type LoginConfig = {
 }
 
 export class GuestEntity {
-    id: string | null = null;
+    id: number | null = null;
     email: string | null = null;
     database: Pool;
 
-    constructor(id: string | null, email: string | null, database: Pool) {
+    constructor(id: number | null, email: string | null, database: Pool) {
         this.id = id;
         this.email = email;
         this.database = database;
@@ -22,14 +22,14 @@ export class GuestEntity {
 
         // Fetch additional PII
         const additionalData: Array<{
-            "id": string,
+            "id": number,
             "full_name": string,
             "email": string,
             "admin_email": string,
             "admin_name": string,
         }> = await this.database.query("SELECT guest_users.id, guest_users.full_name, guest_users.email AS guest_email, users.email as admin_email, users.full_name as admin_name FROM guest_users LEFT JOIN users ON users.id = guest_users.owner_id WHERE guest_users.id = ? OR guest_users.email = ?;", [this.id, this.email]);
         if (!additionalData.length || !additionalData[0]) throw new Error("This guest account does not exist. Please check your credentials and try again.", { cause: { statusCode: 1401 } });
-        this.id = additionalData[0].id;
+        this.id = Number(additionalData[0].id);
         this.email = additionalData[0].email;
 
         // Create the session

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Middleware\Authentication\GuestMiddleware;
 use App\Http\Middleware\Authentication\UserMiddleware;
 use App\Http\Middleware\HandleAppearance;

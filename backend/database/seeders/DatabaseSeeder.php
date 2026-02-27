@@ -111,20 +111,36 @@ class DatabaseSeeder extends Seeder
             ]));
         }
 
+        $this->command->info('Creating and attaching user profiles for admin user...');
+        $adminUserProfiles = collect();
+        $adminUserProfiles = $adminUserProfiles->merge(UserProfile::factory(3)->create([
+            'object_type' => User::class,
+            'object_id' => $adminUser->id,
+        ]));
+
         $this->command->info('Creating and attaching user profile modules for users...');
         $userProfileModules = collect();
         foreach ($userProfiles as $userProfile) {
-            $userProfileModules = $userProfileModules->merge(UserProfileModule::factory(10)->create([
+            $userProfileModules = $userProfileModules->merge(UserProfileModule::factory(3)->create([
                 'user_profile_id' => $userProfile->id,
-                'module_id' => $modules->random()->id,
+                'module_id' => static fn () => $modules->random()->id,
             ]));
         }
         $this->command->info('Creating and attaching user profile modules for guest users...');
         $guestUserProfileModules = collect();
         foreach ($guestUserProfiles as $guestUserProfile) {
-            $guestUserProfileModules = $guestUserProfileModules->merge(UserProfileModule::factory(10)->create([
+            $guestUserProfileModules = $guestUserProfileModules->merge(UserProfileModule::factory(2)->create([
                 'user_profile_id' => $guestUserProfile->id,
-                'module_id' => $modules->random()->id,
+                'module_id' => static fn () => $modules->random()->id,
+            ]));
+        }
+
+        $this->command->info('Creating and attaching user profile modules for admin user...');
+        $adminUserProfileModules = collect();
+        foreach ($adminUserProfiles as $adminUserProfile) {
+            $adminUserProfileModules = $adminUserProfileModules->merge(UserProfileModule::factory(3)->create([
+                'user_profile_id' => $adminUserProfile->id,
+                'module_id' => static fn () => $modules->random()->id,
             ]));
         }
 

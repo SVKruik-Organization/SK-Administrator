@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Traits\HasPanelUrl;
+use App\Traits\HasPosition;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ModuleItem extends Model
 {
+    use HasPanelUrl;
+    use HasPosition;
     use HasTimestamps;
     use HasUuids;
 
@@ -48,33 +54,53 @@ class ModuleItem extends Model
     /**
      * Get the custom module items for the module item.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\CustomModuleItem, \App\Models\ModuleItem>
+     * @return HasMany<CustomModuleItem, ModuleItem>
      */
     public function customModuleItems(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\CustomModuleItem, \App\Models\ModuleItem> */
+        /** @var HasMany<CustomModuleItem, ModuleItem> */
         return $this->hasMany(CustomModuleItem::class);
     }
 
     /**
      * Get the module item grants for the module item.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\ModuleItemGrant, \App\Models\ModuleItem>
+     * @return HasMany<ModuleItemGrant, ModuleItem>
      */
     public function grants(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\ModuleItemGrant, \App\Models\ModuleItem> */
+        /** @var HasMany<ModuleItemGrant, ModuleItem> */
         return $this->hasMany(ModuleItemGrant::class);
     }
 
     /**
      * Get the module that owns the module item.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Module, \App\Models\ModuleItem>
+     * @return BelongsTo<Module, ModuleItem>
      */
     public function module(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Module, \App\Models\ModuleItem> */
+        /** @var BelongsTo<Module, ModuleItem> */
         return $this->belongsTo(Module::class);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function panelPathSegments(): array
+    {
+        $module = $this->module;
+
+        /** @var array<string, string> $name */
+        $name = $this->name;
+
+        if ($module === null) {
+            return [$name['en']];
+        }
+
+        /** @var array<string, string> $moduleName */
+        $moduleName = $module->name;
+
+        return [$moduleName['en'], $name['en']];
     }
 }

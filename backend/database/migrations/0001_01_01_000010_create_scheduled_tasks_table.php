@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\ScheduledTaskStatus;
 use App\Enums\ScheduledTaskType;
 use Illuminate\Database\Migrations\Migration;

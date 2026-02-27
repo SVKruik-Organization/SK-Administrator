@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Traits\HasPosition;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +16,7 @@ class UserProfileModule extends Model
     /** @use HasFactory<\Database\Factories\UserProfileModuleFactory> */
     use HasFactory;
 
+    use HasPosition;
     use HasTimestamps;
     use HasUuids;
 
@@ -40,22 +44,22 @@ class UserProfileModule extends Model
     /**
      * Get the user profile that owns the module.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserProfile, \App\Models\UserProfileModule>
+     * @return BelongsTo<UserProfile, UserProfileModule>
      */
     public function userProfile(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\UserProfile, \App\Models\UserProfileModule> */
+        /** @var BelongsTo<UserProfile, UserProfileModule> */
         return $this->belongsTo(UserProfile::class);
     }
 
     /**
      * Get the module that owns the user profile module.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Module, \App\Models\UserProfileModule>
+     * @return BelongsTo<Module, UserProfileModule>
      */
     public function module(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Module, \App\Models\UserProfileModule> */
+        /** @var BelongsTo<Module, UserProfileModule> */
         return $this->belongsTo(Module::class);
     }
 }

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Traits\HasObjectMorph;
+use App\Traits\HasPosition;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +18,7 @@ class UserProfile extends Model
     use HasFactory;
 
     use HasObjectMorph;
+    use HasPosition;
     use HasTimestamps;
     use HasUuids;
 
@@ -46,22 +50,22 @@ class UserProfile extends Model
     /**
      * Get the custom modules for the user profile.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\CustomModule, \App\Models\UserProfile>
+     * @return HasMany<CustomModule, UserProfile>
      */
     public function customModules(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\CustomModule, \App\Models\UserProfile> */
+        /** @var HasMany<CustomModule, UserProfile> */
         return $this->hasMany(CustomModule::class);
     }
 
     /**
      * Get the user profile modules for the user profile.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\UserProfileModule, \App\Models\UserProfile>
+     * @return HasMany<UserProfileModule, UserProfile>
      */
     public function userProfileModules(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\UserProfileModule, \App\Models\UserProfile> */
+        /** @var HasMany<UserProfileModule, UserProfile> */
         return $this->hasMany(UserProfileModule::class);
     }
 }

@@ -13,22 +13,22 @@ trait HasObjectMorph
     /**
      * Get the user or guest that owns this model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo<\App\Models\User|\App\Models\GuestUser, \Illuminate\Database\Eloquent\Model>
+     * @return MorphTo<User|GuestUser, \Illuminate\Database\Eloquent\Model>
      */
     public function object(): MorphTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphTo<\App\Models\User|\App\Models\GuestUser, \Illuminate\Database\Eloquent\Model> */
+        /** @var MorphTo<User|GuestUser, \Illuminate\Database\Eloquent\Model> */
         return $this->morphTo();
     }
 
     /**
      * Get the type of the object that owns this model.
      *
-     * @return class-string<\App\Models\User|\App\Models\GuestUser>
+     * @return class-string<User|GuestUser>
      */
     public function objectType(): string
     {
-        /** @var class-string<\App\Models\User|\App\Models\GuestUser> */
+        /** @var class-string<User|GuestUser> */
         return $this->object_type;
     }
 

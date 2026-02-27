@@ -1,15 +1,14 @@
 import { InertiaLinkProps } from '@inertiajs/vue3';
 import type { LucideIcon } from 'lucide-vue-next';
-
-export enum UserTypes {
-    USER = "App\\Models\\User",
-    GUEST = "App\\Models\\GuestUser",
-}
+import type { UserTypes, UserProfile, LoadedUserProfile, ModuleItem, Module } from './custom';
 
 export interface Auth {
     user: User;
-    user_type: UserTypes;
-    role: UserRole;
+    object_type: UserTypes;
+    top_module_items: Array<ModuleItem>;
+    first_item_url: string;
+    active_profile: LoadedUserProfile;
+    profiles: Array<UserProfile>;
 }
 
 export type AppPageProps<

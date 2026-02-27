@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\VerificationReason;
@@ -40,11 +42,11 @@ class UserVerification extends Model
     /**
      * Get the user that owns the verification.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\UserVerification>
+     * @return BelongsTo<User, UserVerification>
      */
     public function user(): BelongsTo
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, \App\Models\UserVerification> */
+        /** @var BelongsTo<User, UserVerification> */
         return $this->belongsTo(User::class, 'user_email', 'email');
     }
 }

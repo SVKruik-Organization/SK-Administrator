@@ -17,6 +17,9 @@ class GuestMiddleware
             return redirect()->route('authentication.login');
         }
 
-        return $next($request);
+        /** @var Response $response */
+        $response = $next($request);
+
+        return $response;
     }
 }

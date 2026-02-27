@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Traits\HasPosition;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +16,7 @@ class UserRole extends Model
     /** @use HasFactory<\Database\Factories\UserRoleFactory> */
     use HasFactory;
 
+    use HasPosition;
     use HasTimestamps;
     use HasUuids;
 
@@ -42,33 +46,33 @@ class UserRole extends Model
     /**
      * Get the users for the role.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\User, \App\Models\UserRole>
+     * @return HasMany<User, UserRole>
      */
     public function users(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\User, \App\Models\UserRole> */
+        /** @var HasMany<User, UserRole> */
         return $this->hasMany(User::class);
     }
 
     /**
      * Get the guests for the role.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\GuestUser, \App\Models\UserRole>
+     * @return HasMany<GuestUser, UserRole>
      */
     public function guests(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\GuestUser, \App\Models\UserRole> */
+        /** @var HasMany<GuestUser, UserRole> */
         return $this->hasMany(GuestUser::class);
     }
 
     /**
      * Get the module item grants for the role.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\ModuleItemGrant, \App\Models\UserRole>
+     * @return HasMany<ModuleItemGrant, UserRole>
      */
     public function moduleItemGrants(): HasMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\ModuleItemGrant, \App\Models\UserRole> */
+        /** @var HasMany<ModuleItemGrant, UserRole> */
         return $this->hasMany(ModuleItemGrant::class);
     }
 }

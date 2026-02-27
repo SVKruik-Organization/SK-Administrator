@@ -3,7 +3,7 @@ import type { Languages, UserTypes } from "~/assets/customTypes";
 declare module "#auth-utils" {
     // General User
     interface User {
-        id: string;
+        id: number;
         fullName: string;
         email: string;
         type: UserTypes;
