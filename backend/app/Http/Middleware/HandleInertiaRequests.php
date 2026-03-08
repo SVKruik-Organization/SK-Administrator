@@ -68,8 +68,6 @@ class HandleInertiaRequests extends Middleware
             $authPayload['profiles'] = $userProfileService->getUserProfiles($user);
         }
 
-        // dd($authPayload);
-
         return [
             ...parent::share($request),
             'name' => config('app.name'),

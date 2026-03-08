@@ -6,7 +6,7 @@ import NavBar from '@/components/NavBar.vue';
 <template>
     <main class="flex">
         <SideBar></SideBar>
-        <section class="flex flex-col">
+        <section class="flex flex-col flex-1">
             <NavBar></NavBar>
             <slot />
         </section>

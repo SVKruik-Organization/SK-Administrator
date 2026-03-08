@@ -31,3 +31,24 @@ export type ModuleItem = {
     icon: string | null;
     url: string;
 }
+
+export enum PromptType {
+    info = "info",
+    success = "success",
+    warning = "warning",
+    danger = "danger"
+}
+
+export type NotificationItem = {
+    id: string;
+    object_id: string;
+    object_type: UserTypes;
+    type: PromptType;
+    data: any;
+    source: string;
+    url: string;
+    is_silent: boolean;
+    created_at: Date;
+    updated_at: Date | null;
+    deleted_at: Date | null;
+}

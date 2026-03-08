@@ -10,7 +10,6 @@ use App\Models\GuestUser;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Services\UserProfileService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -37,7 +36,7 @@ class UserProfileController extends Controller
         return redirect()->route('user.profile.index', $userProfile);
     }
 
-    public function switch(Request $request, UserProfile $userProfile): JsonResponse
+    public function switch(Request $request, UserProfile $userProfile): RedirectResponse
     {
         Gate::authorize('update', $userProfile);
 
@@ -48,10 +47,8 @@ class UserProfileController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $this->userProfileService->switchProfile($user, $userProfile);
+        $this->userProfileService->switchProfile($userProfile);
 
-        return response()->json([
-            'message' => 'Profile switched successfully',
-        ]);
+        return redirect()->back();
     }
 }

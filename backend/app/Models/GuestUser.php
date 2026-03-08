@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -96,5 +97,16 @@ class GuestUser extends Authenticatable
     {
         /** @var MorphMany<EventLog, GuestUser> */
         return $this->morphMany(EventLog::class, 'object');
+    }
+
+    /**
+     * Get the profile image for the guest user.
+     *
+     * @return MorphOne<Media, GuestUser>
+     */
+    public function profileImage(): MorphOne
+    {
+        /** @var MorphOne<Media, GuestUser> */
+        return $this->morphOne(Media::class, 'object');
     }
 }

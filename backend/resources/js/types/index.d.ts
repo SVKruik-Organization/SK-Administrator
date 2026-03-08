@@ -27,6 +27,7 @@ export interface User {
     full_name: string;
     email: string;
     last_login_at: Date | null;
+    image_url: string;
     [key: string]: unknown; // This allows for additional properties...
 }
 

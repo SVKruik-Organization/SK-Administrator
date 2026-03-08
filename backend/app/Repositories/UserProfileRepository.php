@@ -56,23 +56,23 @@ class UserProfileRepository extends AbstractRepository
         /** @var UserProfile|null $lastUsedProfile */
         $lastUsedProfile = $user->userProfiles()
             ->orderBy('last_usage_at', 'desc')
+            ->withoutGlobalScope('position')
             ->first();
 
         if (!$lastUsedProfile) {
             abort(404, 'No last used profile found');
         }
 
-        return $this->update($lastUsedProfile, ['last_usage_at' => now()]);
+        return $lastUsedProfile;
     }
 
     /**
      * Switch to a different user profile.
      *
-     * @param  User|GuestUser  $user  The user or guest user.
      * @param  UserProfile  $userProfile  The user profile to switch to.
      * @return UserProfile The switched profile.
      */
-    public function switchProfile(User|GuestUser $user, UserProfile $userProfile): UserProfile
+    public function switchProfile(UserProfile $userProfile): UserProfile
     {
         return $this->update($userProfile, ['last_usage_at' => now()]);
     }

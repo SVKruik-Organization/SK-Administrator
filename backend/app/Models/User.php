@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -113,5 +114,16 @@ class User extends Authenticatable
     {
         /** @var MorphMany<EventLog, User> */
         return $this->morphMany(EventLog::class, 'object');
+    }
+
+    /**
+     * Get the profile image for the user.
+     *
+     * @return MorphOne<Media, User>
+     */
+    public function profileImage(): MorphOne
+    {
+        /** @var MorphOne<Media, User> */
+        return $this->morphOne(Media::class, 'object');
     }
 }

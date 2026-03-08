@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Authentication;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
+class AuthenticationController extends Controller
 {
     private OverwayService $overwayService;
 
@@ -28,7 +28,7 @@ class LoginController extends Controller
             throw new \Exception('Overway URL is not set');
         }
 
-        return redirect()->away($overwayURL.'/login/administrator');
+        return redirect()->away($overwayURL . '/login/administrator');
     }
 
     public function callback(Request $request): RedirectResponse
@@ -46,5 +46,12 @@ class LoginController extends Controller
         }
 
         return redirect()->route('panel.index');
+    }
+
+    public function logout(): RedirectResponse
+    {
+        Auth::logout();
+
+        return redirect()->route('landing');
     }
 }

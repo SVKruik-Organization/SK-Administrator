@@ -68,12 +68,11 @@ class UserProfileService
     /**
      * Switch to a different user profile.
      *
-     * @param  User|GuestUser  $user  The user or guest user.
      * @param  UserProfile  $userProfile  The user profile to switch to.
      * @return UserProfile The switched profile.
      */
-    public function switchProfile(User|GuestUser $user, UserProfile $userProfile): UserProfile
+    public function switchProfile(UserProfile $userProfile): UserProfile
     {
-        return $this->userProfileRepository->switchProfile($user, $userProfile);
+        return $this->userProfileRepository->switchProfile($userProfile);
     }
 }
