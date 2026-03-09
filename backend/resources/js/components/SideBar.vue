@@ -6,49 +6,59 @@ import { Auth } from '@/types';
 import { switchMethod } from '@/routes/user/profile';
 import type { LoadedUserProfile } from '@/types/custom';
 
+// Reactive data
 const page = usePage();
 const auth = computed(() => page.props.auth as Auth);
+const currentUrl = computed(() => page.url);
+const activeProfile = computed(() => auth.value.active_profile as LoadedUserProfile);
 const inactiveProfiles = computed(() =>
     auth.value.profiles.filter((profile) => profile.id !== auth.value.active_profile.id),
 );
 
-const currentUrl = computed(() => page.url);
-const isLinkActive = (href: string): boolean => {
-    return currentUrl.value.startsWith(href);
-};
-
+// Dropdown visibility
 const isProfileSwitcherOpen = ref(false);
-const activeProfile = computed(() => auth.value.active_profile as LoadedUserProfile);
 const profileDropdownRef = ref<HTMLElement | null>(null);
 
 useOnClickOutside(profileDropdownRef, () => {
     isProfileSwitcherOpen.value = false;
 });
 
-const toggleProfileSwitcher = () => {
-    isProfileSwitcherOpen.value = !isProfileSwitcherOpen.value;
-};
+// Methods
 
-function switchProfile(profileId: string) {
+/**
+ * Toggles the visibility of the profile switcher menu.
+ */
+function toggleProfileSwitcher(): void {
+    isProfileSwitcherOpen.value = !isProfileSwitcherOpen.value;
+}
+
+/**
+ * Switches the active user profile.
+ * @param profileId The ID of the profile to switch to.
+ */
+function switchProfile(profileId: string): void {
     router.visit(switchMethod.url(profileId), {
         method: 'put',
         preserveState: true,
-        onFinish: () => {
-            console.log('finish');
-            isProfileSwitcherOpen.value = false;
-        },
-        onSuccess: () => {
-            console.log('success');
-            router.reload({ only: ['auth'] });
-        },
+        onFinish: () => isProfileSwitcherOpen.value = false,
+        onSuccess: () => router.reload({ only: ['auth'] }),
     });
+}
+
+/**
+ * Checks if a link is active.
+ * @param href The href of the link to check.
+ * @returns True if the link is active, false otherwise.
+ */
+function getLinkStatus(href: string): boolean {
+    return currentUrl.value.startsWith(href);
 }
 </script>
 
 <template>
-    <nav class="flex flex-col relative h-screen w-3xs bg-sky-50">
-        <!-- <img class="sidebar-logo-image" src="/img/mesh_1.png" alt="Logo"> -->
+    <nav class="flex flex-col relative h-screen w-3xs bg-sky-50 overflow-hidden">
         <div ref="profileDropdownRef" class="relative p-2 border-b border-sky-200">
+            <!-- Profile switcher button -->
             <button
                 class="group flex items-center gap-2 cursor-pointer hover:bg-sky-100 rounded-4xl relative w-full p-2 h-14"
                 type="button" :class="{ 'active bg-sky-100 rounded-b-none shadow-lg': isProfileSwitcherOpen }"
@@ -64,7 +74,9 @@ function switchProfile(profileId: string) {
                         {{ activeProfile.name[activeProfile.language] }}
                     </small>
                 </div>
-                <i class="fa-regular fa-angle-down ml-auto" :class="{ 'active': isProfileSwitcherOpen }"></i>
+                <i class="fa-regular fa-angle-down ml-auto" :class="{ 'rotate-180': isProfileSwitcherOpen }"></i>
+
+                <!-- Profile switcher menu -->
                 <menu v-if="auth.profiles.length > 1 && isProfileSwitcherOpen"
                     class="flex flex-col absolute top-14 right-0 rounded-b-xl shadow-lg bg-sky-100 p-2 z-10">
                     <button v-for="profile in inactiveProfiles" :key="profile.id"
@@ -77,27 +89,28 @@ function switchProfile(profileId: string) {
             </button>
         </div>
         <section class="flex flex-col h-full overflow-y-auto overflow-x-hidden pl-4 pt-4 gap-8">
+            <!-- Top module items -->
             <div class="flex flex-col gap-4">
-                <!-- Top items -->
                 <menu>
                     <Link v-for="item in auth.top_module_items" :key="item.id" :href="item.url"
-                        :class="{ 'bg-sky-100': isLinkActive(item.url) }"
-                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-full">
-                        <i :class="isLinkActive(item.url) ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
+                        :class="{ 'bg-sky-100': getLinkStatus(item.url) }"
+                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12">
+                        <i :class="getLinkStatus(item.url) ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
                         <p>{{ item.name![activeProfile.language] }}</p>
                     </Link>
                 </menu>
             </div>
+
             <!-- Modules -->
-            <div class="flex flex-col gap-4" v-for="module in activeProfile.modules" :key="module.id">
+            <div class="flex flex-col gap-4 last:mb-8" v-for="module in activeProfile.modules" :key="module.id">
                 <Link :href="module.url" class="flex items-center gap-2">
-                    <i :class="isLinkActive(module.url) ? `fa-solid ${module.icon}` : `fa-regular ${module.icon}`"></i>
+                    <i :class="getLinkStatus(module.url) ? `fa-solid ${module.icon}` : `fa-regular ${module.icon}`"></i>
                     <h4 class="font-medium">{{ module.name![activeProfile.language] }}</h4>
                 </Link>
                 <menu class="flex flex-col gap-2">
                     <Link v-for="item in module.items" :key="item.id" :href="item.url"
-                        :class="{ 'bg-sky-100': isLinkActive(item.url) }"
-                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-full">
+                        :class="{ 'bg-sky-100': getLinkStatus(item.url) }"
+                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12">
                         <p>{{ item.name[activeProfile.language] }}</p>
                     </Link>
                 </menu>
@@ -105,17 +118,3 @@ function switchProfile(profileId: string) {
         </section>
     </nav>
 </template>
-
-<style scoped>
-.sidebar-logo-image {
-    height: 400px;
-    width: 1000px;
-    position: absolute;
-    opacity: 0.4;
-    filter: blur(50px);
-    pointer-events: none;
-    left: -400px;
-    top: -140px;
-    rotate: 30deg;
-}
-</style>
