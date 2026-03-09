@@ -6,6 +6,21 @@ import { Auth } from '@/types';
 import { switchMethod } from '@/routes/user/profile';
 import type { LoadedUserProfile } from '@/types/custom';
 
+// Props
+const props = withDefaults(
+    defineProps<{
+        isOpen?: boolean;
+    }>(),
+    {
+        isOpen: false,
+    },
+);
+
+// Emitters
+const emit = defineEmits<{
+    (e: 'close-sidebar'): void;
+}>();
+
 // Reactive data
 const page = usePage();
 const auth = computed(() => page.props.auth as Auth);
@@ -33,6 +48,13 @@ function toggleProfileSwitcher(): void {
 }
 
 /**
+ * Closes the sidebar.
+ */
+function closeSidebar(): void {
+    emit('close-sidebar');
+}
+
+/**
  * Switches the active user profile.
  * @param profileId The ID of the profile to switch to.
  */
@@ -40,7 +62,10 @@ function switchProfile(profileId: string): void {
     router.visit(switchMethod.url(profileId), {
         method: 'put',
         preserveState: true,
-        onFinish: () => isProfileSwitcherOpen.value = false,
+        onFinish: () => {
+            isProfileSwitcherOpen.value = false;
+            closeSidebar();
+        },
         onSuccess: () => router.reload({ only: ['auth'] }),
     });
 }
@@ -56,7 +81,8 @@ function getLinkStatus(href: string): boolean {
 </script>
 
 <template>
-    <nav class="flex flex-col relative h-screen w-3xs bg-sky-50 overflow-hidden">
+    <nav :class="[props.isOpen ? 'translate-x-0' : '-translate-x-full']"
+        class="flex flex-col h-screen bg-sky-50 overflow-hidden fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 md:static md:w-3xs md:translate-x-0">
         <div ref="profileDropdownRef" class="relative p-2 border-b border-sky-200">
             <!-- Profile switcher button -->
             <button
@@ -94,7 +120,8 @@ function getLinkStatus(href: string): boolean {
                 <menu>
                     <Link v-for="item in auth.top_module_items" :key="item.id" :href="item.url"
                         :class="{ 'bg-sky-100': getLinkStatus(item.url) }"
-                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12">
+                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12"
+                        @click="closeSidebar()">
                         <i :class="getLinkStatus(item.url) ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
                         <p>{{ item.name![activeProfile.language] }}</p>
                     </Link>
@@ -103,14 +130,15 @@ function getLinkStatus(href: string): boolean {
 
             <!-- Modules -->
             <div class="flex flex-col gap-4 last:mb-8" v-for="module in activeProfile.modules" :key="module.id">
-                <Link :href="module.url" class="flex items-center gap-2">
+                <Link :href="module.url" class="flex items-center gap-2" @click="closeSidebar()">
                     <i :class="getLinkStatus(module.url) ? `fa-solid ${module.icon}` : `fa-regular ${module.icon}`"></i>
                     <h4 class="font-medium">{{ module.name![activeProfile.language] }}</h4>
                 </Link>
                 <menu class="flex flex-col gap-2">
                     <Link v-for="item in module.items" :key="item.id" :href="item.url"
                         :class="{ 'bg-sky-100': getLinkStatus(item.url) }"
-                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12">
+                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12"
+                        @click="closeSidebar()">
                         <p>{{ item.name[activeProfile.language] }}</p>
                     </Link>
                 </menu>

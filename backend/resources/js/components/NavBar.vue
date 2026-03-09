@@ -9,6 +9,21 @@ import NotificationItem from '@/components/ui/NotificationItem.vue';
 import type { NotificationItem as NotificationItemType } from '@/types/custom';
 import type { Auth } from '@/types';
 
+// Props
+const props = withDefaults(
+    defineProps<{
+        isSidebarOpen?: boolean;
+    }>(),
+    {
+        isSidebarOpen: false,
+    },
+);
+
+// Emitters
+const emit = defineEmits<{
+    (e: 'toggle-sidebar'): void;
+}>();
+
 // Reactive data
 const page = usePage();
 const auth = computed(() => page.props.auth as Auth);
@@ -62,17 +77,28 @@ function toggleQuickMenuDropdownMenu(): void {
 
 <template>
     <nav
-        class="flex flex-col md:flex-row md:items-center justify-between box-border p-4 gap-4 border-b border-gray-200">
-        <button class="flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-2"
+        class="flex items-center justify-between box-border p-4 gap-4 border-gray-200 fixed bottom-0 w-full md:static md:border-b">
+        <!-- Mobile hamburger button -->
+        <button
+            class="flex items-center justify-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full h-10 w-10 md:hidden"
+            type="button" :aria-expanded="props.isSidebarOpen" aria-controls="panel-sidebar"
+            @click="emit('toggle-sidebar')" title="Open the sidebar">
+            <i class="fa-regular fa-bars"></i>
+        </button>
+
+        <!-- Search -->
+        <button
+            class="flex items-center gap-2 cursor-text bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-2 flex-1 md:flex-none"
             @click="searchBar?.focus()" type="button">
             <i class="fa-regular fa-magnifying-glass"></i>
-            <input ref="searchBar" placeholder="Search" type="text">
+            <input ref="searchBar" placeholder="Search" type="text" class="outline-none">
         </button>
+
         <section class="flex items-center gap-2">
-            <div ref="notificationDropdownRef" class="relative">
+            <div ref="notificationDropdownRef" class="relative hidden md:block">
                 <!-- Notification dropdown button -->
                 <button
-                    class="flex items-center justify-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full h-10 w-10"
+                    class="hidden items-center justify-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full h-10 w-10 md:flex"
                     @click="toggleNotificationDropdownMenu()" title="Open the notification center" type="button">
                     <i v-if="unreadNotifications.length === 0" class="fa-regular fa-envelope"></i>
                     <i v-else class="fa-regular fa-envelope-dot"></i>
@@ -106,7 +132,7 @@ function toggleQuickMenuDropdownMenu(): void {
 
                 <!-- Quick menu dropdown menu -->
                 <menu v-if="quickMenuDropdownVisible"
-                    class="flex flex-col absolute top-12 right-0 rounded-lg shadow-lg bg-gray-50 z-10 w-48">
+                    class="flex flex-col absolute bottom-12 md:top-12 md:bottom-auto right-0 rounded-lg shadow-lg bg-gray-50 z-10 w-48">
                     <p class="font-medium p-2 pointer-events-none">Quick Access</p>
                     <hr class="border-gray-200">
                     <Link :href="auth.first_item_url" @click="toggleQuickMenuDropdownMenu()"
@@ -116,6 +142,10 @@ function toggleQuickMenuDropdownMenu(): void {
                     <Link :href="preferencesIndex.url()" @click="toggleQuickMenuDropdownMenu()"
                         class="px-2 py-1 hover:bg-gray-100" title="Go to your preferences">
                         Preferences
+                    </Link>
+                    <Link :href="notificationsIndex.url()" @click="toggleQuickMenuDropdownMenu()"
+                        class="px-2 py-1 hover:bg-gray-100 md:hidden" title="Go to your notifications">
+                        Notifications
                     </Link>
                     <hr class="border-gray-200">
                     <button @click="signOut()" type="button" title="Sign out of your account"
