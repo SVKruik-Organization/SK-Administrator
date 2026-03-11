@@ -7,5 +7,7 @@ defineOptions({
 </script>
 
 <template>
-    <h1>Preferences - Profile</h1>
+    <template v-slot:content>
+        <h1>Preferences - Profile</h1>
+    </template>
 </template>

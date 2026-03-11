@@ -30,7 +30,9 @@ function toggleSidebar(): void {
 
         <section class="flex flex-col flex-1">
             <NavBar :is-sidebar-open="isSidebarOpen" @toggle-sidebar="toggleSidebar()" />
-            <slot />
+            <div class="p-4">
+                <slot />
+            </div>
         </section>
     </main>
 </template>
