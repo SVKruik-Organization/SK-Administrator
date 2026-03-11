@@ -13,7 +13,7 @@ Route::group(['prefix' => 'authentication', 'as' => 'authentication.'], function
     Route::post('/logout', [App\Http\Controllers\AuthenticationController::class, 'logout'])->name('logout');
 });
 
-Route::group(['prefix' => 'panel', 'middleware' => 'auth.guest', 'as' => 'panel.'], function () {
+Route::group(['prefix' => 'panel', 'as' => 'panel.', 'middleware' => 'auth.guest'], function () {
     Route::get('/', [App\Http\Controllers\Panel\PanelController::class, 'index'])->name('index');
     Route::get('/notifications', [App\Http\Controllers\Panel\NotificationController::class, 'index'])->name('notifications');
 
@@ -60,18 +60,20 @@ Route::group(['prefix' => 'panel', 'middleware' => 'auth.guest', 'as' => 'panel.
         Route::get('/bug-reports', [App\Http\Controllers\Panel\RecordController::class, 'bugReports'])->name('bugReports');
     });
 
-    Route::group(['prefix' => 'preferences', 'as' => 'preferences.'], function () {
-        Route::redirect('/', '/panel/preferences/profile')->name('index');
-        Route::get('/profile', [App\Http\Controllers\Panel\PreferencesController::class, 'profile'])->name('profile');
-        Route::get('/notifications', [App\Http\Controllers\Panel\PreferencesController::class, 'notifications'])->name('notifications');
-        Route::get('/security', [App\Http\Controllers\Panel\PreferencesController::class, 'security'])->name('security');
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::redirect('/', '/panel/settings/modules')->name('index');
+        Route::get('/modules', [App\Http\Controllers\Panel\SettingsController::class, 'modules'])->name('modules');
     });
 });
 
-Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
+Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'auth.guest'], function () {
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
         Route::get('/', [App\Http\Controllers\User\UserProfileController::class, 'index'])->name('index');
         Route::put('/', [App\Http\Controllers\User\UserProfileController::class, 'update'])->name('update');
         Route::put('/switch/{userProfile}', [App\Http\Controllers\User\UserProfileController::class, 'switch'])->name('switch');
+    });
+
+    Route::group(['prefix' => 'preferences', 'as' => 'preferences.'], function () {
+        Route::get('/', [App\Http\Controllers\User\UserPreferencesController::class, 'index'])->name('index');
     });
 });

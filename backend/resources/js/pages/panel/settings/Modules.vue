@@ -7,5 +7,5 @@ defineOptions({
 </script>
 
 <template>
-    <h1>Preferences - Notifications</h1>
+    <h1>Settings - Modules</h1>
 </template>

@@ -92,7 +92,7 @@ function getLinkStatus(href: string): boolean {
                 <div class="relative">
                     <img src="/temp_pfp.jpg" class="aspect-square object-cover h-12 rounded-full">
                     <span :class="isProfileSwitcherOpen ? 'border-sky-100' : 'border-sky-50'"
-                        class="h-4 w-4 bg-green-600 rounded-full absolute -top-0.5 -right-0.5 border-2 group-hover:border-sky-100"></span>
+                        class="h-4 w-4 bg-emerald-600 rounded-full absolute -top-0.5 -right-0.5 border-2 group-hover:border-sky-100"></span>
                 </div>
                 <div class="flex flex-col text-left">
                     <h3 class="font-medium">{{ auth.user.full_name }}</h3>
