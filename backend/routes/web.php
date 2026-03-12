@@ -14,8 +14,10 @@ Route::group(['prefix' => 'authentication', 'as' => 'authentication.'], function
 });
 
 Route::group(['prefix' => 'panel', 'as' => 'panel.', 'middleware' => 'auth.guest'], function () {
+    // Main
     Route::get('/', [App\Http\Controllers\Panel\PanelController::class, 'index'])->name('index');
     Route::get('/notifications', [App\Http\Controllers\Panel\NotificationController::class, 'index'])->name('notifications');
+    Route::get('/settings', [App\Http\Controllers\Panel\SettingsController::class, 'index'])->name('settings');
 
     // Top items
     Route::get('/dashboard', [App\Http\Controllers\Panel\DashboardController::class, 'index'])->name('dashboard');
@@ -58,11 +60,6 @@ Route::group(['prefix' => 'panel', 'as' => 'panel.', 'middleware' => 'auth.guest
         Route::get('/user-reports', [App\Http\Controllers\Panel\RecordController::class, 'userReports'])->name('userReports');
         Route::get('/user-warnings', [App\Http\Controllers\Panel\RecordController::class, 'userWarnings'])->name('userWarnings');
         Route::get('/bug-reports', [App\Http\Controllers\Panel\RecordController::class, 'bugReports'])->name('bugReports');
-    });
-
-    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
-        Route::redirect('/', '/panel/settings/modules')->name('index');
-        Route::get('/modules', [App\Http\Controllers\Panel\SettingsController::class, 'modules'])->name('modules');
     });
 });
 

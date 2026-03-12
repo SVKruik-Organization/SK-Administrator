@@ -52,3 +52,12 @@ export type NotificationItem = {
     updated_at: Date | null;
     deleted_at: Date | null;
 }
+
+export type ObjectTableData = {
+    data: Array<any>;
+    columns: Array<any>;
+    page: number;
+    perPage: number;
+    total: number;
+    hasMore: boolean;
+}

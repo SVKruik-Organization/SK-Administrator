@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserProfileUpdateRequest;
+use App\Http\Requests\User\UserProfileUpdateRequest;
 use App\Models\GuestUser;
 use App\Models\User;
 use App\Models\UserProfile;
