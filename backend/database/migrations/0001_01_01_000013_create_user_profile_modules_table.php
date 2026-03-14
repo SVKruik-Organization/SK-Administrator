@@ -15,10 +15,8 @@ return new class extends Migration
     {
         Schema::create('user_profile_modules', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_profile_id');
-            $table->foreign('user_profile_id')->references('id')->on('user_profiles');
-            $table->uuid('module_id');
-            $table->foreign('module_id')->references('id')->on('modules');
+            $table->foreignUuid('user_profile_id')->references('id')->on('user_profiles')->onDelete('cascade');
+            $table->foreignUuid('module_id')->references('id')->on('modules')->onDelete('cascade');
             $table->integer('position')->default(0);
             $table->timestamps();
         });

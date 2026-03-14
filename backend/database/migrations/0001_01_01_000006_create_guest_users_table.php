@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('guest_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->nullable()->index();
-            $table->foreign('owner_id')->references('id')->on('users')->nullOnDelete();
+            $table->foreignId('owner_id')->nullable()->index()->constrained('users')->nullOnDelete();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');

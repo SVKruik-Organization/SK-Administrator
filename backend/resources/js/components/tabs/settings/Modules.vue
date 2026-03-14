@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import ObjectTable from '@/components/ui/ObjectTable.vue';
 import type { ObjectTableData } from '@/types/custom';
-import Button from '@/components/ui/Button.vue';
+import Button from '@/components/ui/form/Button.vue';
 
 const props = defineProps<{
     table: ObjectTableData;

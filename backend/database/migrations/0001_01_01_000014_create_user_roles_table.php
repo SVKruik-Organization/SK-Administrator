@@ -23,18 +23,15 @@ return new class extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->uuid('role_id')->after('id');
-            $table->foreign('role_id')->references('id')->on('user_roles');
+            $table->foreignUuid('role_id')->after('id')->constrained('user_roles')->onDelete('cascade');
         });
 
         Schema::table('guest_users', function (Blueprint $table) {
-            $table->uuid('role_id')->after('id');
-            $table->foreign('role_id')->references('id')->on('user_roles');
+            $table->foreignUuid('role_id')->after('id')->constrained('user_roles')->onDelete('cascade');
         });
 
         Schema::table('module_item_grants', function (Blueprint $table) {
-            $table->uuid('role_id')->after('id');
-            $table->foreign('role_id')->references('id')->on('user_roles');
+            $table->foreignUuid('role_id')->after('id')->constrained('user_roles')->onDelete('cascade');
         });
     }
 

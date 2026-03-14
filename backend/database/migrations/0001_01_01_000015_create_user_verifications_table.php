@@ -17,7 +17,6 @@ return new class extends Migration
         Schema::create('user_verifications', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_email');
-            $table->foreign('user_email')->references('email')->on('users');
             $table->integer('pin');
             $table->enum('reason', array_map(fn ($case) => $case->name, VerificationReason::cases()));
             $table->timestamp('expires_at');

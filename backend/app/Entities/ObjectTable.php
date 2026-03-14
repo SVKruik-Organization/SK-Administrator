@@ -30,7 +30,12 @@ class ObjectTable
 
     private Closure $mapper;
 
+    /** @var Builder<Model> */
     private Builder $builder;
+
+    private ?string $searchColumn = null;
+
+    private ?string $searchValue = null;
 
     /**
      * @param  class-string<Model>  $modelClass
@@ -84,7 +89,16 @@ class ObjectTable
         $page = $this->page ?? 1;
         $perPage = $this->perPage ?? 15;
 
-        $rows = $this->builder->paginate($perPage, $dataColumns, 'page', $page);
+        $rows = $this->builder
+            ->when($this->searchColumn && $this->searchValue, function (Builder $query): Builder {
+                /** @var string $column */
+                $column = $this->searchColumn;
+                /** @var string $value */
+                $value = $this->searchValue;
+
+                return $query->where($column, 'like', '%' . $value . '%');
+            })
+            ->paginate($perPage, $dataColumns, 'page', $page);
 
         $this->page = $rows->currentPage();
         $this->perPage = $rows->perPage();
@@ -190,6 +204,8 @@ class ObjectTable
 
     /**
      * Normalize a column key to the short form used in row data.
+     *
+     * @return string The normalized column key.
      */
     private function normalizeColumnKey(string $key): string
     {
@@ -202,5 +218,22 @@ class ObjectTable
         }
 
         return $key;
+    }
+
+    /**
+     * Set the search column and value for the query.
+     *
+     * @throws \InvalidArgumentException If the column is not found in the configured columns.
+     */
+    public function setSearch(string $column, ?string $value): self
+    {
+        if (!isset($this->columns[$column])) {
+            throw new \InvalidArgumentException("Column {$column} not found in configured columns");
+        }
+
+        $this->searchColumn = $column;
+        $this->searchValue = $value ?? '';
+
+        return $this;
     }
 }

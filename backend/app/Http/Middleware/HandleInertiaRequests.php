@@ -56,7 +56,7 @@ class HandleInertiaRequests extends Middleware
         $authPayload = [
             'user' => $user,
             'object_type' => $userType,
-            'top_module_items' => ModuleItemResource::collection(ModuleItem::where('module_id', null)->get())->toArray($request),
+            'top_module_items' => ModuleItemResource::collection(ModuleItem::whereNotNull('icon')->get())->toArray($request),
         ];
 
         if ($user) {
@@ -68,10 +68,13 @@ class HandleInertiaRequests extends Middleware
             $authPayload['profiles'] = $userProfileService->getUserProfiles($user);
         }
 
+        $breadcrumbs = app(HandleBreadcrumbs::class)->getBreadcrumbs($request);
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => $authPayload,
+            'breadcrumbs' => $breadcrumbs,
         ];
     }
 }

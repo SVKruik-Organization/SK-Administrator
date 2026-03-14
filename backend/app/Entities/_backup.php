@@ -6,12 +6,15 @@ namespace App\Entities;
 
 use App\Http\Resources\ModuleItemResource;
 use App\Models\ModuleItem;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class BackupObjectTable extends ObjectTable
 {
     public function __construct(
         string $language
     ) {
+        /** @var Builder<Model> */
         $builder = ModuleItem::query()
             ->join('modules', 'module_items.module_id', '=', 'modules.id')
             ->orderBy('module_items.position');

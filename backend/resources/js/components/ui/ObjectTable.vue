@@ -98,7 +98,7 @@ function getRecordRange(): string {
             <tbody>
                 <tr v-for="row in rows" :key="(row.id as number | string)" title="Click to view model."
                     class="relative hover:bg-sky-50">
-                    <td v-for="(_name, key) in columns" :key="key" class="text-left px-2 py-1">
+                    <td v-for="(_name, key) in columns" :key="key" class="text-left p-2">
                         {{ row[key] }}
                     </td>
                     <a :href="row.url" class="absolute inset-0 w-full h-full"></a>

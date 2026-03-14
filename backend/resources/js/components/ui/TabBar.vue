@@ -59,7 +59,7 @@ onUnmounted(() => {
                 v-for="tab in tabs"
                 :key="tab.name"
                 type="button"
-                class="pb-2 text-sm font-medium border-b-2 -mb-0.5"
+                class="pb-2 text-sm font-medium border-b-2 -mb-0.5 cursor-pointer"
                 :class="
                     activeTabName === tab.name
                         ? 'border-gray-700 text-gray-700'

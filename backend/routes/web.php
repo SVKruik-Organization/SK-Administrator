@@ -62,12 +62,12 @@ Route::group(['prefix' => 'panel', 'as' => 'panel.', 'middleware' => 'auth.guest
     });
 
     // Panel Settings
-    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+    Route::group(['prefix' => 'settings', 'as' => 'settings.', 'middleware' => 'auth.user'], function () {
         Route::get('/', [App\Http\Controllers\Panel\SettingsController::class, 'index'])->name('index');
 
         // Modules
         Route::resource('/modules', App\Http\Controllers\Panel\Settings\ModuleController::class)
-            ->only(['show', 'create', 'store', 'edit', 'update', 'destroy']);
+            ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
     });
 });
 

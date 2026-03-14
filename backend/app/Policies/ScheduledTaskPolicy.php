@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Models\GuestUser;
 use App\Models\ScheduledTask;
 use App\Models\User;
-use App\Models\GuestUser;
 
 class ScheduledTaskPolicy
 {

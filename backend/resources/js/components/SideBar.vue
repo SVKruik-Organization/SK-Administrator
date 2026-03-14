@@ -82,7 +82,7 @@ function getLinkStatus(href: string): boolean {
 
 <template>
     <nav :class="[props.isOpen ? 'translate-x-0' : '-translate-x-full']"
-        class="flex flex-col h-screen bg-sky-50 overflow-hidden fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 md:static md:w-3xs md:translate-x-0">
+        class="flex flex-col h-screen bg-sky-50 overflow-hidden fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 md:sticky md:w-3xs md:translate-x-0">
         <div ref="profileDropdownRef" class="relative p-2 border-b border-sky-200">
             <!-- Profile switcher button -->
             <button

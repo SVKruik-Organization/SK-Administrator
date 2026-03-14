@@ -88,7 +88,7 @@ function toggleQuickMenuDropdownMenu(): void {
 
         <!-- Search -->
         <button
-            class="flex items-center gap-2 cursor-text bg-sky-50 hover:bg-sky-100 rounded-full px-4 py-2 flex-1 md:flex-none w-80"
+            class="flex items-center gap-2 cursor-text bg-sky-50 hover:bg-sky-100 rounded-full px-4 py-2 flex-1 md:flex-none w-96"
             @click="searchBar?.focus()" type="button">
             <i class="fa-regular fa-magnifying-glass"></i>
             <input ref="searchBar" placeholder="Search" type="text" class="outline-none">
@@ -106,7 +106,7 @@ function toggleQuickMenuDropdownMenu(): void {
 
                 <!-- Notification dropdown menu -->
                 <menu v-if="notificationDropdownMenuVisible"
-                    class="flex flex-col absolute top-12 right-0 rounded-lg shadow-lg bg-sky-50 z-10 w-96">
+                    class="flex flex-col absolute top-12 right-0 rounded-lg shadow-lg bg-sky-50 z-10 w-96 border border-sky-100">
                     <p class="font-medium p-2 pointer-events-none">Notification Center</p>
                     <hr class="border-sky-100">
                     <NotificationItem v-for="notification in availableNotifications" :key="notification.id"
@@ -115,7 +115,7 @@ function toggleQuickMenuDropdownMenu(): void {
                     <p class="text-sm text-gray-500 p-2" v-else>You are all caught up! Check back later.</p>
                     <hr class="border-sky-100">
                     <Link :href="notificationsIndex.url()"
-                        class="flex items-center gap-2 justify-between px-2 py-1 hover:bg-sky-50"
+                        class="flex items-center gap-2 justify-between px-2 py-1 hover:bg-sky-100"
                         title="See all notifications">
                         <p>See all notifications ({{ notifications.length }})</p>
                         <i class="fa-regular fa-arrow-right"></i>
@@ -132,24 +132,24 @@ function toggleQuickMenuDropdownMenu(): void {
 
                 <!-- Quick menu dropdown menu -->
                 <menu v-if="quickMenuDropdownVisible"
-                    class="flex flex-col absolute bottom-12 md:top-12 md:bottom-auto right-0 rounded-lg shadow-lg bg-sky-50 z-10 w-48">
+                    class="flex flex-col absolute bottom-12 md:top-12 md:bottom-auto right-0 rounded-lg shadow-lg bg-sky-50 z-10 w-48 border border-sky-100">
                     <p class="font-medium p-2 pointer-events-none">Quick Access</p>
                     <hr class="border-sky-100">
                     <Link :href="auth.first_item_url" @click="toggleQuickMenuDropdownMenu()"
-                        class="px-2 py-1 hover:bg-sky-50" title="Go to your homepage">
+                        class="px-2 py-1 hover:bg-sky-100" title="Go to your homepage">
                         Your Home
                     </Link>
                     <Link :href="preferencesIndex.url()" @click="toggleQuickMenuDropdownMenu()"
-                        class="px-2 py-1 hover:bg-sky-50" title="Go to your preferences">
+                        class="px-2 py-1 hover:bg-sky-100" title="Go to your preferences">
                         Preferences
                     </Link>
                     <Link :href="notificationsIndex.url()" @click="toggleQuickMenuDropdownMenu()"
-                        class="px-2 py-1 hover:bg-sky-50 md:hidden" title="Go to your notifications">
+                        class="px-2 py-1 hover:bg-sky-100 md:hidden" title="Go to your notifications">
                         Notifications
                     </Link>
                     <hr class="border-sky-100">
                     <button @click="signOut()" type="button" title="Sign out of your account"
-                        class="flex items-center gap-2 p-2 justify-between cursor-pointer hover:bg-sky-50">
+                        class="flex items-center gap-2 p-2 justify-between cursor-pointer hover:bg-sky-100">
                         <p>Sign Out</p>
                         <i class="fa-regular fa-arrow-right-from-bracket text-red-600"></i>
                     </button>

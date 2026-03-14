@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import SideBar from '@/components/SideBar.vue';
 import NavBar from '@/components/NavBar.vue';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.vue';
 
 // Reactive data
 const isSidebarOpen = ref(false);
@@ -30,7 +31,8 @@ function toggleSidebar(): void {
 
         <section class="flex flex-col flex-1">
             <NavBar :is-sidebar-open="isSidebarOpen" @toggle-sidebar="toggleSidebar()" />
-            <div class="p-4">
+            <div class="p-4 flex flex-col gap-4">
+                <Breadcrumbs />
                 <slot />
             </div>
         </section>

@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('custom_module_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('custom_module_id');
-            $table->foreign('custom_module_id')->references('id')->on('custom_modules');
+            $table->foreignUuid('custom_module_id')->references('id')->on('custom_modules')->onDelete('cascade');
             $table->integer('position')->default(0);
             $table->timestamps();
         });

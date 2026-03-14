@@ -13,9 +13,16 @@ use Inertia\Response as InertiaResponse;
 
 class ModuleController extends Controller
 {
-    public function show(Module $module): InertiaResponse
+    public function index(): RedirectResponse
     {
-        return Inertia::render('panel/settings/modules/Show', [
+        return redirect()->route('panel.settings.index', [
+            'activeTab' => 'modules',
+        ]);
+    }
+
+    public function show(Module $module): RedirectResponse
+    {
+        return redirect()->route('panel.settings.modules.edit', [
             'module' => $module,
         ]);
     }
@@ -29,21 +36,22 @@ class ModuleController extends Controller
     {
         $module = Module::create($request->validated());
 
-        return redirect()->route('panel.settings.modules.show', $module);
+        return redirect()->route('panel.settings.modules.edit', $module);
     }
 
     public function edit(Module $module): InertiaResponse
     {
+        $module->load('moduleItems');
         return Inertia::render('panel/settings/modules/Form', [
             'module' => $module,
         ]);
     }
-    
+
     public function update(ModuleRequest $request, Module $module): RedirectResponse
     {
         $module->update($request->validated());
 
-        return redirect()->route('panel.settings.modules.show', $module);
+        return redirect()->route('panel.settings.modules.edit', $module);
     }
 
     public function destroy(Module $module): RedirectResponse

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Policies;
 
 use App\Models\CustomModule;
-use App\Models\User;
 use App\Models\GuestUser;
+use App\Models\User;
 
 class CustomModulePolicy
 {

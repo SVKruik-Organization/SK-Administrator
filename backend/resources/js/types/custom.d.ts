@@ -18,7 +18,7 @@ export type LoadedUserProfile = UserProfile & {
 
 export type Module = {
     id: string;
-    name: Record<string, string> | null;
+    name: Record<string, string>;
     icon: string | null;
     items: Array<ModuleItem>;
     url: string;

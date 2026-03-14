@@ -7,12 +7,15 @@ namespace App\Entities;
 use App\Http\Resources\ModuleResource;
 use App\Models\Module;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class SettingsModuleObjectTable extends ObjectTable
 {
     public function __construct(
         string $language
     ) {
+        /** @var Builder<Model> */
         $builder = Module::select('id', 'name', 'icon', 'created_at', 'updated_at');
 
         parent::__construct(Module::class);
@@ -31,15 +34,18 @@ class SettingsModuleObjectTable extends ObjectTable
             }
 
             if (isset($row['created_at'])) {
-                $row['created_at'] = Carbon::parse($row['created_at'])->format('d-m-Y H:i:s');
+                /** @var Carbon $createdAt */
+                $createdAt = $row['created_at'];
+                $row['created_at'] = Carbon::parse($createdAt)->format('d-m-Y H:i:s');
             }
 
             if (isset($row['updated_at'])) {
-                $row['updated_at'] = Carbon::parse($row['updated_at'])->format('d-m-Y H:i:s');
+                /** @var Carbon $updatedAt */
+                $updatedAt = $row['updated_at'];
+                $row['updated_at'] = Carbon::parse($updatedAt)->format('d-m-Y H:i:s');
             }
 
-            // dd($row);
-            $row['url'] = route('panel.settings.modules.show', ['module' => $row['id']]);
+            $row['url'] = route('panel.settings.modules.edit', ['module' => $row['id']]);
 
             return $row;
         });
