@@ -8,16 +8,15 @@ Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name(
 
 Route::group(['prefix' => 'authentication', 'as' => 'authentication.'], function () {
     Route::redirect('/', '/authentication/login')->name('index');
-    Route::get('/login', [App\Http\Controllers\AuthenticationController::class, 'login'])->name('login');
-    Route::get('/callback', [App\Http\Controllers\AuthenticationController::class, 'callback'])->name('callback');
-    Route::post('/logout', [App\Http\Controllers\AuthenticationController::class, 'logout'])->name('logout');
+    Route::get('/login', [App\Http\Controllers\User\AuthenticationController::class, 'login'])->name('login');
+    Route::get('/callback', [App\Http\Controllers\User\AuthenticationController::class, 'callback'])->name('callback');
+    Route::post('/logout', [App\Http\Controllers\User\AuthenticationController::class, 'logout'])->name('logout');
 });
 
 Route::group(['prefix' => 'panel', 'as' => 'panel.', 'middleware' => 'auth.guest'], function () {
     // Main
     Route::get('/', [App\Http\Controllers\Panel\PanelController::class, 'index'])->name('index');
     Route::get('/notifications', [App\Http\Controllers\Panel\NotificationController::class, 'index'])->name('notifications');
-    Route::get('/settings', [App\Http\Controllers\Panel\SettingsController::class, 'index'])->name('settings');
 
     // Top items
     Route::get('/dashboard', [App\Http\Controllers\Panel\DashboardController::class, 'index'])->name('dashboard');
@@ -61,16 +60,25 @@ Route::group(['prefix' => 'panel', 'as' => 'panel.', 'middleware' => 'auth.guest
         Route::get('/user-warnings', [App\Http\Controllers\Panel\RecordController::class, 'userWarnings'])->name('userWarnings');
         Route::get('/bug-reports', [App\Http\Controllers\Panel\RecordController::class, 'bugReports'])->name('bugReports');
     });
+
+    // Panel Settings
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::get('/', [App\Http\Controllers\Panel\SettingsController::class, 'index'])->name('index');
+
+        // Modules
+        Route::resource('/modules', App\Http\Controllers\Panel\Settings\ModuleController::class)
+            ->only(['show', 'create', 'store', 'edit', 'update', 'destroy']);
+    });
 });
 
 Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'auth.guest'], function () {
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
-        Route::get('/', [App\Http\Controllers\User\UserProfileController::class, 'index'])->name('index');
-        Route::put('/', [App\Http\Controllers\User\UserProfileController::class, 'update'])->name('update');
-        Route::put('/switch/{userProfile}', [App\Http\Controllers\User\UserProfileController::class, 'switch'])->name('switch');
+        Route::get('/', [App\Http\Controllers\User\ProfileController::class, 'index'])->name('index');
+        Route::put('/', [App\Http\Controllers\User\ProfileController::class, 'update'])->name('update');
+        Route::put('/switch/{userProfile}', [App\Http\Controllers\User\ProfileController::class, 'switch'])->name('switch');
     });
 
     Route::group(['prefix' => 'preferences', 'as' => 'preferences.'], function () {
-        Route::get('/', [App\Http\Controllers\User\UserPreferencesController::class, 'index'])->name('index');
+        Route::get('/', [App\Http\Controllers\User\PreferencesController::class, 'index'])->name('index');
     });
 });

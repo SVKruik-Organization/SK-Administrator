@@ -15,6 +15,6 @@ trait HasPanelUrl
 
     public function panelUrl(): string
     {
-       return strtolower(str_replace(' ', '-', '/panel/' . implode('/', $this->panelPathSegments())));
+        return strtolower(str_replace(' ', '-', '/panel/' . implode('/', $this->panelPathSegments())));
     }
 }

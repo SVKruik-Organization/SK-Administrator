@@ -33,9 +33,20 @@ class UserProfileService
      * @param  User|GuestUser  $user  The user or guest user.
      * @return UserProfile The last used profile.
      */
-    public function getLastUsedProfile(User|GuestUser $user): UserProfile
+    public function getActiveProfile(User|GuestUser $user): UserProfile
     {
-        return $this->userProfileRepository->getLastUsedProfile($user);
+        return $this->userProfileRepository->getActiveProfile($user);
+    }
+
+    /**
+     * Get the language of the active profile for a user or guest user.
+     *
+     * @param  User|GuestUser  $user  The user or guest user.
+     * @return string The language of the active profile.
+     */
+    public function getActiveProfileLanguage(User|GuestUser $user): string
+    {
+        return $this->getActiveProfile($user)->language;
     }
 
     /**

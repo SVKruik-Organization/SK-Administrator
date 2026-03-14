@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\UserProfileModule;
+use App\Models\User;
+use App\Models\GuestUser;
 
 class UserProfileModulePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(GuestUser|User $user): bool
     {
         return false;
     }
@@ -20,7 +21,7 @@ class UserProfileModulePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, UserProfileModule $userProfileModule): bool
+    public function view(GuestUser|User $user, UserProfileModule $userProfileModule): bool
     {
         return false;
     }
@@ -28,7 +29,7 @@ class UserProfileModulePolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(GuestUser|User $user): bool
     {
         return false;
     }
@@ -36,7 +37,7 @@ class UserProfileModulePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, UserProfileModule $userProfileModule): bool
+    public function update(GuestUser|User $user, UserProfileModule $userProfileModule): bool
     {
         return false;
     }
@@ -44,7 +45,7 @@ class UserProfileModulePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, UserProfileModule $userProfileModule): bool
+    public function delete(GuestUser|User $user, UserProfileModule $userProfileModule): bool
     {
         return false;
     }
@@ -52,7 +53,7 @@ class UserProfileModulePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, UserProfileModule $userProfileModule): bool
+    public function restore(GuestUser|User $user, UserProfileModule $userProfileModule): bool
     {
         return false;
     }
@@ -60,7 +61,7 @@ class UserProfileModulePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, UserProfileModule $userProfileModule): bool
+    public function forceDelete(GuestUser|User $user, UserProfileModule $userProfileModule): bool
     {
         return false;
     }

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\ModuleItem;
+use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\ModuleItem
+ * @mixin \App\Models\Module
  */
-class ModuleItemResource extends JsonResource
+class ModuleResource extends JsonResource
 {
-    /** @var ModuleItem */
+    /** @var Module */
     public $resource;
 
     /**
@@ -23,18 +23,12 @@ class ModuleItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $moduleName = $this->resource->getAttribute('module_name');
-        if (is_string($moduleName)) {
-            $moduleName = json_decode($moduleName, true);
-        }
-
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'icon' => $this->resource->icon,
-            'position' => $this->resource->position,
-            'url' => $this->resource->panelUrl(),
-            'module_name' => $moduleName,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

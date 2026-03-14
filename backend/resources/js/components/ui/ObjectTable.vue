@@ -4,16 +4,29 @@ import { router, usePage } from '@inertiajs/vue3';
 const inertiaPage = usePage();
 
 // Props
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     rows: Array<Record<string, any>>;
     columns: Record<string, string>;
-    page: number;
-    perPage: number;
-    total: number;
-    hasMore: boolean;
+    page?: number;
+    perPage?: number;
+    totalRecords?: number;
+    totalPages?: number;
+    hasMore?: boolean;
     baseUrl?: string;
     only?: string;
-}>();
+    class?: string;
+}>(), {
+    rows: () => [],
+    columns: () => ({}),
+    page: 1,
+    perPage: 15,
+    totalRecords: 0,
+    totalPages: 1,
+    hasMore: false,
+    baseUrl: undefined,
+    only: undefined,
+    class: 'w-full',
+});
 
 // Computed properties
 const hasPrevious = computed(() => props.page > 1);
@@ -59,34 +72,62 @@ function goToPage(page: number): void {
         ...(props.only ? { only: [props.only] } : {}),
     });
 }
+
+/**
+ * Gets the record range for the current page.
+ * @returns The record range for the current page.
+ */
+function getRecordRange(): string {
+    const start = (props.page - 1) * props.perPage + 1;
+    const end = Math.min(props.page * props.perPage, props.totalRecords);
+    return `${start} - ${end} of ${props.totalRecords}`;
+}
 </script>
 
 <template>
     <div>
-        <table>
-            <thead>
+        <table :class="class">
+            <thead class="bg-sky-100">
                 <tr>
-                    <th v-for="(name, key) in columns" :key="key">
-                        {{ name }}
+                    <th v-for="(key) in columns" :key="key" :title="key"
+                        class="text-left px-2 py-1 first:rounded-tl-md last:rounded-tr-md">
+                        {{ key }}
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in rows" :key="(row.id as number | string)" class="relative">
-                    <td v-for="(_name, key) in columns" :key="key">
+                <tr v-for="row in rows" :key="(row.id as number | string)" title="Click to view model."
+                    class="relative hover:bg-sky-50">
+                    <td v-for="(_name, key) in columns" :key="key" class="text-left px-2 py-1">
                         {{ row[key] }}
                     </td>
                     <a :href="row.url" class="absolute inset-0 w-full h-full"></a>
                 </tr>
             </tbody>
         </table>
-        <div>
-            <button type="button" @click="goToPage(page - 1)" :disabled="!hasPrevious">
-                Previous
-            </button>
-            <button type="button" @click="goToPage(page + 1)" :disabled="!hasMore">
-                Next
-            </button>
+        <div class="flex justify-between gap-2 bg-sky-100 rounded-b-md px-4 py-1" v-if="totalRecords > 0">
+            <div class="flex gap-2 items-center">
+                <span class="text-sm">
+                    Showing: {{ getRecordRange() }}
+                </span>
+            </div>
+            <div class="flex gap-2 items-center" v-if="totalPages > 1">
+                <button type="button" @click="goToPage(page - 1)" :disabled="!hasPrevious"
+                    :class="{ 'opacity-50 pointer-events-none': !hasPrevious }" title="Previous page"
+                    class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md p-1 cursor-pointer">
+                    <i class="fa-regular fa-angle-left"></i>
+                </button>
+                <button v-for="i in totalPages" :key="i" type="button" @click="goToPage(i)"
+                    :class="{ 'bg-sky-200 text-sky-700': i === page }" :title="`Go to page ${i}`"
+                    class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md px-2 py-1 cursor-pointer">
+                    {{ i }}
+                </button>
+                <button type="button" @click="goToPage(page + 1)" :disabled="!hasMore"
+                    :class="{ 'opacity-50 pointer-events-none': !hasMore }" title="Next page"
+                    class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md p-1 cursor-pointer">
+                    <i class="fa-regular fa-angle-right"></i>
+                </button>
+            </div>
         </div>
     </div>
 </template>

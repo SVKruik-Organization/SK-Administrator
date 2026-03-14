@@ -11,14 +11,18 @@ defineOptions({
 
 const props = defineProps<{
     activeTab: string;
-    modulesTable: ObjectTableData | null;
+    table: ObjectTableData;
+    cta: {
+        label: string;
+        url: string;
+    } | null;
 }>();
 </script>
 
 <template>
     <TabBar>
         <TabItem name="modules" label="Modules">
-            <Modules v-if="modulesTable" :table="modulesTable" />
+            <Modules :table="table" :cta="cta" />
         </TabItem>
     </TabBar>
 </template>

@@ -6,62 +6,91 @@ namespace App\Policies;
 
 use App\Models\ModuleItemGrant;
 use App\Models\User;
+use App\Models\GuestUser;
 
 class ModuleItemGrantPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(GuestUser|User $user): bool
     {
-        return false;
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ModuleItemGrant $moduleItemGrant): bool
+    public function view(GuestUser|User $user, ModuleItemGrant $moduleItemGrant): bool
     {
-        return false;
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(GuestUser|User $user): bool
     {
-        return false;
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ModuleItemGrant $moduleItemGrant): bool
+    public function update(GuestUser|User $user, ModuleItemGrant $moduleItemGrant): bool
     {
-        return false;
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ModuleItemGrant $moduleItemGrant): bool
+    public function delete(GuestUser|User $user, ModuleItemGrant $moduleItemGrant): bool
     {
-        return false;
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, ModuleItemGrant $moduleItemGrant): bool
+    public function restore(GuestUser|User $user, ModuleItemGrant $moduleItemGrant): bool
     {
-        return false;
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, ModuleItemGrant $moduleItemGrant): bool
+    public function forceDelete(GuestUser|User $user, ModuleItemGrant $moduleItemGrant): bool
     {
-        return false;
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
+        return true;
     }
 }

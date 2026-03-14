@@ -6,6 +6,7 @@ namespace App\Entities;
 
 use App\Types\ObjectTableData;
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,7 +19,9 @@ class ObjectTable
 
     private int $perPage;
 
-    private int $total;
+    private int $totalPages;
+
+    private int $totalRecords;
 
     private bool $hasMore;
 
@@ -27,12 +30,15 @@ class ObjectTable
 
     private Closure $mapper;
 
+    private Builder $builder;
+
     /**
      * @param  class-string<Model>  $modelClass
      */
     public function __construct(string $modelClass)
     {
         $this->model = new $modelClass;
+        $this->builder = $this->model->query();
     }
 
     /**
@@ -78,23 +84,23 @@ class ObjectTable
         $page = $this->page ?? 1;
         $perPage = $this->perPage ?? 15;
 
-        $rows = $this->getModel()
-            ->query()
-            ->paginate($perPage, $dataColumns, 'page', $page);
+        $rows = $this->builder->paginate($perPage, $dataColumns, 'page', $page);
 
         $this->page = $rows->currentPage();
         $this->perPage = $rows->perPage();
-        $this->total = $rows->total();
+        $this->totalRecords = $rows->total();
+        $this->totalPages = (int) ceil($this->totalRecords / $this->perPage);
         $this->hasMore = $rows->hasMorePages();
 
         $mapper = $this->mapper ?? static fn (Model $model): Model => $model;
 
         return new ObjectTableData([
             'data' => array_map($mapper, $rows->items()),
-            'columns' => $this->columns,
+            'columns' => $this->getFormattedColumns(),
             'page' => $this->page,
             'perPage' => $this->perPage,
-            'total' => $this->total,
+            'totalRecords' => $this->totalRecords,
+            'totalPages' => $this->totalPages,
             'hasMore' => $this->hasMore,
         ]);
     }
@@ -145,9 +151,56 @@ class ObjectTable
             $base = $previous($model);
             /** @var array<string, mixed> $transformed */
             $transformed = $transformer($base);
+
             return $transformed;
         };
 
         return $this;
+    }
+
+    /**
+     * Sets the builder for the query.
+     *
+     * @param  Builder<Model>  $builder
+     */
+    public function setBuilder(Builder $builder): self
+    {
+        $this->builder = $builder;
+
+        return $this;
+    }
+
+    /**
+     * Get the formatted columns with normalized keys for display and row indexing.
+     * Qualified keys (e.g. "module_items.id") become the short name ("id").
+     * Aliased keys (e.g. "modules.name as module_name") use the alias ("module_name").
+     *
+     * @return array<string, string>
+     */
+    public function getFormattedColumns(): array
+    {
+        $formatted = [];
+
+        foreach ($this->columns as $key => $label) {
+            $formatted[$this->normalizeColumnKey($key)] = $label;
+        }
+
+        return $formatted;
+    }
+
+    /**
+     * Normalize a column key to the short form used in row data.
+     */
+    private function normalizeColumnKey(string $key): string
+    {
+        if (preg_match('/\s+as\s+(\w+)\s*$/i', $key, $matches)) {
+            return $matches[1];
+        }
+
+        if (str_contains($key, '.')) {
+            return substr($key, (int) strrpos($key, '.') + 1);
+        }
+
+        return $key;
     }
 }

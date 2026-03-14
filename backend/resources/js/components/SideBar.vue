@@ -120,7 +120,7 @@ function getLinkStatus(href: string): boolean {
                 <menu>
                     <Link v-for="item in auth.top_module_items" :key="item.id" :href="item.url"
                         :class="{ 'bg-sky-100': getLinkStatus(item.url) }"
-                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12"
+                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12 hover:bg-sky-100"
                         @click="closeSidebar()">
                         <i :class="getLinkStatus(item.url) ? `fa-solid ${item.icon}` : `fa-regular ${item.icon}`"></i>
                         <p>{{ item.name![activeProfile.language] }}</p>
@@ -137,7 +137,7 @@ function getLinkStatus(href: string): boolean {
                 <menu class="flex flex-col gap-2">
                     <Link v-for="item in module.items" :key="item.id" :href="item.url"
                         :class="{ 'bg-sky-100': getLinkStatus(item.url) }"
-                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12"
+                        class="flex items-center gap-2 h-10 rounded-full px-4 box-border w-11/12 hover:bg-sky-100"
                         @click="closeSidebar()">
                         <p>{{ item.name[activeProfile.language] }}</p>
                     </Link>

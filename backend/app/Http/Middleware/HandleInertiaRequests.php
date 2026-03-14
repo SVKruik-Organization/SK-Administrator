@@ -61,7 +61,7 @@ class HandleInertiaRequests extends Middleware
 
         if ($user) {
             $userProfileService = app(UserProfileService::class);
-            $lastUsedProfile = $userProfileService->getLastUsedProfile($user);
+            $lastUsedProfile = $userProfileService->getActiveProfile($user);
             $firstItemUrl = $userProfileService->getFirstItemUrl($lastUsedProfile);
             $authPayload['first_item_url'] = $firstItemUrl;
             $authPayload['active_profile'] = UserProfileResource::make($lastUsedProfile)->toArray($request);

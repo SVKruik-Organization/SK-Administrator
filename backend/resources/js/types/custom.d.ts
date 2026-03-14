@@ -55,9 +55,10 @@ export type NotificationItem = {
 
 export type ObjectTableData = {
     data: Array<any>;
-    columns: Array<any>;
+    columns: Record<string, string>;
     page: number;
     perPage: number;
-    total: number;
+    totalRecords: number;
+    totalPages: number;
     hasMore: boolean;
 }

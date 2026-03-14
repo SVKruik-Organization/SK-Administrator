@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
-class UserProfileController extends Controller
+class ProfileController extends Controller
 {
     public function __construct(
         private UserProfileService $userProfileService

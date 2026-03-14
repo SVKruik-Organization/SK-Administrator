@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
-class UserPreferencesController extends Controller
+class PreferencesController extends Controller
 {
     public function index(): InertiaResponse
     {

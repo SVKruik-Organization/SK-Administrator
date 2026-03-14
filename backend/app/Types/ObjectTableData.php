@@ -16,7 +16,9 @@ class ObjectTableData
 
     public int $perPage;
 
-    public int $total;
+    public int $totalRecords;
+
+    public int $totalPages;
 
     public bool $hasMore;
 
@@ -26,7 +28,8 @@ class ObjectTableData
      *     columns: array<string, string>,
      *     page: int,
      *     perPage: int,
-     *     total: int,
+     *     totalRecords: int,
+     *     totalPages: int,
      *     hasMore: bool,
      * } $attributes
      */
@@ -36,7 +39,8 @@ class ObjectTableData
         $this->columns = $attributes['columns'];
         $this->page = $attributes['page'];
         $this->perPage = $attributes['perPage'];
-        $this->total = $attributes['total'];
+        $this->totalRecords = $attributes['totalRecords'];
+        $this->totalPages = $attributes['totalPages'];
         $this->hasMore = $attributes['hasMore'];
     }
 }

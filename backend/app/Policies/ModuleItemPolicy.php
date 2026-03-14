@@ -6,13 +6,14 @@ namespace App\Policies;
 
 use App\Models\ModuleItem;
 use App\Models\User;
+use App\Models\GuestUser;
 
 class ModuleItemPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(GuestUser|User $user): bool
     {
         return false;
     }
@@ -20,7 +21,7 @@ class ModuleItemPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ModuleItem $moduleItem): bool
+    public function view(GuestUser|User $user, ModuleItem $moduleItem): bool
     {
         return false;
     }
@@ -28,40 +29,60 @@ class ModuleItemPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(GuestUser|User $user): bool
     {
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
         return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ModuleItem $moduleItem): bool
+    public function update(GuestUser|User $user, ModuleItem $moduleItem): bool
     {
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
         return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ModuleItem $moduleItem): bool
+    public function delete(GuestUser|User $user, ModuleItem $moduleItem): bool
     {
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
         return false;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, ModuleItem $moduleItem): bool
+    public function restore(GuestUser|User $user, ModuleItem $moduleItem): bool
     {
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
         return false;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, ModuleItem $moduleItem): bool
+    public function forceDelete(GuestUser|User $user, ModuleItem $moduleItem): bool
     {
+        if ($user instanceof GuestUser) {
+            return false;
+        }
+
         return false;
     }
 }

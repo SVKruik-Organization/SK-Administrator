@@ -51,7 +51,7 @@ class UserProfileRepository extends AbstractRepository
      * @param  User|GuestUser  $user  The user or guest user.
      * @return UserProfile The last used profile.
      */
-    public function getLastUsedProfile(User|GuestUser $user): UserProfile
+    public function getActiveProfile(User|GuestUser $user): UserProfile
     {
         /** @var UserProfile|null $lastUsedProfile */
         $lastUsedProfile = $user->userProfiles()
