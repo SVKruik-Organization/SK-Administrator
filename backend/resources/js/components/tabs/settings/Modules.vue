@@ -14,7 +14,7 @@ const props = defineProps<{
 
 <template>
     <div class="flex flex-col gap-4">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start gap-6">
             <p class="text-gray-500">
                 Overzicht van alle modules.
             </p>

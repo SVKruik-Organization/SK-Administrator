@@ -39,7 +39,7 @@ const sizeStyles: Record<string, string> = {
     xl: 'px-4 py-3 text-xl',
 };
 
-const baseStyles = 'rounded-md hover:brightness-90 flex items-center gap-1 w-fit h-fit cursor-pointer';
+const baseStyles = 'rounded-md hover:brightness-90 flex items-center gap-1 w-fit h-fit cursor-pointer shrink-0';
 const disabledStyles = 'opacity-60 pointer-events-none';
 
 const computedClass = computed(() => {

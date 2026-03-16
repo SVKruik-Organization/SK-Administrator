@@ -75,6 +75,7 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'auth' => $authPayload,
             'breadcrumbs' => $breadcrumbs,
+            'tab' => $request->session()->get('tab'),
         ];
     }
 }

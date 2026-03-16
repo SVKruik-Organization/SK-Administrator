@@ -92,9 +92,6 @@ class HandleBreadcrumbs
 
     /**
      * Format a segment.
-     *
-     * @param  string  $segment
-     * @return string
      */
     private function formatSegment(string $segment): string
     {

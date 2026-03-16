@@ -68,6 +68,11 @@ Route::group(['prefix' => 'panel', 'as' => 'panel.', 'middleware' => 'auth.guest
         // Modules
         Route::resource('/modules', App\Http\Controllers\Panel\Settings\ModuleController::class)
             ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+
+        // Module Items
+        Route::put('/modules/{module}/module-items/reorder', [App\Http\Controllers\Panel\Settings\ModuleItemController::class, 'reorder'])->name('module-items.reorder');
+        Route::resource('/modules/{module}/module-items', App\Http\Controllers\Panel\Settings\ModuleItemController::class)
+            ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
     });
 });
 

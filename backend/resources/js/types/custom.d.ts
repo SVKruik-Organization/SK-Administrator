@@ -62,3 +62,9 @@ export type ObjectTableData = {
     totalPages: number;
     hasMore: boolean;
 }
+
+export type OrderedTableData = {
+    data: Array<Record<string, any>>;
+    columns: Record<string, string>;
+    totalRecords: number;
+}

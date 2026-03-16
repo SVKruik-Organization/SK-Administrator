@@ -1,8 +1,17 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import SideBar from '@/components/SideBar.vue';
 import NavBar from '@/components/NavBar.vue';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue';
+
+watchEffect(() => {
+    const page = usePage();
+
+    if (page.props.tab) {
+        window.location.hash = `#${page.props.tab}`;
+    }
+});
 
 // Reactive data
 const isSidebarOpen = ref(false);

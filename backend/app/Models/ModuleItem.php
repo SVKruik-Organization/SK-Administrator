@@ -28,6 +28,7 @@ class ModuleItem extends Model
         'name',
         'position',
         'icon',
+        'module_id',
     ];
 
     /**

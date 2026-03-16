@@ -23,18 +23,20 @@ class ModuleItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $moduleName = $this->resource->getAttribute('module_name');
-        if (is_string($moduleName)) {
-            $moduleName = json_decode($moduleName, true);
+        $this->resource->load('module');
+        $module = $this->resource->getAttribute('module');
+        if (is_string($module)) {
+            $module = json_decode($module, true);
         }
 
         return [
             'id' => $this->resource->id,
+            'module' => $module,
             'name' => $this->resource->name,
             'icon' => $this->resource->icon,
             'position' => $this->resource->position,
-            'url' => $this->resource->panelUrl(),
-            'module_name' => $moduleName,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

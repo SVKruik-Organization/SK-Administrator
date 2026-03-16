@@ -85,47 +85,47 @@ function getRecordRange(): string {
 </script>
 
 <template>
-    <div>
-        <table :class="class">
-            <thead class="bg-sky-100">
-                <tr>
-                    <th v-for="(key) in columns" :key="key" :title="key"
-                        class="text-left px-2 py-1 first:rounded-tl-md last:rounded-tr-md">
-                        {{ key }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="row in rows" :key="(row.id as number | string)" title="Click to view model."
-                    class="relative hover:bg-sky-50">
-                    <td v-for="(_name, key) in columns" :key="key" class="text-left p-2">
-                        {{ row[key] }}
-                    </td>
-                    <a :href="row.url" class="absolute inset-0 w-full h-full"></a>
-                </tr>
-            </tbody>
-        </table>
-        <div class="flex justify-between gap-2 bg-sky-100 rounded-b-md px-4 py-1" v-if="totalRecords > 0">
-            <div class="flex gap-2 items-center">
-                <span class="text-sm">
-                    Showing: {{ getRecordRange() }}
-                </span>
-            </div>
-            <div class="flex gap-2 items-center" v-if="totalPages > 1">
-                <button type="button" @click="goToPage(page - 1)" :disabled="!hasPrevious"
-                    :class="{ 'opacity-50 pointer-events-none': !hasPrevious }" title="Previous page"
-                    class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md p-1 cursor-pointer">
-                    <i class="fa-regular fa-angle-left"></i>
-                </button>
-                <button v-for="i in totalPages" :key="i" type="button" @click="goToPage(i)"
-                    :class="{ 'bg-sky-200 text-sky-700': i === page }" :title="`Go to page ${i}`"
-                    class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md px-2 py-1 cursor-pointer">
-                    {{ i }}
-                </button>
-                <button type="button" @click="goToPage(page + 1)" :disabled="!hasMore"
-                    :class="{ 'opacity-50 pointer-events-none': !hasMore }" title="Next page"
-                    class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md p-1 cursor-pointer">
-                    <i class="fa-regular fa-angle-right"></i>
+    <div class="flex flex-col">
+    <table :class="class">
+        <thead class="bg-sky-100">
+            <tr>
+                <th v-for="(key) in columns" :key="key" :title="key"
+                    class="text-left px-2 py-1 first:rounded-tl-md last:rounded-tr-md">
+                    {{ key }}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="row in rows" :key="(row.id as number | string)" title="Click to view model."
+                class="relative hover:bg-sky-50">
+                <td v-for="(_name, key) in columns" :key="key" class="text-left p-2">
+                    {{ row[key] }}
+                </td>
+                <a :href="row.url" class="absolute inset-0 w-full h-full"></a>
+            </tr>
+        </tbody>
+    </table>
+    <div class="flex justify-between gap-2 bg-sky-100 rounded-b-md px-4 py-1" v-if="totalRecords > 0">
+        <div class="flex gap-2 items-center">
+            <span class="text-sm">
+                Showing: {{ getRecordRange() }}
+            </span>
+        </div>
+        <div class="flex gap-2 items-center" v-if="totalPages > 1">
+            <button type="button" @click="goToPage(page - 1)" :disabled="!hasPrevious"
+                :class="{ 'opacity-50 pointer-events-none': !hasPrevious }" title="Previous page"
+                class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md p-1 cursor-pointer">
+                <i class="fa-regular fa-angle-left"></i>
+            </button>
+            <button v-for="i in totalPages" :key="i" type="button" @click="goToPage(i)"
+                :class="{ 'bg-sky-200 text-sky-700': i === page }" :title="`Go to page ${i}`"
+                class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md px-2 py-1 cursor-pointer">
+                {{ i }}
+            </button>
+            <button type="button" @click="goToPage(page + 1)" :disabled="!hasMore"
+                :class="{ 'opacity-50 pointer-events-none': !hasMore }" title="Next page"
+                class="text-sky-500 hover:text-sky-700 hover:bg-sky-200 rounded-md p-1 cursor-pointer">
+                <i class="fa-regular fa-angle-right"></i>
                 </button>
             </div>
         </div>

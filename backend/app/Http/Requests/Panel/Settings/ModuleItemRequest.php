@@ -6,7 +6,7 @@ namespace App\Http\Requests\Panel\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ModuleRequest extends FormRequest
+class ModuleItemRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

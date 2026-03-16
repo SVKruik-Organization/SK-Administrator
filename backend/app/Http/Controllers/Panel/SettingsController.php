@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Panel;
 
-use App\Entities\SettingsModuleObjectTable;
+use App\Entities\ObjectTables\ModuleObjectTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ObjectTableRequest;
 use App\Models\GuestUser;
@@ -39,7 +39,7 @@ class SettingsController extends Controller
 
             $language = $this->userProfileService->getActiveProfileLanguage($user);
 
-            $table = (new SettingsModuleObjectTable($language))
+            $table = (new ModuleObjectTable($language))
                 ->fromRequest($validated)
                 ->getResult();
 

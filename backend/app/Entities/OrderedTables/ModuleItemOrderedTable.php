@@ -2,31 +2,35 @@
 
 declare(strict_types=1);
 
-namespace App\Entities;
+namespace App\Entities\OrderedTables;
 
-use App\Http\Resources\ModuleResource;
+use App\Entities\OrderedTable;
+use App\Http\Resources\ModuleItemResource;
 use App\Models\Module;
+use App\Models\ModuleItem;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class SettingsModuleObjectTable extends ObjectTable
+class ModuleItemOrderedTable extends OrderedTable
 {
     public function __construct(
+        Module $module,
         string $language
     ) {
         /** @var Builder<Model> */
-        $builder = Module::select('id', 'name', 'icon', 'created_at', 'updated_at');
+        $builder = ModuleItem::select('id', 'module_id', 'name', 'position', 'created_at', 'updated_at')
+            ->with('module')
+            ->where('module_id', $module->id);
 
-        parent::__construct(Module::class);
+        parent::__construct(ModuleItem::class);
         $this->setBuilder($builder);
         $this->setColumns([
             'name' => 'Naam',
-            'icon' => 'Pictogram',
             'created_at' => 'Aangemaakt op',
             'updated_at' => 'Laast bewerkt op',
         ]);
-        $this->usingResource(ModuleResource::class);
+        $this->usingResource(ModuleItemResource::class);
         $this->usingTransformer(static function (array $row) use ($language): array {
             /** @var array<string, mixed> $row */
             if (isset($row['name']) && is_array($row['name'])) {
@@ -45,7 +49,7 @@ class SettingsModuleObjectTable extends ObjectTable
                 $row['updated_at'] = Carbon::parse($updatedAt)->format('d-m-Y H:i:s');
             }
 
-            $row['url'] = route('panel.settings.modules.edit', ['module' => $row['id']]);
+            $row['url'] = route('panel.settings.module-items.edit', [$row['module']['id'], $row['id']]);
 
             return $row;
         });
