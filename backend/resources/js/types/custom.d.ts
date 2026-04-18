@@ -32,6 +32,11 @@ export type ModuleItem = {
     url: string;
 }
 
+export type BreadcrumbItem = {
+    label: string;
+    url: string;
+}
+
 export enum PromptType {
     info = "info",
     success = "success",

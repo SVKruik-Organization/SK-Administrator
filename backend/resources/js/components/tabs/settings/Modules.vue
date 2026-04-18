@@ -15,10 +15,10 @@ const props = defineProps<{
 <template>
     <div class="flex flex-col gap-4">
         <div class="flex justify-between items-start gap-6">
-            <p class="text-gray-500">
+            <p class="text-gray-700">
                 Overzicht van alle modules.
             </p>
-            <Button v-if="cta" :label="cta.label" :url="cta.url" icon="fa-regular fa-plus" />
+            <Button v-if="cta" :label="cta.label" :href="cta.url" icon="fa-regular fa-plus" />
         </div>
         <ObjectTable :rows="table.data" :columns="table.columns" :page="table.page" :per-page="table.perPage"
             :total-records="table.totalRecords" :total-pages="table.totalPages" :has-more="table.hasMore"

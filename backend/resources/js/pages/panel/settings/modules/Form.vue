@@ -44,17 +44,21 @@ const moduleSaveButton = {
     icon: 'fa-regular fa-save',
 };
 
-const destroyButton = {
+const destroyButton = computed(() => ({
     label: 'Module verwijderen',
     icon: 'fa-regular fa-trash',
     url: props.module ? destroy.url({ module: props.module.id }) : null,
-};
+}));
 
-const moduleItemCreateButton = {
+const moduleItemCreateButton = computed(() => ({
     label: 'Item toevoegen',
     icon: 'fa-regular fa-plus',
     url: props.module ? create.url({ module: props.module.id }) : null,
-};
+}));
+
+const reorderUrl = computed(() =>
+    props.module ? reorder.url({ module: props.module.id }) : '',
+);
 </script>
 
 <template>
@@ -63,14 +67,14 @@ const moduleItemCreateButton = {
             <TabItem name="data" label="Gegevens">
                 <Form :action="formUrl" :method="module ? 'put' : 'post'"
                     v-slot="{ errors, processing, recentlySuccessful, clearErrors }"
-                    class="grid grid-cols-4 gap-2 gap-y-4 bg-gray-100 p-4 rounded-md">
+                    class="grid grid-cols-4 gap-2 gap-y-4 p-4 rounded-lg border-2 border-theme-dark">
                     <div class="flex flex-col gap-2 col-span-2">
-                        <Input type="text" name="name[en]" v-model="name['en']" @input="clearErrors('name.en')"
+                        <Input type="text" id="name[en]" v-model="name['en']" @input="clearErrors('name.en')"
                             label="Engelse naam" />
                         <InputError :message="errors['name.en']" />
                     </div>
                     <div class="flex flex-col gap-2 col-span-2">
-                        <Input type="text" name="name[nl]" v-model="name['nl']" @input="clearErrors('name.nl')"
+                        <Input type="text" id="name[nl]" v-model="name['nl']" @input="clearErrors('name.nl')"
                             label="Nederlandse naam" />
                         <InputError :message="errors['name.nl']" />
                     </div>
@@ -79,7 +83,7 @@ const moduleItemCreateButton = {
                         <div class="flex items-center gap-2">
                             <i :class="`fa-regular ${icon}`" class="text-gray-500 text-2xl"></i>
                             <div class="flex flex-col gap-2 flex-1">
-                                <Input type="text" name="icon" v-model="icon" @input="clearErrors('icon')"
+                                <Input type="text" id="icon" v-model="icon" @input="clearErrors('icon')"
                                     placeholder="fa-icon" />
                             </div>
                         </div>
@@ -100,14 +104,15 @@ const moduleItemCreateButton = {
             <TabItem name="items" label="Items" v-if="module">
                 <div class="flex flex-col gap-4">
                     <div class="flex justify-between items-start gap-6">
-                        <p class="text-gray-500">
+                        <p class="text-gray-700">
                             Items van de {{ module.name?.['en'] }} module bewerken. Als de module toegevoegd is aan het
                             profiel zijn de items zichtbaar in de sidebar.
                         </p>
-                        <Button :label="moduleItemCreateButton.label" :url="moduleItemCreateButton.url ?? ''"
+                        <Button :label="moduleItemCreateButton.label" :href="moduleItemCreateButton.url ?? ''"
                             :icon="moduleItemCreateButton.icon" />
                     </div>
-                    <OrderedTable v-if="table" :rows="table.data" :columns="table.columns" only="table" :reorderUrl="reorder.url({ module: module.id })" />
+                    <OrderedTable v-if="table && module" :rows="table.data" :columns="table.columns" only="table"
+                        :reorder-url="reorderUrl" />
                 </div>
             </TabItem>
             <TabItem name="profiles" label="Profielen" v-if="module">
@@ -118,8 +123,8 @@ const moduleItemCreateButton = {
                 </div>
             </TabItem>
             <TabItem name="management" label="Beheer" v-if="module">
-                <Button :label="destroyButton.label" :icon="destroyButton.icon" :style="'danger'" type="button"
-                    class="col-span-2 mt-4" :url="destroyButton.url ?? ''" method="delete" />
+                <Button :label="destroyButton.label" :icon="destroyButton.icon" theme="danger" type="button"
+                    class="col-span-2 mt-4" :href="destroyButton.url ?? ''" method="delete" />
             </TabItem>
         </TabBar>
     </div>

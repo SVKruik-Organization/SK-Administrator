@@ -14,7 +14,7 @@ class HandleBreadcrumbs
      * Build breadcrumb items from the current request path.
      * Path segments that are route parameters and resolve to models get the model's display name.
      *
-     * @return array<int, array{label: string, url: string}>
+     * @return array{items: array<int, array{label: string, url: string}>, title: string}
      */
     public function getBreadcrumbs(Request $request): array
     {
@@ -35,13 +35,24 @@ class HandleBreadcrumbs
             $url = '/'.implode('/', $accumulated);
             $label = $this->resolveSegmentLabel($segment, $index, $uriParts, $route);
 
-            $breadcrumbs[] = [
-                'label' => $label,
-                'url' => $url,
-            ];
+            if ($label === 'Panel') {
+                continue;
+            }
+
+            if ($index === count($segments) - 1) {
+                $title = $label;
+            } else {
+                $breadcrumbs[] = [
+                    'label' => $label,
+                    'url' => $url,
+                ];
+            }
         }
 
-        return $breadcrumbs;
+        return [
+            'items' => $breadcrumbs,
+            'title' => $title,
+        ];
     }
 
     /**

@@ -1,16 +1,19 @@
 <script lang="ts" setup>
-import { HTMLAttributes, InputHTMLAttributes } from 'vue';
+import { computed, useAttrs } from 'vue';
 import { useVModel } from "@vueuse/core"
+
+defineOptions({
+    inheritAttrs: false,
+});
 
 const props = defineProps<{
     label?: string;
-    name: string;
     defaultValue?: string | number;
     modelValue?: string | number | null;
-    placeholder?: InputHTMLAttributes['placeholder'];
-    type?: InputHTMLAttributes['type'];
-    class?: HTMLAttributes['class'];
 }>();
+
+const attrs = useAttrs();
+const id = computed(() => attrs.id as string);
 
 const emits = defineEmits<{
     (e: "update:modelValue", payload: string | number): void
@@ -24,7 +27,8 @@ const modelValue = useVModel(props, "modelValue", emits, {
 
 <template>
     <div class="flex flex-col gap-2">
-        <label :for="name" v-if="label">{{ label }}</label>
-        <input :type="type" :name="name" :id="name" v-model="modelValue" :placeholder="placeholder" :class="class" class="w-full p-2 border border-gray-300 bg-white rounded-md" />
+        <label :for="id" v-if="label">{{ label }}</label>
+        <input v-model="modelValue" :name="id" class="w-full rounded-md border-2 border-theme-dark p-2"
+            v-bind="$attrs" />
     </div>
 </template>

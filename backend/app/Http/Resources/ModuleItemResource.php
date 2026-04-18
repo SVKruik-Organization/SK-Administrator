@@ -34,6 +34,7 @@ class ModuleItemResource extends JsonResource
             'module' => $module,
             'name' => $this->resource->name,
             'icon' => $this->resource->icon,
+            'url' => $this->resource->panelUrl(),
             'position' => $this->resource->position,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,

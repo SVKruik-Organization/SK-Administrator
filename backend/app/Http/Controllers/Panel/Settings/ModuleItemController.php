@@ -74,7 +74,9 @@ class ModuleItemController extends Controller
     {
         $moduleItem->delete();
 
-        return redirect()->route('panel.settings.modules.edit', $module);
+        return redirect()
+            ->route('panel.settings.modules.edit', $module)
+            ->with('tab', 'items');
     }
 
     public function reorder(Request $request, Module $module): RedirectResponse

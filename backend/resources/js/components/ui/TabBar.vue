@@ -54,7 +54,7 @@ onUnmounted(() => {
 
 <template>
     <div>
-        <div class="flex gap-6 border-b-2 border-gray-200 mb-4">
+        <div class="flex gap-6 border-b-2 border-theme-dark mb-4">
             <button
                 v-for="tab in tabs"
                 :key="tab.name"

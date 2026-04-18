@@ -1,34 +1,36 @@
 <script lang="ts" setup>
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { computed, HTMLAttributes, ButtonHTMLAttributes } from 'vue';
 
 const props = withDefaults(defineProps<{
-    label: string;
-    url?: string;
     method?: 'get' | 'post' | 'put' | 'delete';
-    type?: ButtonHTMLAttributes['type'];
-    style?: 'primary' | 'secondary' | 'danger' | 'warning' | 'info' | 'outline';
+    element?: 'button' | 'a';
+    label?: string;
+    theme?: 'primary' | 'secondary' | 'danger' | 'warning' | 'info' | 'outline' | 'transparent';
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     icon?: string;
-    class?: HTMLAttributes['class'];
-    disabled?: HTMLButtonElement['disabled'];
     processing?: boolean;
+    disabled?: boolean;
+    href?: string;
+    type?: 'button' | 'submit' | 'reset';
 }>(), {
-    type: 'button',
-    style: 'primary',
-    class: '',
+    element: 'button',
+    theme: 'primary',
     size: 'sm',
-    disabled: false,
     processing: false,
+    disabled: false,
+    href: undefined,
+    type: 'button',
 });
 
-const styles: Record<string, string> = {
-    primary: 'bg-emerald-500 border border-emerald-600 text-white',
-    secondary: 'bg-sky-500 border border-sky-600 text-white',
-    danger: 'bg-red-500 border border-red-600 text-white',
-    warning: 'bg-yellow-500 border border-yellow-600 text-white',
-    info: 'bg-blue-500 border border-blue-600 text-white',
+const themes: Record<string, string> = {
+    primary: 'bg-emerald-500 border border-emerald-600 text-theme',
+    secondary: 'bg-theme-dark0 border border-sky-600 text-white',
+    danger: 'bg-red-500 border border-red-600 text-theme',
+    warning: 'bg-yellow-500 border border-yellow-600 text-theme',
+    info: 'bg-blue-500 border border-blue-600 text-theme',
     outline: 'bg-white border border-gray-600 text-gray-600',
+    transparent: 'bg-transparent border-none text-gray-600',
 };
 
 const sizeStyles: Record<string, string> = {
@@ -44,11 +46,10 @@ const disabledStyles = 'opacity-60 pointer-events-none';
 
 const computedClass = computed(() => {
     return [
-        styles[props.style as keyof typeof styles],
+        themes[props.theme as keyof typeof themes],
         sizeStyles[props.size as keyof typeof sizeStyles],
         baseStyles,
         props.disabled && disabledStyles,
-        props.class,
     ].join(' ');
 });
 
@@ -62,7 +63,7 @@ const handleClick = (event: MouseEvent) => {
 </script>
 
 <template>
-    <Link :href="url" :method="method" v-if="url" :class="computedClass" :title="label" :disabled="disabled" :aria-disabled="disabled"
+    <Link v-if="href" :href="href" :method="method" :class="computedClass" :title="label" :disabled="disabled" :aria-disabled="disabled"
         @click="handleClick">
         <i :class="icon" v-if="icon && !processing"></i>
         <i class="fa-regular fa-loader fa-spin" v-if="processing"></i>

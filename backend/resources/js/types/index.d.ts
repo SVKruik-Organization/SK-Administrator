@@ -1,6 +1,6 @@
 import { InertiaLinkProps } from '@inertiajs/vue3';
 import type { LucideIcon } from 'lucide-vue-next';
-import type { UserTypes, UserProfile, LoadedUserProfile, ModuleItem, Module } from './custom';
+import type { UserTypes, UserProfile, LoadedUserProfile, ModuleItem, Module, BreadcrumbItem } from './custom';
 
 export interface Auth {
     user: User;
@@ -16,6 +16,10 @@ export type AppPageProps<
 > = T & {
     name: string;
     auth: Auth;
+    breadcrumbs: {
+        items: Array<BreadcrumbItem>;
+        title: string;
+    };
     [key: string]: unknown;
 };
 
@@ -30,5 +34,3 @@ export interface User {
     image_url: string;
     [key: string]: unknown; // This allows for additional properties...
 }
-
-export type BreadcrumbItemType = BreadcrumbItem;
