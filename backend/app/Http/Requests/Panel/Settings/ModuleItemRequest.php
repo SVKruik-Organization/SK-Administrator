@@ -28,10 +28,12 @@ class ModuleItemRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        /** @var array<string, string> $name */
+        $name = $this->name;
         $this->merge([
             'name' => [
-                'en' => $this->name['en'],
-                'nl' => $this->name['nl'],
+                'en' => $name['en'],
+                'nl' => $name['nl'],
             ],
         ]);
     }

@@ -59,7 +59,7 @@ const moduleItemDestroyButton = {
             <TabItem name="data" label="Gegevens">
                 <Form :action="formUrl" :method="moduleItem ? 'put' : 'post'"
                     v-slot="{ errors, processing, recentlySuccessful, clearErrors }"
-                    class="grid grid-cols-3 gap-2 gap-y-4 p-4 rounded-lg border-2 border-theme-dark">
+                    class="grid grid-cols-3 gap-2 gap-y-4 p-4 rounded-lg border-2 border-gray-100">
                     <div class="flex flex-col gap-2 col-span-3">
                         <Input type="text" id="name[en]" v-model="name['en']" @input="clearErrors('name.en')"
                             label="Engelse naam" />

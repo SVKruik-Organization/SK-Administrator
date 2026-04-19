@@ -81,8 +81,10 @@ class ModuleItemController extends Controller
 
     public function reorder(Request $request, Module $module): RedirectResponse
     {
+        /** @var array<int, array{id: string}> $moduleItems */
         $moduleItems = $request->input('moduleItems');
         for ($i = 0; $i < count($moduleItems); $i++) {
+            /** @var ModuleItem $moduleItem */
             $moduleItem = ModuleItem::find($moduleItems[$i]['id']);
             $moduleItem->update(['position' => $i + 1]);
         }

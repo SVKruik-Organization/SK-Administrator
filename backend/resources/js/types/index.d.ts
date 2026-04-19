@@ -20,6 +20,10 @@ export type AppPageProps<
         items: Array<BreadcrumbItem>;
         title: string;
     };
+    cta?: {
+        label: string;
+        url: string;
+    };
     [key: string]: unknown;
 };
 

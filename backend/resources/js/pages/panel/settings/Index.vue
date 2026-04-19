@@ -12,17 +12,20 @@ defineOptions({
 const props = defineProps<{
     activeTab: string;
     table: ObjectTableData;
-    cta: {
-        label: string;
-        url: string;
-    } | null;
 }>();
 </script>
 
 <template>
     <TabBar>
         <TabItem name="modules" label="Modules">
-            <Modules :table="table" :cta="cta" />
+            <div class="flex flex-col gap-8">
+                <div class="flex justify-between items-start gap-6">
+                    <p class="text-gray-700">
+                        Modules die gebruikers kunnen toevoegen aan hun profiel.
+                    </p>
+                </div>
+                <Modules :table="table" />
+            </div>
         </TabItem>
     </TabBar>
 </template>

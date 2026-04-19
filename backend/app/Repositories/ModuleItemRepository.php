@@ -7,6 +7,9 @@ namespace App\Repositories;
 use App\Models\Module;
 use App\Models\ModuleItem;
 
+/** 
+ * @extends AbstractRepository<ModuleItem>
+ */
 class ModuleItemRepository extends AbstractRepository
 {
     public function __construct(ModuleItem $model)
@@ -19,6 +22,12 @@ class ModuleItemRepository extends AbstractRepository
      */
     public function getNextPosition(Module $module): int
     {
-        return ModuleItem::where('module_id', $module->id)->max('position') + 1;
+        /** @var ModuleItem|null $highestPosition */
+        $highestPosition = $this->getModel()->where('module_id', $module->id)->orderBy('position', 'desc')->first();
+
+        if ($highestPosition) {
+            return $highestPosition->position + 1;
+        }
+        return 1;
     }
 }

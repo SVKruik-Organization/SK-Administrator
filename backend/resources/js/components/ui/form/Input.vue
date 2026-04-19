@@ -28,7 +28,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
 <template>
     <div class="flex flex-col gap-2">
         <label :for="id" v-if="label">{{ label }}</label>
-        <input v-model="modelValue" :name="id" class="w-full rounded-md border-2 border-theme-dark p-2"
+        <input v-model="modelValue" :name="id" class="w-full rounded-md border-2 border-gray-100 p-2"
             v-bind="$attrs" />
     </div>
 </template>

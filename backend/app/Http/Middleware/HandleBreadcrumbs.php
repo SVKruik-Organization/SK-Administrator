@@ -20,7 +20,10 @@ class HandleBreadcrumbs
     {
         $path = trim($request->path(), '/');
         if ($path === '') {
-            return [];
+            return [
+                'items' => [],
+                'title' => '',
+            ];
         }
 
         $segments = explode('/', $path);
@@ -29,6 +32,8 @@ class HandleBreadcrumbs
 
         $breadcrumbs = [];
         $accumulated = [];
+
+        $title = '';
 
         foreach ($segments as $index => $segment) {
             $accumulated[] = $segment;

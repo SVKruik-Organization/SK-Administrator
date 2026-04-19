@@ -67,7 +67,7 @@ const reorderUrl = computed(() =>
             <TabItem name="data" label="Gegevens">
                 <Form :action="formUrl" :method="module ? 'put' : 'post'"
                     v-slot="{ errors, processing, recentlySuccessful, clearErrors }"
-                    class="grid grid-cols-4 gap-2 gap-y-4 p-4 rounded-lg border-2 border-theme-dark">
+                    class="grid grid-cols-4 gap-2 gap-y-4 p-4 rounded-lg border-2 border-gray-100">
                     <div class="flex flex-col gap-2 col-span-2">
                         <Input type="text" id="name[en]" v-model="name['en']" @input="clearErrors('name.en')"
                             label="Engelse naam" />
@@ -102,11 +102,11 @@ const reorderUrl = computed(() =>
                 </Form>
             </TabItem>
             <TabItem name="items" label="Items" v-if="module">
-                <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-8">
                     <div class="flex justify-between items-start gap-6">
                         <p class="text-gray-700">
-                            Items van de {{ module.name?.['en'] }} module bewerken. Als de module toegevoegd is aan het
-                            profiel zijn de items zichtbaar in de sidebar.
+                            Items van de {{ module.name?.['en'] }} module. Als de module toegevoegd is aan het
+                            profiel zijn de items zichtbaar in het menu.
                         </p>
                         <Button :label="moduleItemCreateButton.label" :href="moduleItemCreateButton.url ?? ''"
                             :icon="moduleItemCreateButton.icon" />
@@ -115,10 +115,17 @@ const reorderUrl = computed(() =>
                         :reorder-url="reorderUrl" />
                 </div>
             </TabItem>
+            <TabItem name="permissions" label="Toegang" v-if="module">
+                <div class="flex justify-between items-center">
+                    <p>
+                        Regels voor lees en schrijfrechten voor de {{ module.name?.['en'] }} module.
+                    </p>
+                </div>
+            </TabItem>
             <TabItem name="profiles" label="Profielen" v-if="module">
                 <div class="flex justify-between items-center">
                     <p>
-                        Profielen waar de {{ module.name?.['en'] }} module aan toegevoegd is bewerken.
+                        Profielen van gebruikers waar de {{ module.name?.['en'] }} module aan toegevoegd is.
                     </p>
                 </div>
             </TabItem>

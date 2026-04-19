@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import SideBar from '@/components/SideBar.vue';
 import NavBar from '@/components/NavBar.vue';
-import Breadcrumbs from '@/components/ui/Breadcrumbs.vue';
+import Heading from '@/components/ui/Heading.vue';
 
 const page = usePage();
 watchEffect(() => {
@@ -23,6 +23,8 @@ function closeSidebar(): void {
     isSidebarOpen.value = false;
 }
 
+const cta = computed(() => page.props.cta as { label: string; url: string } | undefined);
+
 /**
  * Toggles the visibility of the sidebar.
  */
@@ -41,7 +43,7 @@ function toggleSidebar(): void {
         <section class="flex flex-col flex-1">
             <NavBar :is-sidebar-open="isSidebarOpen" @toggle-sidebar="toggleSidebar()" />
             <div class="p-4 flex flex-col gap-6">
-                <Breadcrumbs />
+                <Heading :cta="cta" />
                 <slot />
             </div>
         </section>
